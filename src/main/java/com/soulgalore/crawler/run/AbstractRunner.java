@@ -25,7 +25,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.MissingOptionException;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -40,8 +39,6 @@ public abstract class AbstractRunner {
 	 * Used for converting milliseconds to seconds.
 	 */
 	protected static final int MILLISECONDS_PER_SECOND = 1000;
-
-	private static final int MAX_NUMBER_OF_ARGS = 100;
 
 	private final CommandLineParser clp = new GnuParser();
 
@@ -84,20 +81,8 @@ public abstract class AbstractRunner {
 	 * @return the basic options
 	 */
 	protected Options getOptions() {
-		final Options options = new Options();
 
-		final Option basicAuthOption = new Option(
-				"a",
-				true,
-				"basic authentincation, syntax: domain1:port1:user1:pw1,domain2:port2:user2:pw2");
-		basicAuthOption.setRequired(false);
-		basicAuthOption.setLongOpt("auth");
-		basicAuthOption.setArgName("BASIC-AUTHENTICATION");
-		basicAuthOption.setValueSeparator(',');
-		basicAuthOption.setArgs(MAX_NUMBER_OF_ARGS);
-		options.addOption(basicAuthOption);
-
-		return options;
+		return new Options();
 	}
 
 }
