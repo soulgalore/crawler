@@ -1,16 +1,16 @@
 # Java web crawler [![Build Status](https://secure.travis-ci.org/soulgalore/crawler.png?branch=master)](http://travis-ci.org/soulgalore/crawler)
 
-Simple java crawler to crawl webpages on one and same domain. Basicly you can this:
+Simple java crawler to crawl webpages on one and same domain. Basicly you can do this:
 <ul>
-<li>Crawl from a start point, defining the depth of the crawl</li>
-<li>Crawl only specific paths</li>
-<li>Output the data to a csv file, separated by working and non working url</li>
+<li>Crawl from a start point, defining the depth of the crawl and decide to crawl only a specific path</li>
+<li>Output all working urls</li>
+<li>Output the data to a csv file, separated by working (200 response code) and non working url</li>
 <li>Output url:s that contains a keyword in the html</li>
 </ul>
 
 
 ## How to crawl
-A simple crawl have the following options
+A simple crawl have the following options, and will output the url:s crawled to system out:
 <pre>
 usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
  -l,--level <LEVEL>       how deep the crawl should be done, default is 2
@@ -20,7 +20,7 @@ usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
                           examle http://mydomain.com/mypage
 </pre>
 
-Crawl and output to csv file
+You can choose to output the result in a csv file, and separate the urls by working and non working:
 <pre>
 usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-p <PATH>] -u <URL>
  -f,--filename <FILENAME>   the name of the csv ouput file, default name
