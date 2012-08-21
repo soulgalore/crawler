@@ -93,7 +93,6 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 			
 			if (entity.getContentType() == null
 					|| (!entity.getContentType().toString().contains("html"))) {
-				System.out.println(entity.getContentType().toString());
 				return new HTMLPageResponse(url,
 						StatusCode.SC_WRONG_CONTENT_TYPE,
 						Collections.<String, String>emptyMap(), "", "", 0);
