@@ -34,8 +34,7 @@ usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-p <PATH>] -u <URL>
 
 Crawl and output urls that contains specific keyword in the html
 <pre>
-usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-p <PATH>]
-       -u <URL>
+usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-p <PATH>] -u <URL>
  -k,--keyword <KEYWORD>   the keyword to search for in the page
                           [required]
  -l,--level <LEVEL>       how deep the crawl should be done, default is 2
