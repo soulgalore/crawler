@@ -10,7 +10,8 @@ Simple java crawler to crawl webpages on one and same domain. Basicly you can do
 
 
 ## How to crawl
-A simple crawl have the following options, and will output the url:s crawled to system out:
+
+A simple crawl have the following options, and will output the url:s crawled to system out. Note, only urls that returns 200 will be outputted by default:
 <pre>
 usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
  -l,--level <LEVEL>       how deep the crawl should be done, default is 2
@@ -21,6 +22,7 @@ usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
  -v,--verify <VERIFY>     verify that all links are returning 200, default
                           is set to true [optional]                          
 </pre>
+
 
 You can choose to output the result in a csv file, and separate the urls by working and non working:
 <pre>
