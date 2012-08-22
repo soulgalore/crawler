@@ -86,6 +86,10 @@ public class HTMLPageResponse {
 	public String getUrl() {
 		return url.getUrl();
 	}
+	
+	public PageURL getPageUrl() {
+		return url;
+	}
 
 	public int getResponseCode() {
 		return responseCode;
