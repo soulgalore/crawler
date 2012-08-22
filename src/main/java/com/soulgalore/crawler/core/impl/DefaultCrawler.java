@@ -21,12 +21,15 @@
 package com.soulgalore.crawler.core.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -222,38 +225,40 @@ public class DefaultCrawler implements Crawler {
 	private void verifyUrls(Set<PageURL> allUrls, Set<PageURL> verifiedUrls,
 			Set<PageURL> nonWorkingUrls) {
 
-		// Only test the onces that hasn't been verified
+		// Only test the once that hasn't been verified
 		Set<PageURL> urlsThatNeedsVerification = new LinkedHashSet<PageURL>(
 				allUrls);
 		urlsThatNeedsVerification.removeAll(verifiedUrls);
 
-		final Map<Future<HTMLPageResponse>, PageURL> responses = new HashMap<Future<HTMLPageResponse>, PageURL>(
+		final Set<Callable<HTMLPageResponse>> tasks = new HashSet<Callable<HTMLPageResponse>>(
 				urlsThatNeedsVerification.size());
 
 		for (PageURL testURL : urlsThatNeedsVerification) {
-			responses.put(service.submit(new HTMLPageResponseCallable(testURL,
-					responseFetcher, true)), testURL);
+			tasks.add(new HTMLPageResponseCallable(testURL, responseFetcher,
+					true));
 		}
 
-		final Iterator<Entry<Future<HTMLPageResponse>, PageURL>> it = responses
-				.entrySet().iterator();
+		try {
+			// wait for all urls to verify
+			List<Future<HTMLPageResponse>> responses = service.invokeAll(tasks);
 
-		while (it.hasNext()) {
-
-			final Entry<Future<HTMLPageResponse>, PageURL> entry = it.next();
-
-			try {
-
-				final HTMLPageResponse response = entry.getKey().get();
-				if (response.getResponseCode() != HttpStatus.SC_OK) {
-					allUrls.remove(response.getPageUrl());
-					nonWorkingUrls.add(response.getPageUrl());
+			for (Future<HTMLPageResponse> future : responses) {
+				if (!future.isCancelled()) {
+					HTMLPageResponse response = future.get();
+					if (response.getResponseCode() == HttpStatus.SC_OK)
+						urlsThatNeedsVerification.remove(response.getPageUrl());
 				}
-			} catch (InterruptedException | ExecutionException e) {
-				allUrls.remove(entry.getValue());
-				nonWorkingUrls.add(entry.getValue());
+
 			}
+
+		} catch (InterruptedException | ExecutionException e1) {
+			// TODO add some logging
+			e1.printStackTrace();
 		}
+
+		// The one kept in urlsThatNeedsVerification are not working urls ...
+		allUrls.removeAll(urlsThatNeedsVerification);
+		nonWorkingUrls.addAll(urlsThatNeedsVerification);
 	}
 
 	private HTMLPageResponse fetchOnePage(PageURL url) {
