@@ -51,11 +51,6 @@ import com.soulgalore.crawler.util.StatusCode;
  */
 public class DefaultCrawler implements Crawler {
 
-	/**
-	 * The default number of levels to crawl.
-	 */
-	public static final int DEFAULT_CRAWL_LEVELS = 2;
-
 	private final HTMLPageResponseFetcher responseFetcher;
 	private final ListeningExecutorService service;
 	private final Parser parser;
@@ -196,6 +191,11 @@ public class DefaultCrawler implements Crawler {
 							}
 						}
 					}
+				}
+				else
+				{
+					allUrls.remove(entry.getValue());
+					nonWorkingUrls.add(entry.getValue());
 				}
 
 			} catch (InterruptedException | ExecutionException e) {
