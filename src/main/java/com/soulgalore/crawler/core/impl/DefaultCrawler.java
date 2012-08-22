@@ -246,8 +246,8 @@ public class DefaultCrawler implements Crawler {
 
 				final HTMLPageResponse response = entry.getKey().get();
 				if (response.getResponseCode() != HttpStatus.SC_OK) {
-					allUrls.remove(entry.getValue());
-					nonWorkingUrls.add(entry.getValue());
+					allUrls.remove(response.getPageUrl());
+					nonWorkingUrls.add(response.getPageUrl());
 				}
 			} catch (InterruptedException | ExecutionException e) {
 				allUrls.remove(entry.getValue());
