@@ -14,7 +14,7 @@ Simple java crawler to crawl webpages on one and same domain. Basicly you can do
 A simple crawl have the following options, and will output the url:s crawled to system out. Note, only urls that returns 200 will be outputted by default:
 <pre>
 usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
- -l,--level <LEVEL>       how deep the crawl should be done, default is 2
+ -l,--level <LEVEL>       how deep the crawl should be done, default is 1
                           [optional]
  -p,--followPath <PATH>   stay on this path when crawling [optional]
  -u,--url <URL>           the page that is the startpoint of the crawl,
@@ -30,7 +30,7 @@ usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-p <PATH>] -u <URL>
  -f,--filename <FILENAME>   the name of the csv ouput file, default name
                             is result.csv [optional]
  -l,--level <LEVEL>         how deep the crawl should be done, default is
-                            2 [optional]
+                            1 [optional]
  -p,--followPath <PATH>     stay on this path when crawling [optional]
  -u,--url <URL>             the page that is the startpoint of the crawl,
                             examle http://mydomain.com/mypage
@@ -43,7 +43,7 @@ Crawl and output urls that contains specific keyword in the html
 usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-p <PATH>] -u <URL>
  -k,--keyword <KEYWORD>   the keyword to search for in the page
                           [required]
- -l,--level <LEVEL>       how deep the crawl should be done, default is 2
+ -l,--level <LEVEL>       how deep the crawl should be done, default is 1
                           [optional]
  -p,--followPath <PATH>   stay on this path when crawling [optional]
  -u,--url <URL>           the page that is the startpoint of the crawl,
