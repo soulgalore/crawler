@@ -67,10 +67,11 @@ public class AhrefParser implements Parser {
 
 		Set<PageURL> ahrefs = new HashSet<PageURL>();
 
-		// only populate if we have a valid response, else create an empty page
+		// only populate if we have a valid response, else return empty set
 		if (theResponse.getResponseCode() == HttpStatus.SC_OK) {
 			ahrefs = fetch(AHREF, ABS_HREF, theResponse.getBody(), url);
 		}
+		
 		return ImmutableSet.copyOf(ahrefs);
 	}
 
