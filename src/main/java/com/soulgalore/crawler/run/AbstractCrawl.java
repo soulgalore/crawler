@@ -34,9 +34,11 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	private static final String URL = "url";
 	private static final String LEVEL = "level";
 	private static final String FOLLOW_PATH = "followPath";
+	private static final String VERIFY = "verify";
 	private final String url;
 	private final int level;
 	private final String path;
+	private final boolean shouldVerify;
 	
 
 	/**
@@ -53,6 +55,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 
 		level = Integer.parseInt(getLine().getOptionValue(LEVEL, "1"));
 		path = getLine().getOptionValue(FOLLOW_PATH, "");
+		shouldVerify = Boolean.parseBoolean(getLine().getOptionValue(VERIFY,"true"));
 	}
 
 	/**
@@ -100,7 +103,14 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		followOption.setArgs(1);
 		options.addOption(followOption);
 		
-
+		final Option verifyOption = new Option("v",
+				"verify that all links are returning 200, default is set to true [optional]");
+		verifyOption.setArgName("VERIFY");
+		verifyOption.setLongOpt(VERIFY);
+		verifyOption.setRequired(false);
+		verifyOption.setArgs(1);
+		options.addOption(verifyOption);
+		
 		return options;
 	}
 
@@ -123,4 +133,12 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		return url;
 	}
 
+	/**
+	 * Get to know if all url:s should be verified or not.
+	 * @return the verify
+	 */
+	protected boolean getShouldVerify() {
+		return shouldVerify;
+	}
+	
 }

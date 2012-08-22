@@ -18,6 +18,8 @@ usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
  -p,--followPath <PATH>   stay on this path when crawling [optional]
  -u,--url <URL>           the page that is the startpoint of the crawl,
                           examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>     verify that all links are returning 200, default
+                          is set to true [optional]                          
 </pre>
 
 You can choose to output the result in a csv file, and separate the urls by working and non working:
@@ -30,6 +32,8 @@ usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-p <PATH>] -u <URL>
  -p,--followPath <PATH>     stay on this path when crawling [optional]
  -u,--url <URL>             the page that is the startpoint of the crawl,
                             examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>     verify that all links are returning 200, default
+                          is set to true [optional]
 </pre>
 
 Crawl and output urls that contains specific keyword in the html
@@ -42,6 +46,8 @@ usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-p <PATH>] -u <URL
  -p,--followPath <PATH>   stay on this path when crawling [optional]
  -u,--url <URL>           the page that is the startpoint of the crawl,
                           examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>     verify that all links are returning 200, default
+                          is set to true [optional]
 </pre>
 
 

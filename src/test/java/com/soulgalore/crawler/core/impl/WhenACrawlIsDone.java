@@ -57,7 +57,7 @@ public class WhenACrawlIsDone {
 	@Test
 	public void oneLevelShouldBeFetched() {
 
-		CrawlerResult result = crawler.getUrls("http://soulislove.com", 1);
+		CrawlerResult result = crawler.getUrls("http://soulislove.com", 1, false);
 		assertThat(result.getUrls().size(), is(1));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 		assertThat(result.getUrls(), hasItem(new PageURL(
@@ -68,14 +68,14 @@ public class WhenACrawlIsDone {
 	@Test
 	public void pathThatDoesntExistShouldNotBeFetched() {
 		assertThat(
-				crawler.getUrls("http://soulislove.com", "this/dont/exist", 4).getUrls().size(), is(0));
+				crawler.getUrls("http://soulislove.com", "this/dont/exist", 4, false).getUrls().size(), is(0));
 
 	}
 
 	@Test
 	public void specificPathsShouldAlwaysBeFetched() {
 		CrawlerResult result = crawler.getUrls("http://soulislove.com",
-				"/mypath/", 3);
+				"/mypath/", 3, false);
 		assertThat(result.getUrls().size(), is(3));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 	}
@@ -83,7 +83,7 @@ public class WhenACrawlIsDone {
 	@Test
 	public void threeLevelsShouldBeFetched() {
 
-		CrawlerResult result = crawler.getUrls("http://soulislove.com", 3);
+		CrawlerResult result = crawler.getUrls("http://soulislove.com", 3, false);
 		assertThat(result.getUrls().size(), is(10));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 		assertThat(result.getUrls(), hasItem(new PageURL(
@@ -104,7 +104,7 @@ public class WhenACrawlIsDone {
 	@Test
 	public void twoLevelsShouldBeFetched() {
 
-		CrawlerResult result = crawler.getUrls("http://soulislove.com", 2);
+		CrawlerResult result = crawler.getUrls("http://soulislove.com", 2, false);
 		System.out.println(result.getUrls());
 		assertThat(result.getUrls().size(), is(3));
 		assertThat(result.getNonWorkingUrls().size(), is(0));

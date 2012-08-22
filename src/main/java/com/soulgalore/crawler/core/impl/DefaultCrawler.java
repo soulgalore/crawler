@@ -94,8 +94,9 @@ public class DefaultCrawler implements Crawler {
 	 * 
 	 * @return the result of the crawl
 	 */
-	public CrawlerResult getUrls(String startUrl, int maxLevels) {
-		return getUrls(startUrl, "", maxLevels);
+	public CrawlerResult getUrls(String startUrl, int maxLevels,
+			boolean verifyUrls) {
+		return getUrls(startUrl, "", maxLevels, verifyUrls);
 	}
 
 	/**
@@ -112,13 +113,14 @@ public class DefaultCrawler implements Crawler {
 	 * @return the result of the crawl
 	 */
 	public CrawlerResult getUrls(String startUrl, String onlyOnPath,
-			int maxLevels) {
+			int maxLevels, boolean verifyUrls) {
 
 		final PageURL pageUrl = verifyInput(startUrl, onlyOnPath);
 
 		int level = 0;
 
 		final Set<PageURL> allUrls = new LinkedHashSet<PageURL>();
+		final Set<PageURL> verifiedUrls = new LinkedHashSet<PageURL>();
 		final Set<PageURL> nonWorkingUrls = new LinkedHashSet<PageURL>();
 
 		final String host = pageUrl.getHost();
@@ -138,9 +140,13 @@ public class DefaultCrawler implements Crawler {
 			}
 
 			nextToFetch = fetchNextLevelLinks(futures, allUrls, nonWorkingUrls,
-					host, onlyOnPath);
+					verifiedUrls, host, onlyOnPath);
 			level++;
 		}
+
+		if (verifyUrls)
+			verifyUrls(allUrls, verifiedUrls, nonWorkingUrls);
+
 		return new CrawlerResult(startUrl, allUrls, nonWorkingUrls);
 
 	}
@@ -163,8 +169,8 @@ public class DefaultCrawler implements Crawler {
 	 */
 	protected Set<PageURL> fetchNextLevelLinks(
 			Map<Future<HTMLPageResponse>, PageURL> responses,
-			Set<PageURL> allUrls, Set<PageURL> nonWorkingUrls, String host,
-			String onlyOnPath) {
+			Set<PageURL> allUrls, Set<PageURL> nonWorkingUrls,
+			Set<PageURL> verifiedUrls, String host, String onlyOnPath) {
 
 		final Set<PageURL> nextLevel = new LinkedHashSet<PageURL>();
 
@@ -179,6 +185,9 @@ public class DefaultCrawler implements Crawler {
 
 				final HTMLPageResponse response = entry.getKey().get();
 				if (HttpStatus.SC_OK == response.getResponseCode()) {
+					// we know that this links work
+					verifiedUrls.add(entry.getValue());
+
 					final Set<PageURL> allLinks = parser.get(response);
 
 					for (PageURL link : allLinks) {
@@ -191,21 +200,63 @@ public class DefaultCrawler implements Crawler {
 							}
 						}
 					}
-				}
-				else
-				{
+				} else {
 					allUrls.remove(entry.getValue());
 					nonWorkingUrls.add(entry.getValue());
 				}
 
 			} catch (InterruptedException | ExecutionException e) {
-
 				nonWorkingUrls.add(entry.getValue());
 			}
 		}
 		return nextLevel;
 	}
 
+	/**
+	 * Verify that all urls in allUrls returns 200. If not, they will be removed
+	 * from that set and instead added to the nonworking list.
+	 * 
+	 * @param allUrls
+	 *            all the links that has been fetched
+	 * @param nonWorkingUrls
+	 *            links that are not working
+	 */
+	private void verifyUrls(Set<PageURL> allUrls, Set<PageURL> verifiedUrls,
+			Set<PageURL> nonWorkingUrls) {
+
+		// Only test the onces that hasn't been verified
+		Set<PageURL> urlsThatNeedsVerification = new LinkedHashSet<PageURL>(
+				allUrls);
+		urlsThatNeedsVerification.removeAll(verifiedUrls);
+
+		final Map<Future<HTMLPageResponse>, PageURL> responses = new HashMap<Future<HTMLPageResponse>, PageURL>(
+				urlsThatNeedsVerification.size());
+
+		for (PageURL testURL : urlsThatNeedsVerification) {
+			responses.put(service.submit(new HTMLPageResponseCallable(testURL,
+					responseFetcher, true)), testURL);
+		}
+
+		final Iterator<Entry<Future<HTMLPageResponse>, PageURL>> it = responses
+				.entrySet().iterator();
+
+		while (it.hasNext()) {
+
+			final Entry<Future<HTMLPageResponse>, PageURL> entry = it.next();
+
+			try {
+
+				final HTMLPageResponse response = entry.getKey().get();
+				if (response.getResponseCode() != HttpStatus.SC_OK) {
+					allUrls.remove(entry.getValue());
+					nonWorkingUrls.add(entry.getValue());
+				}
+			} catch (InterruptedException | ExecutionException e) {
+				allUrls.remove(entry.getValue());
+				nonWorkingUrls.add(entry.getValue());
+			}
+		}
+	}
 
 	private HTMLPageResponse fetchOnePage(PageURL url) {
 		return responseFetcher.get(url, false);

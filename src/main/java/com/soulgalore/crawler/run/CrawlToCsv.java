@@ -80,8 +80,8 @@ public class CrawlToCsv extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = ("".equals(getPath())) ? crawler.getUrls(
-				getUrl(), getLevel()) : crawler.getUrls(getUrl(), getPath(),
-				getLevel());
+				getUrl(), getLevel(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
+				getLevel(), getShouldVerify());
 
 		final StringBuilder builder = new StringBuilder();
 		builder.append("URL,parent\n");

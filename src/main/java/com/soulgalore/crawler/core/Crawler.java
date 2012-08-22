@@ -34,10 +34,11 @@ public interface Crawler {
 	 * @param maxLevels
 	 *            the maximum number of levels to crawl, the max number is
 	 *            {@link #MAX_CRAWL_LEVELS}
-	 * 
+	 * @param verifyUrls 
+	 * 			  verify all fetched links, if they are returning 200 or not  
 	 * @return the result of the crawl
 	 */
-	CrawlerResult getUrls(String startUrl, int maxLevels);
+	CrawlerResult getUrls(String startUrl, int maxLevels, boolean verifyUrls);
 
 	/**
 	 * Get the urls.
@@ -50,10 +51,12 @@ public interface Crawler {
 	 * @param maxLevels
 	 *            the maximum number of levels to crawl, the max number is
 	 *            {@link #MAX_CRAWL_LEVELS}
+	 * @param verifyUrls 
+	 * 			  verify all fetched links, if they are returning 200 or not          
 	 * @return the result of the crawl
 	 */
 	CrawlerResult getUrls(String startUrl, String onlyOnPath,
-			int maxLevels);
+			int maxLevels, boolean verifyUrls);
 
 	/**
 	 * Shutdown the crawler and all it's assets.
