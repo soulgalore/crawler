@@ -63,15 +63,14 @@ public class HTMLPageResponse {
 		// ends with an /
 
 		final String baseUri = pageUrl.getUri().getScheme()
-				+ ":"
-				+ ((pageUrl.getUri().getPort() != NO_HTTP_PORT) ? pageUrl
-						.getUri().getPort() : "")
-				+ "//"
+				+ "://"
 				+ pageUrl.getUri().getHost()
+				+ ((pageUrl.getUri().getPort() != NO_HTTP_PORT) ? ":" + pageUrl
+						.getUri().getPort() : "")
 				+ ((pageUrl.getUri().getPath().contains(".")) ? pageUrl
 						.getUri().getPath() : pageUrl.getUri().getPath()
 						+ (pageUrl.getUri().getPath().endsWith("/") ? "" : "/"));
-
+	
 		doc = Jsoup.parse(theBody, baseUri);
 
 	}
