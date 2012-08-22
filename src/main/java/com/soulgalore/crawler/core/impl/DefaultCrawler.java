@@ -33,8 +33,6 @@ import java.util.concurrent.Future;
 
 import org.apache.http.HttpStatus;
 
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.google.inject.Inject;
 import com.soulgalore.crawler.core.Parser;
 import com.soulgalore.crawler.core.Crawler;
@@ -52,7 +50,7 @@ import com.soulgalore.crawler.util.StatusCode;
 public class DefaultCrawler implements Crawler {
 
 	private final HTMLPageResponseFetcher responseFetcher;
-	private final ListeningExecutorService service;
+	private final ExecutorService service;
 	private final Parser parser;
 
 	/**
@@ -68,7 +66,7 @@ public class DefaultCrawler implements Crawler {
 	@Inject
 	public DefaultCrawler(HTMLPageResponseFetcher theResponseFetcher,
 			ExecutorService theService, Parser theParser) {
-		service = MoreExecutors.listeningDecorator(theService);
+		service = theService;
 		responseFetcher = theResponseFetcher;
 		parser = theParser;
 	}
