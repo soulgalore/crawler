@@ -75,7 +75,7 @@ Checkout the project:
 <pre>git clone git@github.com:soulgalore/crawler.git</pre>
 
 or download the jar (the jar contains all libs needed):
-<a href="http://github.com/downloads/soulgalore/crawler/crawler-0.7-full.jar">Download/a>
+<a href="http://github.com/downloads/soulgalore/crawler/crawler-0.7-full.jar">Download</a>
 
 
 ## Examples
