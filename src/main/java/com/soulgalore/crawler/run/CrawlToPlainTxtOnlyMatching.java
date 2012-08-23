@@ -72,8 +72,6 @@ public class CrawlToPlainTxtOnlyMatching extends AbstractCrawl {
 		final CrawlerResult result = ("".equals(getPath())) ? crawler.getUrls(
 				getUrl(), getLevel(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
 				getLevel(), getShouldVerify());
-
-		System.out.println(result.getUrls().size());
 		crawler.shutdown();
 	}
 
