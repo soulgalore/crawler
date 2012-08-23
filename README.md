@@ -81,17 +81,17 @@ or <a href="http://github.com/downloads/soulgalore/crawler/crawler-0.7-full.jar"
 
 Running from the jar, fetching two levels depth and only fetch urls that contains "/tagg/"
 <pre>
-java -jar crawler-0.5.full.jar -u http://soulislove.com -l 2 -p /tagg/
+java -jar crawler-0.7.full.jar -u http://soulislove.com -l 2 -p /tagg/
 </pre>
 
 Running from the jar, adding base auth
 <pre>
-java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-0.5-full.jar -u http://soulislove.com
+java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-0.7-full.jar -u http://soulislove.com
 </pre>
 
 Running from the jar, output urls in csv file
 <pre>
-java -cp crawler-0.5-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
+java -cp crawler-0.7-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
 </pre>
 
 ## License
