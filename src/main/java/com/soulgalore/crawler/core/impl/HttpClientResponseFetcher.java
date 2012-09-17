@@ -84,11 +84,12 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 		}
 	
 		final HttpGet get = new HttpGet(url.getUri());
-
+		HttpEntity entity = null;
+		
 		try {
 
 			final HttpResponse resp = httpClient.execute(get);
-			final HttpEntity entity = resp.getEntity();
+			entity = resp.getEntity();
 
 			
 			if (entity.getContentType() == null
@@ -115,7 +116,6 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 			final String body = getPage ? getBody(entity, "".equals(encoding)?"UTF-8":encoding) : "";
 			final long size = entity.getContentLength();
 
-			EntityUtils.consume(entity);
 			return new HTMLPageResponse(url, resp.getStatusLine()
 					.getStatusCode(), headersAndValues, body, encoding, size);
 
@@ -131,6 +131,15 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 					StatusCode.SC_SERVER_RESPONSE_UNKNOWN,
 					Collections.<String, String>emptyMap(), "", "", 0);
 		}
+		finally {
+			try {
+				EntityUtils.consume(entity);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 
 	}
 
