@@ -5,6 +5,7 @@ Simple java (1.7) crawler to crawl webpages on one and same domain. Basicly you 
 <li>Crawl from a start point, defining the depth of the crawl and decide to crawl only a specific path</li>
 <li>Output all working urls</li>
 <li>Output the data to a csv file, separated by working (200 response code) and non working url</li>
+<li>Output the data to two text files, one with working urls and one with none working. Each url will be on one new line.</li>
 <li>Output url:s that contains a keyword in the html</li>
 </ul>
 
@@ -21,6 +22,28 @@ usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
                           examle http://mydomain.com/mypage
  -v,--verify <VERIFY>     verify that all links are returning 200, default
                           is set to true [optional]                          
+</pre>
+
+
+You can choose to output the crawled list to two plain text files, one with working urls, and one with the none working:
+<pre>
+usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-p
+       <PATH>] -u <URL> [-v <VERIFY>]
+ -ef,--errorfilename <ERRORFILENAME>   the name of the error output file,
+                                       default name is errorurls.txt
+                                       [optional]
+ -f,--filename <FILENAME>              the name of the output file,
+                                       default name is urls.txt [optional]
+ -l,--level <LEVEL>                    how deep the crawl should be done,
+                                       default is 2 [optional]
+ -p,--followPath <PATH>                stay on this path when crawling
+                                       [optional]
+ -u,--url <URL>                        the page that is the startpoint of
+                                       the crawl, examle
+                                       http://mydomain.com/mypage
+ -v,--verify <VERIFY>                  verify that all links are returning
+                                       200, default is set to true
+                                       [optional]
 </pre>
 
 
@@ -74,7 +97,7 @@ com.soulgalore.crawler.auth=
 Checkout the project:
 <pre>git clone git@github.com:soulgalore/crawler.git</pre>
 
-or <a href="http://github.com/downloads/soulgalore/crawler/crawler-0.8-full.jar">download</a> the jar (the jar contains all libs needed).
+or <a href="http://github.com/downloads/soulgalore/crawler/crawler-0.9-full.jar">download</a> the jar (the jar contains all libs needed).
 
 
 ## Examples
@@ -86,13 +109,19 @@ java -jar crawler-0.8.full.jar -u http://soulislove.com -l 2 -p /tagg/
 
 Running from the jar, adding base auth
 <pre>
-java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-0.8-full.jar -u http://soulislove.com
+java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-0.9-full.jar -u http://soulislove.com
 </pre>
 
 Running from the jar, output urls in csv file
 <pre>
-java -cp crawler-0.8-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
+java -cp crawler-0.9-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
 </pre>
+
+Running from the jar, output urls into two text files: workingurls.txt and nonworkingurls.txt
+<pre>
+java -cp crawler-0.9-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
+</pre>
+
 
 ## License
 
