@@ -61,8 +61,8 @@ public class CrawlToSystemOut extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = ("".equals(getPath())) ? crawler.getUrls(
-				getUrl(), getLevel(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
-				getLevel(), getShouldVerify());
+				getUrl(), getLevel(), getNoPath(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
+				getLevel(), getNoPath(),getShouldVerify());
 					
 		for (PageURL workingUrls : result.getUrls()) {
 			System.out.println(workingUrls.getUrl());

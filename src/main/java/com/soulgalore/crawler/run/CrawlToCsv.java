@@ -80,8 +80,8 @@ public class CrawlToCsv extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = ("".equals(getPath())) ? crawler.getUrls(
-				getUrl(), getLevel(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
-				getLevel(), getShouldVerify());
+				getUrl(), getLevel(), getNoPath(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
+				getLevel(), getNoPath(), getShouldVerify());
 
 		final StringBuilder builder = new StringBuilder();
 		builder.append("URL,parent\n");
@@ -123,7 +123,7 @@ public class CrawlToCsv extends AbstractCrawl {
 		final Options options = super.getOptions();
 
 		final Option filenameOption = new Option("f",
-				"the name of the csv ouput file, default name is "
+				"the name of the csv output file, default name is "
 						+ DEFAULT_FILENAME + " [optional]");
 		filenameOption.setArgName("FILENAME");
 		filenameOption.setLongOpt("filename");

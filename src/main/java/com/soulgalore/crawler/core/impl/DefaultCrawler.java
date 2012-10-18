@@ -100,6 +100,39 @@ public class DefaultCrawler implements Crawler {
 		return getUrls(startUrl, "", maxLevels, verifyUrls);
 	}
 
+	
+	/**
+	 * Get the urls.
+	 * 
+	 * @param startUrl
+	 *            the first url to start crawl
+	 * @param maxLevels
+	 *            the maximum number of levels to crawl, the max number is
+	 *            {@link #MAX_CRAWL_LEVELS}
+	 * @param don't collect/follow urls that contains this text in the url       
+	 * 
+	 * @return the result of the crawl
+	 */
+	public CrawlerResult getUrls(String startUrl, int maxLevels, String notOnPath,
+			boolean verifyUrls) {
+		return getUrls(startUrl, "", maxLevels, notOnPath, verifyUrls );
+	}
+	
+	/**
+	 * Get the urls.
+	 * 
+	 * @param startUrl
+	 *            the first url to start crawl
+	 * @param maxLevels
+	 *            the maximum number of levels to crawl, the max number is
+	 *            {@link #MAX_CRAWL_LEVELS}   
+	 * 
+	 * @return the result of the crawl
+	 */
+	public CrawlerResult getUrls(String startUrl, String onlyOnPath,
+			int maxLevels,  boolean verifyUrls) {
+		return getUrls(startUrl,onlyOnPath, maxLevels,"", verifyUrls);
+	}
 	/**
 	 * Get the urls.
 	 * 
@@ -111,10 +144,11 @@ public class DefaultCrawler implements Crawler {
 	 * @param maxLevels
 	 *            the maximum number of levels to crawl, the max number is
 	 *            {@link #MAX_CRAWL_LEVELS}
+	 * @param don't collect/follow urls that contains this text in the url               
 	 * @return the result of the crawl
 	 */
 	public CrawlerResult getUrls(String startUrl, String onlyOnPath,
-			int maxLevels, boolean verifyUrls) {
+			int maxLevels, String notOnPath, boolean verifyUrls) {
 
 		final PageURL pageUrl = verifyInput(startUrl, onlyOnPath);
 
@@ -141,7 +175,7 @@ public class DefaultCrawler implements Crawler {
 			}
 
 			nextToFetch = fetchNextLevelLinks(futures, allUrls, nonWorkingUrls,
-					verifiedUrls, host, onlyOnPath);
+					verifiedUrls, host, onlyOnPath, notOnPath);
 			level++;
 		}
 
@@ -166,12 +200,13 @@ public class DefaultCrawler implements Crawler {
 	 * @param onlyOnPath
 	 *            only fetch files that match the following path. If empty, all
 	 *            will match.
+	 * @param don't collect/follow urls that contains this text in the url                
 	 * @return the next level of links that we should fetch
 	 */
 	protected Set<PageURL> fetchNextLevelLinks(
 			Map<Future<HTMLPageResponse>, PageURL> responses,
 			Set<PageURL> allUrls, Set<PageURL> nonWorkingUrls,
-			Set<PageURL> verifiedUrls, String host, String onlyOnPath) {
+			Set<PageURL> verifiedUrls, String host, String onlyOnPath, String notOnPath) {
 
 		final Set<PageURL> nextLevel = new LinkedHashSet<PageURL>();
 
@@ -188,13 +223,14 @@ public class DefaultCrawler implements Crawler {
 				if (HttpStatus.SC_OK == response.getResponseCode()) {
 					// we know that this links work
 					verifiedUrls.add(entry.getValue());
-
 					final Set<PageURL> allLinks = parser.get(response);
 
 					for (PageURL link : allLinks) {
 						// only add if it is the same host
 						if (host.equals(link.getHost())
-								&& link.getUrl().contains(onlyOnPath)) {
+								&& link.getUrl().contains(onlyOnPath)
+								&& (notOnPath.equals("") ? true : (!link
+										.getUrl().contains(notOnPath)))) {
 							if (!allUrls.contains(link)) {
 								nextLevel.add(link);
 								allUrls.add(link);

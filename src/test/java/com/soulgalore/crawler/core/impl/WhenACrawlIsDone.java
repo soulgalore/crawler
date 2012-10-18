@@ -79,6 +79,14 @@ public class WhenACrawlIsDone {
 		assertThat(result.getUrls().size(), is(3));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 	}
+	
+	@Test
+	public void specificNoPathShouldNotBeFetched() {
+		CrawlerResult result = crawler.getUrls("http://soulislove.com",
+				3, "/mypath/",  false);
+		assertThat(result.getUrls().size(), is(0));
+		assertThat(result.getNonWorkingUrls().size(), is(0));
+	}
 
 	@Test
 	public void threeLevelsShouldBeFetched() {

@@ -82,8 +82,8 @@ public class CrawlToFile extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = ("".equals(getPath())) ? crawler.getUrls(
-				getUrl(), getLevel(), getShouldVerify()) : crawler.getUrls(
-				getUrl(), getPath(), getLevel(), getShouldVerify());
+				getUrl(), getLevel(), getNoPath(), getShouldVerify()) : crawler.getUrls(
+				getUrl(), getPath(), getLevel(), getNoPath(),getShouldVerify());
 
 		final StringBuilder workingUrls = new StringBuilder();
 		final StringBuilder nonWorkingUrls = new StringBuilder();

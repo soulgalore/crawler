@@ -34,10 +34,12 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	private static final String URL = "url";
 	private static final String LEVEL = "level";
 	private static final String FOLLOW_PATH = "followPath";
+	private static final String NO_FOLLOW_PATH = "notFollowPath";
 	private static final String VERIFY = "verify";
 	private final String url;
 	private final int level;
 	private final String path;
+	private final String noPath;
 	private final boolean shouldVerify;
 	
 
@@ -55,6 +57,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 
 		level = Integer.parseInt(getLine().getOptionValue(LEVEL, "1"));
 		path = getLine().getOptionValue(FOLLOW_PATH, "");
+		noPath = getLine().getOptionValue(NO_FOLLOW_PATH, "");
 		shouldVerify = Boolean.parseBoolean(getLine().getOptionValue(VERIFY,"true"));
 	}
 
@@ -103,6 +106,14 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		followOption.setArgs(1);
 		options.addOption(followOption);
 		
+		final Option noFollowOption = new Option("np",
+				"no url:s on this path will be crawled [optional]");
+		noFollowOption.setArgName("NOPATH");
+		noFollowOption.setLongOpt(NO_FOLLOW_PATH);
+		noFollowOption.setRequired(false);
+		noFollowOption.setArgs(1);
+		options.addOption(noFollowOption);
+		
 		final Option verifyOption = new Option("v",
 				"verify that all links are returning 200, default is set to true [optional]");
 		verifyOption.setArgName("VERIFY");
@@ -124,6 +135,16 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		return path;
 	}
 
+	/**
+	 * Urls on this path will not be fetched. If empty all paths on the domain
+	 * will be followed.
+	 * 
+	 * @return the path
+	 */
+	protected String getNoPath() {
+		return noPath;
+	}
+	
 	/**
 	 * Get the url (startpage) this crawler will use.
 	 * 
