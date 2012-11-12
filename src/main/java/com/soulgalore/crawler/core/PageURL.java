@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 
-import com.google.common.base.Objects;
 
 /**
  * A page url.
@@ -111,9 +110,7 @@ public class PageURL {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("url", url)
-				.add("referfer", referer).add("host", host).add("uri", uri)
-				.add("isWrongSyntax", isWrongSyntax).toString();
+		return this.getClass().getSimpleName() + " url:" + url;
 	}
 
 	@Override

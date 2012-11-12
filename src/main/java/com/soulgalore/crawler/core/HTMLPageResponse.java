@@ -25,8 +25,6 @@ import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.google.common.base.Objects;
-
 /**
  * The response for a html page.
  * 
@@ -98,9 +96,7 @@ public class HTMLPageResponse {
 	@Override
 	public String toString() {
 		// left out the body for now
-		return Objects.toStringHelper(this).add("url", getUrl())
-				.add("responseCode", getResponseCode())
-				.add("encoding", encoding).toString();
+		return this.getClass().getSimpleName() + "url:" + getUrl() + "responseCode:" + getResponseCode()+ "encoding:"+ encoding;
 	}
 
 	@Override

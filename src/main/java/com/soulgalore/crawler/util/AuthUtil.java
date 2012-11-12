@@ -5,8 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
-import com.google.common.base.Splitter;
+import java.util.StringTokenizer;
 
 /**
  * Helper class for authentication.
@@ -48,13 +47,13 @@ public final class AuthUtil {
 
 		try {
 			for (String auth : parts) {
-				final Iterable<String> allAuths = Splitter.on(':')
-						.trimResults().split(auth);
-
-				final Iterator<String> authItems = allAuths.iterator();
-
-				auths.add(new Auth(authItems.next(), authItems.next(),
-						authItems.next(), authItems.next()));
+				
+				StringTokenizer tokenizer = new StringTokenizer(auth,":");
+				
+				while (tokenizer.hasMoreTokens()) {
+				auths.add(new Auth(tokenizer.nextToken(), tokenizer.nextToken(),
+						tokenizer.nextToken(), tokenizer.nextToken()));
+				}
 
 			}
 

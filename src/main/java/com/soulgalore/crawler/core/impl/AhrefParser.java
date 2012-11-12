@@ -28,7 +28,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.google.common.collect.ImmutableSet;
 import com.soulgalore.crawler.core.Parser;
 import com.soulgalore.crawler.core.PageURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
@@ -72,7 +71,7 @@ public class AhrefParser implements Parser {
 			ahrefs = fetch(AHREF, ABS_HREF, theResponse.getBody(), url);
 		}
 		
-		return ImmutableSet.copyOf(ahrefs);
+		return ahrefs;
 	}
 
 	private Set<PageURL> fetch(String query, String attributeKey, Document doc,

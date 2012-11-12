@@ -1,6 +1,5 @@
 package com.soulgalore.crawler.util;
 
-import com.google.common.base.Objects;
 
 public class Auth {
 
@@ -93,13 +92,6 @@ public class Auth {
 	 */
 	public String getUserName() {
 		return userName;
-	}
-
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this).add("userName", userName)
-				.add("password", password).add("scope", scope)
-				.add("port", port).toString();
 	}
 
 }

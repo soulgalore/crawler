@@ -22,7 +22,6 @@ package com.soulgalore.crawler.core;
 
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Objects;
 
 
 /**
@@ -68,7 +67,6 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this).add("url", url)
-				.toString();
+		return this.getClass().getSimpleName() + " url:" + url;
 	}
 }
