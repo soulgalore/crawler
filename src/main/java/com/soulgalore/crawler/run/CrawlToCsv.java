@@ -22,12 +22,14 @@ package com.soulgalore.crawler.run;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.google.common.io.Files;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
@@ -100,12 +102,12 @@ public class CrawlToCsv extends AbstractCrawl {
 					.append(nonWorkingUrl.getReferer()).append("\n");
 		}
 
-		final File theFile = new File(fileName);
-
-		System.out.println("Start storing file " + theFile.getAbsolutePath());
+		System.out.println("Start storing file " + fileName);
 
 		try {
-			Files.write(builder.toString().getBytes("UTF-8"), theFile);
+			Files.write(FileSystems.getDefault().getPath(".", fileName),
+					builder.toString().getBytes("UTF-8"),
+					StandardOpenOption.CREATE);
 		} catch (IOException e) {
 			System.err.println(e);
 		}

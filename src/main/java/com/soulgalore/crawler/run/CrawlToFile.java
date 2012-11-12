@@ -22,12 +22,14 @@ package com.soulgalore.crawler.run;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.google.common.io.Files;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
@@ -93,15 +95,15 @@ public class CrawlToFile extends AbstractCrawl {
 
 		}
 
-		final File workingUrlsFile = new File(fileName);
 
-		System.out.println("Start storing file "
-				+ workingUrlsFile.getAbsolutePath());
+		System.out.println("Start storing file " 
+				+ fileName);
 
 		try {
-			Files.write(workingUrls.toString().getBytes("UTF-8"),
-					workingUrlsFile);
-
+			Files.write(FileSystems.getDefault().getPath(".", fileName),
+					workingUrls.toString().getBytes("UTF-8"),
+					StandardOpenOption.CREATE);
+	
 		} catch (IOException e) {
 			System.err.println(e);
 		}
@@ -110,11 +112,13 @@ public class CrawlToFile extends AbstractCrawl {
 			for (PageURL nonWorkingUrl : result.getNonWorkingUrls()) {
 				nonWorkingUrls.append(nonWorkingUrl.getUrl()).append("\n");
 			}
-			final File nonWorkingUrlsFile = new File(errorFileName);
 
 			try {
-				Files.write(nonWorkingUrls.toString().getBytes("UTF-8"),
-						nonWorkingUrlsFile);
+				
+				Files.write(FileSystems.getDefault().getPath(".", errorFileName),
+						nonWorkingUrls.toString().getBytes("UTF-8"),
+						StandardOpenOption.CREATE);
+				
 
 			} catch (IOException e) {
 				System.err.println(e);
