@@ -149,7 +149,7 @@ public class DefaultCrawler implements Crawler {
 	 */
 	public CrawlerResult getUrls(String startUrl, String onlyOnPath,
 			int maxLevels, String notOnPath, boolean verifyUrls) {
-
+		
 		final PageURL pageUrl = verifyInput(startUrl, onlyOnPath);
 
 		int level = 0;
@@ -159,24 +159,30 @@ public class DefaultCrawler implements Crawler {
 		final Set<PageURL> nonWorkingUrls = new LinkedHashSet<PageURL>();
 
 		final String host = pageUrl.getHost();
+		
+		if (maxLevels > 0) {
 
-		// set the start url
-		Set<PageURL> nextToFetch = new LinkedHashSet<PageURL>();
-		nextToFetch.add(pageUrl);
+			// set the start url
+			Set<PageURL> nextToFetch = new LinkedHashSet<PageURL>();
+			nextToFetch.add(pageUrl);
 
-		while (level < maxLevels) {
+			while (level < maxLevels) {
 
-			final Map<Future<HTMLPageResponse>, PageURL> futures = new HashMap<Future<HTMLPageResponse>, PageURL>(
-					nextToFetch.size());
+				final Map<Future<HTMLPageResponse>, PageURL> futures = new HashMap<Future<HTMLPageResponse>, PageURL>(
+						nextToFetch.size());
 
-			for (PageURL testURL : nextToFetch) {
-				futures.put(service.submit(new HTMLPageResponseCallable(
-						testURL, responseFetcher, true)), testURL);
+				for (PageURL testURL : nextToFetch) {
+					futures.put(service.submit(new HTMLPageResponseCallable(
+							testURL, responseFetcher, true)), testURL);
+				}
+
+				nextToFetch = fetchNextLevelLinks(futures, allUrls,
+						nonWorkingUrls, verifiedUrls, host, onlyOnPath,
+						notOnPath);
+				level++;
 			}
-
-			nextToFetch = fetchNextLevelLinks(futures, allUrls, nonWorkingUrls,
-					verifiedUrls, host, onlyOnPath, notOnPath);
-			level++;
+		} else {
+			allUrls.add(pageUrl);
 		}
 
 		if (verifyUrls)
