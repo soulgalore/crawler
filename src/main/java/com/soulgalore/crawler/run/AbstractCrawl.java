@@ -90,7 +90,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		options.addOption(urlOption);
 
 		final Option levelOption = new Option("l",
-				"how deep the crawl should be done, default is " + 2
+				"how deep the crawl should be done, default is " + 1
 						+ " [optional]");
 		levelOption.setArgName("LEVEL");
 		levelOption.setLongOpt(LEVEL);
