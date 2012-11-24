@@ -105,7 +105,7 @@ public class CrawlToCsv extends AbstractCrawl {
 		System.out.println("Start storing file " + fileName);
 
 		try {
-			Files.write(FileSystems.getDefault().getPath(".", fileName),
+			Files.write(FileSystems.getDefault().getPath(fileName),
 					builder.toString().getBytes("UTF-8"),
 					StandardOpenOption.CREATE);
 		} catch (IOException e) {

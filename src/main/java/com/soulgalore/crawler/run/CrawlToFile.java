@@ -100,7 +100,7 @@ public class CrawlToFile extends AbstractCrawl {
 				+ fileName);
 
 		try {
-			Files.write(FileSystems.getDefault().getPath(".", fileName),
+			Files.write(FileSystems.getDefault().getPath(fileName),
 					workingUrls.toString().getBytes("UTF-8"),
 					StandardOpenOption.CREATE);
 	
@@ -115,7 +115,7 @@ public class CrawlToFile extends AbstractCrawl {
 
 			try {
 				
-				Files.write(FileSystems.getDefault().getPath(".", errorFileName),
+				Files.write(FileSystems.getDefault().getPath(errorFileName),
 						nonWorkingUrls.toString().getBytes("UTF-8"),
 						StandardOpenOption.CREATE);
 				
