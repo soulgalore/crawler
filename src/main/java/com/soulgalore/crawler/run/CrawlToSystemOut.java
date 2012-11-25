@@ -60,9 +60,7 @@ public class CrawlToSystemOut extends AbstractCrawl {
 		final Injector injector = Guice.createInjector(new CrawlModule());
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
-		final CrawlerResult result = ("".equals(getPath())) ? crawler.getUrls(
-				getUrl(), getLevel(), getNoPath(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
-				getLevel(), getNoPath(),getShouldVerify());
+		final CrawlerResult result = crawler.getUrls(getConfiguration());
 					
 		for (PageURL workingUrls : result.getUrls()) {
 			System.out.println(workingUrls.getUrl());

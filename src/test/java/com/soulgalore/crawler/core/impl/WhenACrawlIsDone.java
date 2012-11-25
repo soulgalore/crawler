@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.soulgalore.crawler.core.Crawler;
+import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.core.CrawlerResult;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.PageURL;
@@ -56,8 +57,10 @@ public class WhenACrawlIsDone {
 
 	@Test
 	public void oneLevelShouldBeFetched() {
-
-		CrawlerResult result = crawler.getUrls("http://soulislove.com", 1, false);
+		CrawlerConfiguration conf = new CrawlerConfiguration();
+		conf.setStartUrl("http://soulislove.com");
+		conf.setVerifyUrls(false);
+		CrawlerResult result = crawler.getUrls(conf);
 		assertThat(result.getUrls().size(), is(1));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 		assertThat(result.getUrls(), hasItem(new PageURL(
@@ -67,23 +70,43 @@ public class WhenACrawlIsDone {
 
 	@Test
 	public void pathThatDoesntExistShouldNotBeFetched() {
+		
+		CrawlerConfiguration conf = new CrawlerConfiguration();
+		conf.setStartUrl("http://soulislove.com");
+		conf.setOnlyOnPath("this/dont/exist");
+		conf.setMaxLevels(4);
+		conf.setVerifyUrls(false);
+		
 		assertThat(
-				crawler.getUrls("http://soulislove.com", "this/dont/exist", 4, false).getUrls().size(), is(0));
+				crawler.getUrls(conf).getUrls().size(), is(0));
 
 	}
 
 	@Test
 	public void specificPathsShouldAlwaysBeFetched() {
-		CrawlerResult result = crawler.getUrls("http://soulislove.com",
-				"/mypath/", 3, false);
+		
+
+		CrawlerConfiguration conf = new CrawlerConfiguration();
+		conf.setStartUrl("http://soulislove.com");
+		conf.setOnlyOnPath("/mypath/");
+		conf.setMaxLevels(3);
+		conf.setVerifyUrls(false);
+		
+		CrawlerResult result = crawler.getUrls(conf);
 		assertThat(result.getUrls().size(), is(3));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 	}
 	
 	@Test
 	public void specificNoPathShouldNotBeFetched() {
-		CrawlerResult result = crawler.getUrls("http://soulislove.com",
-				3, "/mypath/",  false);
+		
+		CrawlerConfiguration conf = new CrawlerConfiguration();
+		conf.setStartUrl("http://soulislove.com");
+		conf.setNotOnPath("/mypath/");
+		conf.setMaxLevels(3);
+		conf.setVerifyUrls(false);
+		
+		CrawlerResult result = crawler.getUrls(conf);
 		assertThat(result.getUrls().size(), is(0));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 	}
@@ -91,7 +114,12 @@ public class WhenACrawlIsDone {
 	@Test
 	public void threeLevelsShouldBeFetched() {
 
-		CrawlerResult result = crawler.getUrls("http://soulislove.com", 3, false);
+		CrawlerConfiguration conf = new CrawlerConfiguration();
+		conf.setStartUrl("http://soulislove.com");
+		conf.setMaxLevels(3);
+		conf.setVerifyUrls(false);
+		
+		CrawlerResult result = crawler.getUrls(conf);
 		assertThat(result.getUrls().size(), is(10));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
 		assertThat(result.getUrls(), hasItem(new PageURL(
@@ -112,7 +140,11 @@ public class WhenACrawlIsDone {
 	@Test
 	public void twoLevelsShouldBeFetched() {
 
-		CrawlerResult result = crawler.getUrls("http://soulislove.com", 2, false);
+		CrawlerConfiguration conf = new CrawlerConfiguration();
+		conf.setStartUrl("http://soulislove.com");
+		conf.setMaxLevels(2);
+		conf.setVerifyUrls(false);
+		CrawlerResult result = crawler.getUrls(conf);
 		System.out.println(result.getUrls());
 		assertThat(result.getUrls().size(), is(3));
 		assertThat(result.getNonWorkingUrls().size(), is(0));

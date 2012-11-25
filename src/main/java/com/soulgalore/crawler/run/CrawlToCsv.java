@@ -81,9 +81,7 @@ public class CrawlToCsv extends AbstractCrawl {
 		final Injector injector = Guice.createInjector(new CrawlModule());
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
-		final CrawlerResult result = ("".equals(getPath())) ? crawler.getUrls(
-				getUrl(), getLevel(), getNoPath(), getShouldVerify()) : crawler.getUrls(getUrl(), getPath(),
-				getLevel(), getNoPath(), getShouldVerify());
+		final CrawlerResult result = crawler.getUrls(getConfiguration());
 
 		final StringBuilder builder = new StringBuilder();
 		builder.append("URL,parent\n");

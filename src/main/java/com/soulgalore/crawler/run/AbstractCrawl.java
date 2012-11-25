@@ -24,6 +24,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.soulgalore.crawler.core.CrawlerConfiguration;
+
 /**
  * Abstract crawl class, used to setup default args options.
  * 
@@ -41,6 +43,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	private final String path;
 	private final String noPath;
 	private final boolean shouldVerify;
+	private final CrawlerConfiguration configuration = new CrawlerConfiguration();
 	
 
 	/**
@@ -59,6 +62,12 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		path = getLine().getOptionValue(FOLLOW_PATH, "");
 		noPath = getLine().getOptionValue(NO_FOLLOW_PATH, "");
 		shouldVerify = Boolean.parseBoolean(getLine().getOptionValue(VERIFY,"true"));
+		
+		configuration.setMaxLevels(level);
+		configuration.setStartUrl(url);
+		configuration.setNotOnPath(noPath);
+		configuration.setOnlyOnPath(path);
+		configuration.setVerifyUrls(shouldVerify);
 	}
 
 	/**
@@ -160,6 +169,10 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	 */
 	protected boolean getShouldVerify() {
 		return shouldVerify;
+	}
+	
+	protected CrawlerConfiguration getConfiguration() {
+		return configuration;
 	}
 	
 }

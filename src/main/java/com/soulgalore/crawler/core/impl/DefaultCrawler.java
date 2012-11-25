@@ -37,6 +37,7 @@ import java.util.concurrent.Future;
 import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
+import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.core.Parser;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
@@ -84,55 +85,21 @@ public class DefaultCrawler implements Crawler {
 			responseFetcher.shutdown();
 	}
 
+	
 	/**
 	 * Get the urls.
 	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}
-	 * 
+	 * @param configuration how to perform the crawl
 	 * @return the result of the crawl
 	 */
-	public CrawlerResult getUrls(String startUrl, int maxLevels,
-			boolean verifyUrls) {
-		return getUrls(startUrl, "", maxLevels, verifyUrls);
+	public CrawlerResult getUrls(CrawlerConfiguration configuration) {
+
+		return getUrls(configuration.getStartUrl(),
+				configuration.getOnlyOnPath(), configuration.getMaxLevels(),
+				configuration.getNotOnPath(), configuration.isVerifyUrls());
+
 	}
 
-	
-	/**
-	 * Get the urls.
-	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}
-	 * @param don't collect/follow urls that contains this text in the url       
-	 * 
-	 * @return the result of the crawl
-	 */
-	public CrawlerResult getUrls(String startUrl, int maxLevels, String notOnPath,
-			boolean verifyUrls) {
-		return getUrls(startUrl, "", maxLevels, notOnPath, verifyUrls );
-	}
-	
-	/**
-	 * Get the urls.
-	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}   
-	 * 
-	 * @return the result of the crawl
-	 */
-	public CrawlerResult getUrls(String startUrl, String onlyOnPath,
-			int maxLevels,  boolean verifyUrls) {
-		return getUrls(startUrl,onlyOnPath, maxLevels,"", verifyUrls);
-	}
 	/**
 	 * Get the urls.
 	 * 
@@ -147,7 +114,7 @@ public class DefaultCrawler implements Crawler {
 	 * @param don't collect/follow urls that contains this text in the url               
 	 * @return the result of the crawl
 	 */
-	public CrawlerResult getUrls(String startUrl, String onlyOnPath,
+	private CrawlerResult getUrls(String startUrl, String onlyOnPath,
 			int maxLevels, String notOnPath, boolean verifyUrls) {
 		
 		final PageURL pageUrl = verifyInput(startUrl, onlyOnPath);

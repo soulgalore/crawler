@@ -29,70 +29,10 @@ public interface Crawler {
 	/**
 	 * Get the urls.
 	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}
-	 * @param verifyUrls 
-	 * 			  verify all fetched links, if they are returning 200 or not  
+	 * @param configuration how to perform the crawl
 	 * @return the result of the crawl
 	 */
-	CrawlerResult getUrls(String startUrl, int maxLevels, boolean verifyUrls);
-
-	/**
-	 * Get the urls.
-	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}
-	 * @param notOnPath don't collect/follow urls that contains this text in the url           
-	 * @param verifyUrls 
-	 * 			  verify all fetched links, if they are returning 200 or not  
-	 * @return the result of the crawl
-	 */
-	CrawlerResult getUrls(String startUrl, int maxLevels, String notOnPath, boolean verifyUrls);
-	
-
-	
-	/**
-	 * Get the urls.
-	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param onlyOnPath
-	 *            only fetch files that match the following path. If empty, all
-	 *            will match.
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}
-	 * @param verifyUrls 
-	 * 			  verify all fetched links, if they are returning 200 or not          
-	 * @return the result of the crawl
-	 */
-	CrawlerResult getUrls(String startUrl, String onlyOnPath,
-			int maxLevels, boolean verifyUrls);
-	
-	/**
-	 * Get the urls.
-	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param onlyOnPath
-	 *            only fetch files that match the following path. If empty, all
-	 *            will match.
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}
-	 * @param notOnPath don't collect/follow urls that contains this text in the url                
-	 * @param verifyUrls 
-	 * 			  verify all fetched links, if they are returning 200 or not          
-	 * @return the result of the crawl
-	 */
-	CrawlerResult getUrls(String startUrl, String onlyOnPath,
-			int maxLevels,  String notOnPath, boolean verifyUrls);
+	CrawlerResult getUrls(CrawlerConfiguration configuration);
 
 	/**
 	 * Shutdown the crawler and all it's assets.
