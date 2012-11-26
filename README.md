@@ -14,78 +14,49 @@ Simple java (1.7) crawler to crawl webpages on one and same domain. Basicly you 
 
 A simple crawl have the following options, and will output the url:s crawled to system out. Note, only urls that returns 200 will be outputted by default:
 <pre>
-usage: CrawlToSystemOut [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL>
-       [-v <VERIFY>]
- -l,--level <LEVEL>             how deep the crawl should be done, default
-                                is 1 [optional]
- -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled
-                                [optional]
- -p,--followPath <PATH>         stay on this path when crawling [optional]
- -u,--url <URL>                 the page that is the startpoint of the
-                                crawl, examle http://mydomain.com/mypage
- -v,--verify <VERIFY>           verify that all links are returning 200,
-                                default is set to true [optional]                    
+usage: CrawlToSystemOut [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>]
+ -l,--level <LEVEL>            how deep the crawl should be done, default is 1 [optional]
+ -np,--notFollowPath <NOPATH>  no url:s on this path will be crawled [optional]
+ -p,--followPath <PATH>        stay on this path when crawling [optional]
+ -u,--url <URL>                the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>          verify that all links are returning 200, default is set to true [optional]                    
 </pre>
 
 
 You can choose to output the crawled list to two plain text files, one with working urls, and one with the none working:
 <pre>
-usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-np
-       <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>] [-ve <VERBOSE>]
- -ef,--errorfilename <ERRORFILENAME>   the name of the error output file,
-                                       default name is errorurls.txt
-                                       [optional]
- -f,--filename <FILENAME>              the name of the output file,
-                                       default name is urls.txt [optional]
- -l,--level <LEVEL>                    how deep the crawl should be done,
-                                       default is 1 [optional]
- -np,--notFollowPath <NOPATH>          no url:s on this path will be
-                                       crawled [optional]
- -p,--followPath <PATH>                stay on this path when crawling
-                                       [optional]
- -u,--url <URL>                        the page that is the startpoint of
-                                       the crawl, examle
-                                       http://mydomain.com/mypage
- -v,--verify <VERIFY>                  verify that all links are returning
-                                       200, default is set to true
-                                       [optional]
- -ve,--verbose <VERBOSE>               verbose logging, default is false
-                                       [optional]
+usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>] [-ve <VERBOSE>]
+ -ef,--errorfilename <ERRORFILENAME>   the name of the error output file, default name is errorurls.txt [optional]
+ -f,--filename <FILENAME>              the name of the output file, default name is urls.txt [optional]
+ -l,--level <LEVEL>                    how deep the crawl should be done, default is 1 [optional]
+ -np,--notFollowPath <NOPATH>          no url:s on this path will be crawled [optional]
+ -p,--followPath <PATH>                stay on this path when crawling [optional]
+ -u,--url <URL>                        the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>                  verify that all links are returning 200, default is set to true [optional]
+ -ve,--verbose <VERBOSE>               verbose logging, default is false [optional]
 </pre>
 
 
 You can choose to output the result in a csv file, and separate the urls by working and non working:
 <pre>
-usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>]
-       -u <URL> [-v <VERIFY>]
- -f,--filename <FILENAME>       the name of the csv output file, default
-                                name is result.csv [optional]
- -l,--level <LEVEL>             how deep the crawl should be done, default
-                                is 1 [optional]
- -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled
-                                [optional]
+usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>]
+ -f,--filename <FILENAME>       the name of the csv output file, default name is result.csv [optional]
+ -l,--level <LEVEL>             how deep the crawl should be done, default is 1 [optional]
+ -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled [optional]
  -p,--followPath <PATH>         stay on this path when crawling [optional]
- -u,--url <URL>                 the page that is the startpoint of the
-                                crawl, examle http://mydomain.com/mypage
- -v,--verify <VERIFY>           verify that all links are returning 200,
-                                default is set to true [optional]
+ -u,--url <URL>                 the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>           verify that all links are returning 200, default is set to true [optional]
 </pre>
 
 Crawl and output urls that contains specific keyword in the html
 <pre>
-usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-np
-       <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>]
- -k,--keyword <KEYWORD>         the keyword to search for in the page
-                                [required]
- -l,--level <LEVEL>             how deep the crawl should be done, default
-                                is 1 [optional]
- -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled
-                                [optional]
+usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>]
+ -k,--keyword <KEYWORD>         the keyword to search for in the page [required]
+ -l,--level <LEVEL>             how deep the crawl should be done, default is 1 [optional]
+ -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled [optional]
  -p,--followPath <PATH>         stay on this path when crawling [optional]
- -u,--url <URL>                 the page that is the startpoint of the
-                                crawl, examle http://mydomain.com/mypage
- -v,--verify <VERIFY>           verify that all links are returning 200,
-                                default is set to true [optional]
+ -u,--url <URL>                 the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>           verify that all links are returning 200, default is set to true [optional]
 </pre>
 
 
