@@ -39,7 +39,7 @@ import com.soulgalore.crawler.guice.CrawlModule;
 
 /**
  * Crawl and output a CSV file.
- *
+ * 
  */
 public class CrawlToCsv extends AbstractCrawl {
 
@@ -81,7 +81,7 @@ public class CrawlToCsv extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = crawler.getUrls(getConfiguration());
-	
+
 		final StringBuilder builder = new StringBuilder();
 		builder.append("URL,parent\n");
 
@@ -102,9 +102,8 @@ public class CrawlToCsv extends AbstractCrawl {
 		System.out.println("Start storing file " + fileName);
 
 		try {
-			Files.write(FileSystems.getDefault().getPath(fileName),
-					builder.toString().getBytes("UTF-8"),
-					StandardOpenOption.CREATE);
+			Files.write(FileSystems.getDefault().getPath(fileName), builder
+					.toString().getBytes("UTF-8"), StandardOpenOption.CREATE);
 		} catch (IOException e) {
 			System.err.println(e);
 		}
