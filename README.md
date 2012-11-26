@@ -14,28 +14,33 @@ Simple java (1.7) crawler to crawl webpages on one and same domain. Basicly you 
 
 A simple crawl have the following options, and will output the url:s crawled to system out. Note, only urls that returns 200 will be outputted by default:
 <pre>
-usage: CrawlToSystemOut [-l <LEVEL>] [-p <PATH>] -u <URL>
- -l,--level <LEVEL>       how deep the crawl should be done, default is 1
-                          [optional]
- -p,--followPath <PATH>   stay on this path when crawling [optional]
- -u,--url <URL>           the page that is the startpoint of the crawl,
-                          examle http://mydomain.com/mypage
- -v,--verify <VERIFY>     verify that all links are returning 200, default
-                          is set to true [optional]                          
+usage: CrawlToSystemOut [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL>
+       [-v <VERIFY>]
+ -l,--level <LEVEL>             how deep the crawl should be done, default
+                                is 1 [optional]
+ -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled
+                                [optional]
+ -p,--followPath <PATH>         stay on this path when crawling [optional]
+ -u,--url <URL>                 the page that is the startpoint of the
+                                crawl, examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>           verify that all links are returning 200,
+                                default is set to true [optional]                    
 </pre>
 
 
 You can choose to output the crawled list to two plain text files, one with working urls, and one with the none working:
 <pre>
-usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-p
-       <PATH>] -u <URL> [-v <VERIFY>]
+usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-np
+       <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>] [-ve <VERBOSE>]
  -ef,--errorfilename <ERRORFILENAME>   the name of the error output file,
                                        default name is errorurls.txt
                                        [optional]
  -f,--filename <FILENAME>              the name of the output file,
                                        default name is urls.txt [optional]
  -l,--level <LEVEL>                    how deep the crawl should be done,
-                                       default is 2 [optional]
+                                       default is 1 [optional]
+ -np,--notFollowPath <NOPATH>          no url:s on this path will be
+                                       crawled [optional]
  -p,--followPath <PATH>                stay on this path when crawling
                                        [optional]
  -u,--url <URL>                        the page that is the startpoint of
@@ -44,35 +49,43 @@ usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-p
  -v,--verify <VERIFY>                  verify that all links are returning
                                        200, default is set to true
                                        [optional]
+ -ve,--verbose <VERBOSE>               verbose logging, default is false
+                                       [optional]
 </pre>
 
 
 You can choose to output the result in a csv file, and separate the urls by working and non working:
 <pre>
-usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-p <PATH>] -u <URL>
- -f,--filename <FILENAME>   the name of the csv ouput file, default name
-                            is result.csv [optional]
- -l,--level <LEVEL>         how deep the crawl should be done, default is
-                            1 [optional]
- -p,--followPath <PATH>     stay on this path when crawling [optional]
- -u,--url <URL>             the page that is the startpoint of the crawl,
-                            examle http://mydomain.com/mypage
- -v,--verify <VERIFY>     verify that all links are returning 200, default
-                          is set to true [optional]
+usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>]
+       -u <URL> [-v <VERIFY>]
+ -f,--filename <FILENAME>       the name of the csv output file, default
+                                name is result.csv [optional]
+ -l,--level <LEVEL>             how deep the crawl should be done, default
+                                is 1 [optional]
+ -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled
+                                [optional]
+ -p,--followPath <PATH>         stay on this path when crawling [optional]
+ -u,--url <URL>                 the page that is the startpoint of the
+                                crawl, examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>           verify that all links are returning 200,
+                                default is set to true [optional]
 </pre>
 
 Crawl and output urls that contains specific keyword in the html
 <pre>
-usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-p <PATH>] -u <URL>
- -k,--keyword <KEYWORD>   the keyword to search for in the page
-                          [required]
- -l,--level <LEVEL>       how deep the crawl should be done, default is 1
-                          [optional]
- -p,--followPath <PATH>   stay on this path when crawling [optional]
- -u,--url <URL>           the page that is the startpoint of the crawl,
-                          examle http://mydomain.com/mypage
- -v,--verify <VERIFY>     verify that all links are returning 200, default
-                          is set to true [optional]
+usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-np
+       <NOPATH>] [-p <PATH>] -u <URL> [-v <VERIFY>]
+ -k,--keyword <KEYWORD>         the keyword to search for in the page
+                                [required]
+ -l,--level <LEVEL>             how deep the crawl should be done, default
+                                is 1 [optional]
+ -np,--notFollowPath <NOPATH>   no url:s on this path will be crawled
+                                [optional]
+ -p,--followPath <PATH>         stay on this path when crawling [optional]
+ -u,--url <URL>                 the page that is the startpoint of the
+                                crawl, examle http://mydomain.com/mypage
+ -v,--verify <VERIFY>           verify that all links are returning 200,
+                                default is set to true [optional]
 </pre>
 
 
@@ -97,29 +110,29 @@ com.soulgalore.crawler.auth=
 Checkout the project:
 <pre>git clone git@github.com:soulgalore/crawler.git</pre>
 
-or <a href="http://github.com/downloads/soulgalore/crawler/crawler-0.9-full.jar">download</a> the jar (the jar contains all libs needed).
+or <a href="http://github.com/downloads/soulgalore/crawler/crawler-1.0-full.jar">download</a> the jar (the jar contains all libs needed).
 
 
 ## Examples
 
 Running from the jar, fetching two levels depth and only fetch urls that contains "/tagg/"
 <pre>
-java -jar crawler-0.9.1.full.jar -u http://soulislove.com -l 2 -p /tagg/
+java -jar crawler-1.0.full.jar -u http://soulislove.com -l 2 -p /tagg/
 </pre>
 
 Running from the jar, adding base auth
 <pre>
-java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-0.9.1-full.jar -u http://soulislove.com
+java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-1.0-full.jar -u http://soulislove.com
 </pre>
 
 Running from the jar, output urls in csv file
 <pre>
-java -cp crawler-0.9.1-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
+java -cp crawler-1.0-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
 </pre>
 
 Running from the jar, output urls into two text files: workingurls.txt and nonworkingurls.txt
 <pre>
-java -cp crawler-0.9.1-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
+java -cp crawler-1.0-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
 </pre>
 
 
