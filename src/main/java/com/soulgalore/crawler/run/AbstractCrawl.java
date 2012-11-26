@@ -24,12 +24,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
-import com.soulgalore.crawler.core.CrawlerResult;
-import com.soulgalore.crawler.guice.CrawlModule;
 
 /**
  * Abstract crawl class, used to setup default args options.
@@ -57,13 +52,18 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	public AbstractCrawl(String[] args) throws ParseException {
 		super(args);
 		
-		 configuration = CrawlerConfiguration
+		configuration = CrawlerConfiguration
 				.builder()
 				.setMaxLevels(
-						Integer.parseInt(getLine().getOptionValue(LEVEL, "1")))
+						Integer.parseInt(getLine()
+								.getOptionValue(
+										LEVEL,
+										Integer.toString(CrawlerConfiguration.DEFAULT_CRAWL_LEVEL))))
 				.setVerifyUrls(
-						Boolean.parseBoolean(getLine().getOptionValue(VERIFY,
-								"true")))
+						Boolean.parseBoolean(getLine()
+								.getOptionValue(
+										VERIFY,
+										Boolean.toString(CrawlerConfiguration.DEFAULT_SHOULD_VERIFY_URLS))))
 				.setOnlyOnPath(getLine().getOptionValue(FOLLOW_PATH, ""))
 				.setNotOnPath(getLine().getOptionValue(NO_FOLLOW_PATH, ""))
 				.setStartUrl(getLine().getOptionValue(URL)).build();
@@ -91,7 +91,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		options.addOption(urlOption);
 
 		final Option levelOption = new Option("l",
-				"how deep the crawl should be done, default is " + 1
+				"how deep the crawl should be done, default is " + CrawlerConfiguration.DEFAULT_CRAWL_LEVEL
 						+ " [optional]");
 		levelOption.setArgName("LEVEL");
 		levelOption.setLongOpt(LEVEL);
@@ -116,7 +116,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		options.addOption(noFollowOption);
 		
 		final Option verifyOption = new Option("v",
-				"verify that all links are returning 200, default is set to true [optional]");
+				"verify that all links are returning 200, default is set to " + CrawlerConfiguration.DEFAULT_SHOULD_VERIFY_URLS + " [optional]");
 		verifyOption.setArgName("VERIFY");
 		verifyOption.setLongOpt(VERIFY);
 		verifyOption.setRequired(false);

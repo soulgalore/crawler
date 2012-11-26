@@ -49,12 +49,15 @@ public class CrawlToFile extends AbstractCrawl {
 
 	private final String fileName;
 	private final String errorFileName;
-
+	private final boolean verbose;
+	
 	CrawlToFile(String[] args) throws ParseException {
 		super(args);
 		fileName = getLine().getOptionValue("filename", DEFAULT_FILENAME);
 		errorFileName = getLine().getOptionValue("errorfilename",
 				DEFAULT_ERROR_FILENAME);
+		verbose = new Boolean(getLine().getOptionValue("verbose","false"));
+		
 
 	}
 
@@ -93,7 +96,8 @@ public class CrawlToFile extends AbstractCrawl {
 		}
 
 
-		System.out.println("Start storing file " 
+		if (verbose)
+			System.out.println("Start storing file working urls " 
 				+ fileName);
 
 		try {
@@ -105,11 +109,16 @@ public class CrawlToFile extends AbstractCrawl {
 			System.err.println(e);
 		}
 
+	
 		if (nonWorkingUrls.length() > 0) {
 			for (PageURL nonWorkingUrl : result.getNonWorkingUrls()) {
 				nonWorkingUrls.append(nonWorkingUrl.getUrl()).append("\n");
 			}
 
+			if (verbose)
+				System.out.println("Start storing file working urls " 
+					+ errorFileName);
+			
 			try {
 				
 				Files.write(FileSystems.getDefault().getPath(errorFileName),
@@ -153,6 +162,17 @@ public class CrawlToFile extends AbstractCrawl {
 		errorFilenameOption.setArgs(1);
 
 		options.addOption(errorFilenameOption);
+		
+		final Option verboseOption = new Option("v",
+				"verbose logging, default is false [optional]");
+		verboseOption.setArgName("VERBOSE");
+		verboseOption.setLongOpt("verbose");
+		verboseOption.setRequired(false);
+		verboseOption.setArgs(1);
+		verboseOption.setType(Boolean.class);
+
+		options.addOption(verboseOption);
+		
 
 		return options;
 

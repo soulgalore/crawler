@@ -20,7 +20,7 @@ package com.soulgalore.crawler.run;
  *
  *******************************************************
  */
-import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -65,7 +65,6 @@ public class CrawlToCsv extends AbstractCrawl {
 	public static void main(String[] args) {
 
 		try {
-
 			final CrawlToCsv crawl = new CrawlToCsv(args);
 			crawl.crawl();
 

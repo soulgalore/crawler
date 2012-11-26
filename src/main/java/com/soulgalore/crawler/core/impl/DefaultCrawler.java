@@ -85,39 +85,17 @@ public class DefaultCrawler implements Crawler {
 			responseFetcher.shutdown();
 	}
 
-	
 	/**
 	 * Get the urls.
 	 * 
-	 * @param configuration how to perform the crawl
+	 * @param configuration
+	 *            how to perform the crawl
 	 * @return the result of the crawl
 	 */
 	public CrawlerResult getUrls(CrawlerConfiguration configuration) {
 
-		return getUrls(configuration.getStartUrl(),
-				configuration.getOnlyOnPath(), configuration.getMaxLevels(),
-				configuration.getNotOnPath(), configuration.isVerifyUrls());
-
-	}
-
-	/**
-	 * Get the urls.
-	 * 
-	 * @param startUrl
-	 *            the first url to start crawl
-	 * @param onlyOnPath
-	 *            only fetch files that match the following path. If empty, all
-	 *            will match.
-	 * @param maxLevels
-	 *            the maximum number of levels to crawl, the max number is
-	 *            {@link #MAX_CRAWL_LEVELS}
-	 * @param don't collect/follow urls that contains this text in the url               
-	 * @return the result of the crawl
-	 */
-	private CrawlerResult getUrls(String startUrl, String onlyOnPath,
-			int maxLevels, String notOnPath, boolean verifyUrls) {
-		
-		final PageURL pageUrl = verifyInput(startUrl, onlyOnPath);
+		final PageURL pageUrl = verifyInput(configuration.getStartUrl(),
+				configuration.getOnlyOnPath());
 
 		int level = 0;
 
@@ -126,14 +104,14 @@ public class DefaultCrawler implements Crawler {
 		final Set<PageURL> nonWorkingUrls = new LinkedHashSet<PageURL>();
 
 		final String host = pageUrl.getHost();
-		
-		if (maxLevels > 0) {
+
+		if (configuration.getMaxLevels() > 0) {
 
 			// set the start url
 			Set<PageURL> nextToFetch = new LinkedHashSet<PageURL>();
 			nextToFetch.add(pageUrl);
 
-			while (level < maxLevels) {
+			while (level < configuration.getMaxLevels()) {
 
 				final Map<Future<HTMLPageResponse>, PageURL> futures = new HashMap<Future<HTMLPageResponse>, PageURL>(
 						nextToFetch.size());
@@ -144,18 +122,20 @@ public class DefaultCrawler implements Crawler {
 				}
 
 				nextToFetch = fetchNextLevelLinks(futures, allUrls,
-						nonWorkingUrls, verifiedUrls, host, onlyOnPath,
-						notOnPath);
+						nonWorkingUrls, verifiedUrls, host,
+						configuration.getOnlyOnPath(),
+						configuration.getNotOnPath());
 				level++;
 			}
 		} else {
 			allUrls.add(pageUrl);
 		}
 
-		if (verifyUrls)
+		if (configuration.isVerifyUrls())
 			verifyUrls(allUrls, verifiedUrls, nonWorkingUrls);
 
-		return new CrawlerResult(startUrl, allUrls, nonWorkingUrls);
+		return new CrawlerResult(configuration.getStartUrl(), allUrls,
+				nonWorkingUrls);
 
 	}
 
@@ -173,13 +153,15 @@ public class DefaultCrawler implements Crawler {
 	 * @param onlyOnPath
 	 *            only fetch files that match the following path. If empty, all
 	 *            will match.
-	 * @param don't collect/follow urls that contains this text in the url                
+	 * @param don
+	 *            't collect/follow urls that contains this text in the url
 	 * @return the next level of links that we should fetch
 	 */
 	protected Set<PageURL> fetchNextLevelLinks(
 			Map<Future<HTMLPageResponse>, PageURL> responses,
 			Set<PageURL> allUrls, Set<PageURL> nonWorkingUrls,
-			Set<PageURL> verifiedUrls, String host, String onlyOnPath, String notOnPath) {
+			Set<PageURL> verifiedUrls, String host, String onlyOnPath,
+			String notOnPath) {
 
 		final Set<PageURL> nextLevel = new LinkedHashSet<PageURL>();
 
