@@ -56,7 +56,7 @@ public class CrawlToFile extends AbstractCrawl {
 		fileName = getLine().getOptionValue("filename", DEFAULT_FILENAME);
 		errorFileName = getLine().getOptionValue("errorfilename",
 				DEFAULT_ERROR_FILENAME);
-		verbose = new Boolean(getLine().getOptionValue("verbose","false"));
+		verbose = Boolean.valueOf(getLine().getOptionValue("verbose","false"));
 		
 
 	}

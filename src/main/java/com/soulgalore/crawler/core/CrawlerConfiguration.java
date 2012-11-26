@@ -4,7 +4,7 @@ package com.soulgalore.crawler.core;
  * Configuration for a crawl.
  * 
  */
-public class CrawlerConfiguration {
+public final class CrawlerConfiguration {
 
 	/**
 	 * The default crawl level if no is supplied.
@@ -49,11 +49,11 @@ public class CrawlerConfiguration {
 	}
 
 	private CrawlerConfiguration copy() {
-		CrawlerConfiguration conf = new CrawlerConfiguration();
+		final CrawlerConfiguration conf = new CrawlerConfiguration();
 		conf.setMaxLevels(getMaxLevels());
-		conf.setNotOnPath(new String(getNotOnPath()));
-		conf.setOnlyOnPath(new String(getOnlyOnPath()));
-		conf.setStartUrl(new String(getStartUrl()));
+		conf.setNotOnPath(getNotOnPath());
+		conf.setOnlyOnPath(getOnlyOnPath());
+		conf.setStartUrl(getStartUrl());
 		conf.setVerifyUrls(isVerifyUrls());
 		return conf;
 
