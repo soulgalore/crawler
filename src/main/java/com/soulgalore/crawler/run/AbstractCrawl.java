@@ -24,7 +24,12 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
+import com.soulgalore.crawler.core.CrawlerResult;
+import com.soulgalore.crawler.guice.CrawlModule;
 
 /**
  * Abstract crawl class, used to setup default args options.
@@ -38,12 +43,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	private static final String FOLLOW_PATH = "followPath";
 	private static final String NO_FOLLOW_PATH = "notFollowPath";
 	private static final String VERIFY = "verify";
-	private final String url;
-	private final int level;
-	private final String path;
-	private final String noPath;
-	private final boolean shouldVerify;
-	private final CrawlerConfiguration configuration = new CrawlerConfiguration();
+	private final CrawlerConfiguration configuration;
 	
 
 	/**
@@ -56,28 +56,20 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	 */
 	public AbstractCrawl(String[] args) throws ParseException {
 		super(args);
-		url = getLine().getOptionValue(URL);
-
-		level = Integer.parseInt(getLine().getOptionValue(LEVEL, "1"));
-		path = getLine().getOptionValue(FOLLOW_PATH, "");
-		noPath = getLine().getOptionValue(NO_FOLLOW_PATH, "");
-		shouldVerify = Boolean.parseBoolean(getLine().getOptionValue(VERIFY,"true"));
 		
-		configuration.setMaxLevels(level);
-		configuration.setStartUrl(url);
-		configuration.setNotOnPath(noPath);
-		configuration.setOnlyOnPath(path);
-		configuration.setVerifyUrls(shouldVerify);
+		 configuration = CrawlerConfiguration
+				.builder()
+				.setMaxLevels(
+						Integer.parseInt(getLine().getOptionValue(LEVEL, "1")))
+				.setVerifyUrls(
+						Boolean.parseBoolean(getLine().getOptionValue(VERIFY,
+								"true")))
+				.setOnlyOnPath(getLine().getOptionValue(FOLLOW_PATH, ""))
+				.setNotOnPath(getLine().getOptionValue(NO_FOLLOW_PATH, ""))
+				.setStartUrl(getLine().getOptionValue(URL)).build();
+
 	}
 
-	/**
-	 * Get the level of the crawl.
-	 * 
-	 * @return level
-	 */
-	protected int getLevel() {
-		return level;
-	}
 
 	/**
 	 * Get hold of the default options.
@@ -133,46 +125,8 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		
 		return options;
 	}
-
-	/**
-	 * Get the path the crawl will follow. If empty all paths on the domain
-	 * will be followed.
-	 * 
-	 * @return the path
-	 */
-	protected String getPath() {
-		return path;
-	}
-
-	/**
-	 * Urls on this path will not be fetched. If empty all paths on the domain
-	 * will be followed.
-	 * 
-	 * @return the path
-	 */
-	protected String getNoPath() {
-		return noPath;
-	}
-	
-	/**
-	 * Get the url (startpage) this crawler will use.
-	 * 
-	 * @return the url
-	 */
-	protected String getUrl() {
-		return url;
-	}
-
-	/**
-	 * Get to know if all url:s should be verified or not.
-	 * @return the verify
-	 */
-	protected boolean getShouldVerify() {
-		return shouldVerify;
-	}
 	
 	protected CrawlerConfiguration getConfiguration() {
 		return configuration;
 	}
-	
 }

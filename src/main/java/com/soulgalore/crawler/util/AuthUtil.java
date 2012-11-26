@@ -2,7 +2,6 @@ package com.soulgalore.crawler.util;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;

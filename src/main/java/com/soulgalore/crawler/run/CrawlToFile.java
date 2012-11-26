@@ -20,7 +20,6 @@
  */
 package com.soulgalore.crawler.run;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -84,7 +83,7 @@ public class CrawlToFile extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = crawler.getUrls(getConfiguration());
-
+	
 		final StringBuilder workingUrls = new StringBuilder();
 		final StringBuilder nonWorkingUrls = new StringBuilder();
 

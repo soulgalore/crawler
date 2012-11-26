@@ -82,7 +82,7 @@ public class CrawlToCsv extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = crawler.getUrls(getConfiguration());
-
+	
 		final StringBuilder builder = new StringBuilder();
 		builder.append("URL,parent\n");
 

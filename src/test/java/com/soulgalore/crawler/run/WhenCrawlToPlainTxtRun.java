@@ -25,7 +25,7 @@ public class WhenCrawlToPlainTxtRun extends AbstractRun {
 		int inParameterLevel = 2;
 		String[] args = { getDefaultArg(), "-l=" + inParameterLevel };
 		CrawlToSystemOut test = (CrawlToSystemOut) fetchRunner(args);
-		assertThat(test.getLevel(), is(inParameterLevel));
+		assertThat(test.getConfiguration().getMaxLevels(), is(inParameterLevel));
 	}
 
 	@Test
@@ -33,14 +33,14 @@ public class WhenCrawlToPlainTxtRun extends AbstractRun {
 		String inParameterPath = "/cool/path/";
 		String[] args = { getDefaultArg(), "-p=" + inParameterPath };
 		CrawlToSystemOut test = (CrawlToSystemOut) fetchRunner(args);
-		assertThat(test.getPath(), is(inParameterPath));
+		assertThat(test.getConfiguration().getOnlyOnPath(), is(inParameterPath));
 	}
 
 	@Test
 	public void urlParameterShouldBeFetched() throws ParseException {
 		String[] args = { getDefaultArg() };
 		CrawlToSystemOut test = (CrawlToSystemOut) fetchRunner(args);
-		assertThat(test.getUrl(), is(IN_PARAMETER_URL));
+		assertThat(test.getConfiguration().getStartUrl(), is(IN_PARAMETER_URL));
 	}
 
 }

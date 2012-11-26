@@ -2,51 +2,108 @@ package com.soulgalore.crawler.core;
 
 /**
  * Configuration for a crawl.
- *
+ * 
  */
 public class CrawlerConfiguration {
 
 	private String startUrl;
 	private String onlyOnPath = "";
-	private int maxLevels = 1;  
+	private int maxLevels = 1;
 	private String notOnPath = "";
 	private boolean verifyUrls = true;
-	
-	public CrawlerConfiguration() {
-		
+
+	private CrawlerConfiguration() {
+
 	}
-	
-	
+
 	public String getStartUrl() {
 		return startUrl;
 	}
-	public void setStartUrl(String startUrl) {
+
+	private void setStartUrl(String startUrl) {
 		this.startUrl = startUrl;
 	}
+
 	public String getOnlyOnPath() {
 		return onlyOnPath;
 	}
-	public void setOnlyOnPath(String onlyOnPath) {
+
+	private void setOnlyOnPath(String onlyOnPath) {
 		this.onlyOnPath = onlyOnPath;
 	}
+
 	public int getMaxLevels() {
 		return maxLevels;
 	}
-	public void setMaxLevels(int maxLevels) {
+
+	private void setMaxLevels(int maxLevels) {
 		this.maxLevels = maxLevels;
 	}
+
 	public String getNotOnPath() {
 		return notOnPath;
 	}
-	public void setNotOnPath(String notOnPath) {
+
+	private void setNotOnPath(String notOnPath) {
 		this.notOnPath = notOnPath;
 	}
+
 	public boolean isVerifyUrls() {
 		return verifyUrls;
 	}
-	public void setVerifyUrls(boolean verifyUrls) {
+
+	private void setVerifyUrls(boolean verifyUrls) {
 		this.verifyUrls = verifyUrls;
 	}
-	
-	
+
+	private CrawlerConfiguration copy() {
+		CrawlerConfiguration conf = new CrawlerConfiguration();
+		conf.setMaxLevels(getMaxLevels());
+		conf.setNotOnPath(new String(getNotOnPath()));
+		conf.setOnlyOnPath(new String(getOnlyOnPath()));
+		conf.setStartUrl(new String(getStartUrl()));
+		conf.setVerifyUrls(isVerifyUrls());
+		return conf;
+
+	}
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		private final CrawlerConfiguration configuration = new CrawlerConfiguration();
+
+		public Builder() {
+		}
+
+		public Builder setStartUrl(String startUrl) {
+			configuration.setStartUrl(startUrl);
+			return this;
+		}
+
+		public Builder setVerifyUrls(boolean verifyUrls) {
+			configuration.setVerifyUrls(verifyUrls);
+			return this;
+		}
+
+		public Builder setOnlyOnPath(String onlyOnPath) {
+			configuration.setOnlyOnPath(onlyOnPath);
+			return this;
+		}
+
+		public Builder setMaxLevels(int maxLevels) {
+			configuration.setMaxLevels(maxLevels);
+			return this;
+		}
+
+		public Builder setNotOnPath(String notOnPath) {
+			configuration.setNotOnPath(notOnPath);
+			return this;
+		}
+
+		public CrawlerConfiguration build() {
+			return configuration.copy();
+		}
+	}
 }
