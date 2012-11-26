@@ -163,7 +163,7 @@ public class CrawlToFile extends AbstractCrawl {
 
 		options.addOption(errorFilenameOption);
 		
-		final Option verboseOption = new Option("v",
+		final Option verboseOption = new Option("ve",
 				"verbose logging, default is false [optional]");
 		verboseOption.setArgName("VERBOSE");
 		verboseOption.setLongOpt("verbose");
