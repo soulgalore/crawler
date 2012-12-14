@@ -20,6 +20,8 @@
  */
 package com.soulgalore.crawler.guice;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -39,7 +41,7 @@ public abstract class AbstractPropertiesModule extends AbstractModule {
 	 * The properties file in the class path. You can override these properties
 	 * by system properties.
 	 */
-	protected static final String PROPERTY_FILE = "/crawler.properties";
+	protected static final String PROPERTY_FILE = "crawler.properties";
 
 	/**
 	 * Properties read from {@link #PROPERTY_FILE}.
@@ -50,11 +52,22 @@ public abstract class AbstractPropertiesModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
+		
+		
 		InputStream is = null;
 		try {
-			is = getClass().getResourceAsStream(PROPERTY_FILE);
+			is = getClass().getResourceAsStream("/" + PROPERTY_FILE);
 			properties.load(is);
 
+			// override by file in the running dir
+			File localFile = new File(new File(System.getProperty("com.soulgalore.crawler.propertydir", ".")), PROPERTY_FILE);
+		
+			if (localFile.exists()) {
+				InputStream in = new FileInputStream(localFile);
+				properties.load(in);
+			}
+				
+			
 			// override the properties by setting a system property
 			properties.putAll(System.getProperties());
 
