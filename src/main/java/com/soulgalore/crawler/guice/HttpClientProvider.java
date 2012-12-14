@@ -23,10 +23,12 @@ package com.soulgalore.crawler.guice;
 import java.util.Set;
 
 import org.apache.http.Header;
+import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 
@@ -74,6 +76,12 @@ public class HttpClientProvider implements Provider<HttpClient> {
 	private final Set<Header> headers;
 
 	private final Set<Auth> auths;
+	
+	private final String proxyHost;
+	
+	private final String proxyProtocol;
+	
+	private final int proxyPort;
 
 	/**
 	 * Create a provider.
@@ -88,6 +96,12 @@ public class HttpClientProvider implements Provider<HttpClient> {
 	 *            the request headers, in the form at of ...
 	 * @param auth
 	 *            the auth string
+	 * @param theProxyHost
+	 * 			  the host of the proxy
+	 * @param theProxyPort
+	 * 			  the proxy port
+	 * @param theProxyProtocol 
+	 * 			  the proxy protocol            
 	 */
 	@Inject
 	public HttpClientProvider(
@@ -95,7 +109,10 @@ public class HttpClientProvider implements Provider<HttpClient> {
 			@Named("com.soulgalore.crawler.http.socket.timeout") int theSocketTimeout,
 			@Named("com.soulgalore.crawler.http.connection.timeout") int theConnectionTimeout,
 			@Named("com.soulgalore.crawler.requestheaders") String headersAsString,
-			@Named("com.soulgalore.crawler.auth") String authAsString) {
+			@Named("com.soulgalore.crawler.auth") String authAsString,
+			@Named("com.soulgalore.crawler.proxyhost") String theProxyHost,
+			@Named("com.soulgalore.crawler.proxyport") int theProxyPort,
+			@Named("com.soulgalore.crawler.proxyprotocol") String theProxyProtocol){
 		nrOfThreads = maxNrOfThreads;
 		maxToRoute = maxNrOfThreads;
 		connectionTimeout = theConnectionTimeout;
@@ -103,6 +120,10 @@ public class HttpClientProvider implements Provider<HttpClient> {
 		headers = HeaderUtil.getInstance().createHeadersFromString(
 				headersAsString);
 		auths = AuthUtil.getInstance().createAuthsFromString(authAsString);
+		proxyHost = theProxyHost;
+		proxyPort = theProxyPort;
+		proxyProtocol = "".equals(theProxyProtocol)?"http":theProxyProtocol;
+		
 	}
 
 	/**
@@ -120,7 +141,13 @@ public class HttpClientProvider implements Provider<HttpClient> {
 		client.getParams().setParameter("http.connection.timeout",
 				connectionTimeout);
 		client.getParams().setParameter(ClientPNames.DEFAULT_HEADERS, headers);
-
+		
+		if (!"".equals(proxyHost)) {
+			HttpHost proxy = new HttpHost(proxyHost, proxyPort, proxyProtocol);
+			client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
+                    proxy);
+		}
+			
 		if (auths.size() > 0) {
 	
 			for (Auth authObject : auths) {
