@@ -74,13 +74,9 @@ com.soulgalore.crawler.requestheaders=
 # Auth like:
 # soulislove.com:80:username:password,...
 com.soulgalore.crawler.auth=
-# Proxy properties, if you are behind a proxy.
-## The host like: proxy.soulgalore.com
-com.soulgalore.crawler.proxyhost=
-## The port: 80
-com.soulgalore.crawler.proxyport=80
-## The protocol, if not added http will be used
-com.soulgalore.crawler.proxyprotocol=
+# Proxy properties, if you are behind a proxy.                                                                                                                                                          
+## The host by this special format: http:proxy.soulgalore.com:80                                                                                                                                        
+com.soulgalore.crawler.proxy=
 </pre>
 The location of crawler.properties file can be set with the system property com.soulgalore.crawler.propertydir.
 
