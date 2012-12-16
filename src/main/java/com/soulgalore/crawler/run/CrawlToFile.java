@@ -89,13 +89,12 @@ public class CrawlToFile extends AbstractCrawl {
 	
 		final StringBuilder workingUrls = new StringBuilder();
 		final StringBuilder nonWorkingUrls = new StringBuilder();
-
+		
 		for (PageURL workingUrl : result.getUrls()) {
 			workingUrls.append(workingUrl.getUrl()).append("\n");
 
 		}
-
-
+	
 		if (verbose)
 			System.out.println("Start storing file working urls " 
 				+ fileName);
@@ -110,13 +109,13 @@ public class CrawlToFile extends AbstractCrawl {
 		}
 
 	
-		if (nonWorkingUrls.length() > 0) {
+		if (result.getNonWorkingUrls().size() > 0) {
 			for (PageURL nonWorkingUrl : result.getNonWorkingUrls()) {
 				nonWorkingUrls.append(nonWorkingUrl.getUrl()).append("\n");
 			}
 
 			if (verbose)
-				System.out.println("Start storing file working urls " 
+				System.out.println("Start storing file non working urls " 
 					+ errorFileName);
 			
 			try {
