@@ -77,6 +77,9 @@ com.soulgalore.crawler.auth=
 # Proxy properties, if you are behind a proxy.                                                                                                                                                          
 ## The host by this special format: http:proxy.soulgalore.com:80                                                                                                                                        
 com.soulgalore.crawler.proxy=
+
+# The user agent
+com.soulgalore.crawler.useragent=
 </pre>
 The location of crawler.properties file can be set with the system property com.soulgalore.crawler.propertydir.
 
