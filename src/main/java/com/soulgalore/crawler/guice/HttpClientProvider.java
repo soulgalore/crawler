@@ -32,6 +32,7 @@ import org.apache.http.client.params.ClientPNames;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.HttpProtocolParams;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -79,6 +80,8 @@ public class HttpClientProvider implements Provider<HttpClient> {
 	private final Set<Auth> auths;
 	
 	private final String proxy;
+	
+	private final String userAgent;
 
 	/**
 	 * Create a provider.
@@ -95,7 +98,8 @@ public class HttpClientProvider implements Provider<HttpClient> {
 	 *            the auth string
 	 * @param theProxy
 	 * 			  the proxy
-         
+	 * @param theUserAgent 
+	 * 			  the user agent         
 	 */
 	@Inject
 	public HttpClientProvider(
@@ -104,7 +108,8 @@ public class HttpClientProvider implements Provider<HttpClient> {
 			@Named("com.soulgalore.crawler.http.connection.timeout") int theConnectionTimeout,
 			@Named("com.soulgalore.crawler.requestheaders") String headersAsString,
 			@Named("com.soulgalore.crawler.auth") String authAsString,
-			@Named("com.soulgalore.crawler.proxy") String theProxy){
+			@Named("com.soulgalore.crawler.proxy") String theProxy,
+			@Named("com.soulgalore.crawler.useragent") String theUserAgent){
 		nrOfThreads = maxNrOfThreads;
 		maxToRoute = maxNrOfThreads;
 		connectionTimeout = theConnectionTimeout;
@@ -113,6 +118,7 @@ public class HttpClientProvider implements Provider<HttpClient> {
 				headersAsString);
 		auths = AuthUtil.getInstance().createAuthsFromString(authAsString);
 		proxy = theProxy;		
+		userAgent = theUserAgent;
 	}
 
 	/**
@@ -130,7 +136,9 @@ public class HttpClientProvider implements Provider<HttpClient> {
 		client.getParams().setParameter("http.connection.timeout",
 				connectionTimeout);
 		client.getParams().setParameter(ClientPNames.DEFAULT_HEADERS, headers);
-	
+		
+		HttpProtocolParams.setUserAgent(client.getParams(), userAgent);
+		
 		if (!"".equals(proxy)) {
 			StringTokenizer token = new StringTokenizer(proxy, ":");
 
