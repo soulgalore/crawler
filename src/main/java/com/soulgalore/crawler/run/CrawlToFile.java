@@ -33,8 +33,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
+import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.PageURL;
 import com.soulgalore.crawler.guice.CrawlModule;
+import com.soulgalore.crawler.util.StatusCode;
 
 /**
  * Crawl to File. To files will be created, one with the working urls & one with the none working urls.
@@ -110,9 +112,11 @@ public class CrawlToFile extends AbstractCrawl {
 
 	
 		if (result.getNonWorkingUrls().size() > 0) {
-			for (PageURL nonWorkingUrl : result.getNonWorkingUrls()) {
-				nonWorkingUrls.append(nonWorkingUrl.getUrl()).append("\n");
-			}
+			for (HTMLPageResponse nonWorkingUrl : result.getNonWorkingUrls()) {
+				nonWorkingUrls.append(StatusCode.toFriendlyName(nonWorkingUrl.getResponseCode()))
+						.append(",").append(nonWorkingUrl.getUrl())
+						.append("\n");
+		}
 
 			if (verbose)
 				System.out.println("Start storing file non working urls " 

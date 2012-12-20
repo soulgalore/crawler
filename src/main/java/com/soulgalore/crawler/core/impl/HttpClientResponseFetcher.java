@@ -79,7 +79,7 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 	public HTMLPageResponse get(PageURL url, boolean getPage) {
 
 		if (url.isWrongSyntax()) {
-			return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI,
+			return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
 					Collections.<String, String>emptyMap(), "", "", 0);
 		}
 	
@@ -95,7 +95,7 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 			if (entity.getContentType() == null
 					|| (!entity.getContentType().toString().contains("html"))) {
 				return new HTMLPageResponse(url,
-						StatusCode.SC_WRONG_CONTENT_TYPE,
+						StatusCode.SC_WRONG_CONTENT_TYPE.getCode(),
 						Collections.<String, String>emptyMap(), "", "", 0);
 			}
 			
@@ -106,7 +106,7 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 			// response isn't 200
 			// these headers will not be shown in the results
 			final Map<String, String> headersAndValues = getPage
-					|| !StatusCode.getInstance().isResponseCodeOk(
+					|| !StatusCode.isResponseCodeOk(
 							resp.getStatusLine().getStatusCode()) ? getHeaders(resp)
 					: Collections.<String, String>emptyMap();
 
@@ -121,14 +121,14 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 
 		} catch (SocketTimeoutException e) {
 			return new HTMLPageResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_TIMEOUT,
+					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
 					Collections.<String, String>emptyMap(), "", "", 0);
 			}
 
 		catch (IOException e) {
 			System.out.println(e);
 			return new HTMLPageResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_UNKNOWN,
+					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
 					Collections.<String, String>emptyMap(), "", "", 0);
 		}
 		finally {

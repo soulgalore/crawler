@@ -12,10 +12,9 @@ public class WhenAStatusCodeIsChecked {
 
 	@Test
 	public void test() {
-		StatusCode statusCode = StatusCode.getInstance();
-		assertThat(statusCode.isResponseCodeOk(HttpStatus.SC_OK), is(true));
-		assertThat(statusCode.isResponseCodeOk(HttpStatus.SC_FORBIDDEN), is(false));
-		assertThat(statusCode.isResponseCodeOk(HttpStatus.SC_INTERNAL_SERVER_ERROR), is(false));
+		assertThat(StatusCode.isResponseCodeOk(HttpStatus.SC_OK), is(true));
+		assertThat(StatusCode.isResponseCodeOk(HttpStatus.SC_FORBIDDEN), is(false));
+		assertThat(StatusCode.isResponseCodeOk(HttpStatus.SC_INTERNAL_SERVER_ERROR), is(false));
 	}
 
 }

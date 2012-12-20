@@ -31,7 +31,7 @@ import java.util.Set;
 public class CrawlerResult {
 
 	private final Set<PageURL> urls;
-	private final Set<PageURL> nonWorkingUrls;
+	private final Set<HTMLPageResponse> nonWorkingResponses;
 	private final String startPoint;
 
 	/**
@@ -41,14 +41,14 @@ public class CrawlerResult {
 	 *            where the crawl was started
 	 * @param theUrls
 	 *            the urls that was fetched
-	 * @param theNonWorkingUrls
+	 * @param theNonWorkingResponses
 	 *            the non working urls
 	 */
 	public CrawlerResult(String theStartPoint, Set<PageURL> theUrls,
-			Set<PageURL> theNonWorkingUrls) {
+			Set<HTMLPageResponse> theNonWorkingResponses) {
 		startPoint = theStartPoint;
 		urls = theUrls;
-		nonWorkingUrls = theNonWorkingUrls;
+		nonWorkingResponses = theNonWorkingResponses;
 	}
 
 	/**
@@ -56,8 +56,8 @@ public class CrawlerResult {
 	 * 
 	 * @return non working urls.
 	 */
-	public Set<PageURL> getNonWorkingUrls() {
-		return Collections.unmodifiableSet(nonWorkingUrls);
+	public Set<HTMLPageResponse> getNonWorkingUrls() {
+		return Collections.unmodifiableSet(nonWorkingResponses);
 	}
 
 	/**

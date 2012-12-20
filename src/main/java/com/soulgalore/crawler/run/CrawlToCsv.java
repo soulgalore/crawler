@@ -34,6 +34,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
+import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.PageURL;
 import com.soulgalore.crawler.guice.CrawlModule;
 
@@ -94,9 +95,9 @@ public class CrawlToCsv extends AbstractCrawl {
 		if (result.getNonWorkingUrls().size() > 0)
 			builder.append("URL non working,parent\n");
 
-		for (PageURL nonWorkingUrl : result.getNonWorkingUrls()) {
+		for (HTMLPageResponse nonWorkingUrl : result.getNonWorkingUrls()) {
 			builder.append(nonWorkingUrl.getUrl()).append(",")
-					.append(nonWorkingUrl.getReferer()).append("\n");
+					.append(nonWorkingUrl.getPageUrl().getReferer()).append("\n");
 		}
 
 		System.out.println("Start storing file " + fileName);

@@ -26,47 +26,43 @@ import org.apache.http.HttpStatus;
  * Specific status codes.
  *
  */
-public final class StatusCode {
+public enum StatusCode {
+	
+	SC_SERVER_RESPONSE_TIMEOUT(580,"Response timed out"),
+	SC_SERVER_RESPONSE_UNKNOWN(581,"Unknown error"),
+	SC_MALFORMED_URI(582,"Malformed url"),
+	SC_WRONG_CONTENT_TYPE(583,"The url didn't contain HTML");
+	
+	private final int code;
+	private final String friendlyName;
 
-	/**
-	 * Server time out.
-	 */
-	public static final int SC_SERVER_RESPONSE_TIMEOUT = 580;
-
-	/**
-	 * Unknown response.
-	 */
-	public static final int SC_SERVER_RESPONSE_UNKNOWN = 581;
-
-	/**
-	 * Malformed URI.
-	 */
-	public static final int SC_MALFORMED_URI = 582;
-
-	/**
-	 * Wrong content type aka not text/html.
-	 */
-	public static final int SC_WRONG_CONTENT_TYPE = 583;
-
-	private static final StatusCode INSTANCE = new StatusCode();
-
-	private StatusCode() {
+	StatusCode(int theCode, String theFriendlyName) {
+		code = theCode;
+		friendlyName = theFriendlyName;
 	}
 
-	/**
-	 * Get the instance.
-	 * @return the status code
-	 */
-	public static StatusCode getInstance() {
-		return INSTANCE;
+	public int getCode() {
+		return code;
 	}
-
+	
+	public String getFriendlyName() {
+		return friendlyName;
+	}
+	
+	public static String toFriendlyName(int code) {
+		for (StatusCode s : StatusCode.values()) {
+			if (s.getCode() == code)
+				return s.getFriendlyName();
+		}
+		return String.valueOf(code);
+	}
+	
 	/**
 	 * Is a status code ok?
 	 * @param responseCode the code
 	 * @return true if it is ok
 	 */
-	public boolean isResponseCodeOk(Integer responseCode) {
+	public static boolean isResponseCodeOk(Integer responseCode) {
 
 		if (responseCode >= HttpStatus.SC_BAD_REQUEST)
 			return false;
