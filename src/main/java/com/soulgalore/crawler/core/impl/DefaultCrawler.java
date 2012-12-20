@@ -102,6 +102,9 @@ public class DefaultCrawler implements Crawler {
 		final Set<PageURL> allUrls = new LinkedHashSet<PageURL>();
 		final Set<PageURL> verifiedUrls = new LinkedHashSet<PageURL>();
 		final Set<PageURL> nonWorkingUrls = new LinkedHashSet<PageURL>();
+		
+		// add the already verified url
+		verifiedUrls.add(pageUrl);
 
 		final String host = pageUrl.getHost();
 
@@ -134,7 +137,8 @@ public class DefaultCrawler implements Crawler {
 		if (configuration.isVerifyUrls())
 			verifyUrls(allUrls, verifiedUrls, nonWorkingUrls);
 
-		return new CrawlerResult(configuration.getStartUrl(), allUrls,
+		return new CrawlerResult(configuration.getStartUrl(),
+				configuration.isVerifyUrls() ? verifiedUrls : allUrls,
 				nonWorkingUrls);
 
 	}
@@ -216,9 +220,9 @@ public class DefaultCrawler implements Crawler {
 	private void verifyUrls(Set<PageURL> allUrls, Set<PageURL> verifiedUrls,
 			Set<PageURL> nonWorkingUrls) {
 
-		// Only test the once that hasn't been verified
 		Set<PageURL> urlsThatNeedsVerification = new LinkedHashSet<PageURL>(
 				allUrls);
+		
 		urlsThatNeedsVerification.removeAll(verifiedUrls);
 
 		final Set<Callable<HTMLPageResponse>> tasks = new HashSet<Callable<HTMLPageResponse>>(
@@ -236,10 +240,12 @@ public class DefaultCrawler implements Crawler {
 			for (Future<HTMLPageResponse> future : responses) {
 				if (!future.isCancelled()) {
 					HTMLPageResponse response = future.get();
-					if (response.getResponseCode() == HttpStatus.SC_OK)
+					if (response.getResponseCode() == HttpStatus.SC_OK) {
+						// remove, way of catching interrupted / execution e
 						urlsThatNeedsVerification.remove(response.getPageUrl());
+						verifiedUrls.add(response.getPageUrl());
+					}
 				}
-
 			}
 
 		} catch (InterruptedException | ExecutionException e1) {
@@ -248,7 +254,6 @@ public class DefaultCrawler implements Crawler {
 		}
 
 		// The one kept in urlsThatNeedsVerification are not working urls ...
-		allUrls.removeAll(urlsThatNeedsVerification);
 		nonWorkingUrls.addAll(urlsThatNeedsVerification);
 	}
 
