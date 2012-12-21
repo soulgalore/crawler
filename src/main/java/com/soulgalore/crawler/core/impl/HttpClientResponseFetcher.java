@@ -91,15 +91,6 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 			final HttpResponse resp = httpClient.execute(get);
 			entity = resp.getEntity();
 
-			
-			if (entity.getContentType() == null
-					|| (!entity.getContentType().toString().contains("html"))) {
-				return new HTMLPageResponse(url,
-						StatusCode.SC_WRONG_CONTENT_TYPE.getCode(),
-						Collections.<String, String>emptyMap(), "", "", 0);
-			}
-			
-
 			// this is a hack to minimize the amount of memory used
 			// should make this configurable maybe
 			// don't fetch headers for request that don't fetch the body and
