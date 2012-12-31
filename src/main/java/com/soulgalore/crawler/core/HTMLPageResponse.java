@@ -37,6 +37,7 @@ public class HTMLPageResponse {
 	private final String encoding;
 	private final PageURL url;
 	private final int responseCode;
+	private final String responseType;
 
 	/**
 	 * Create a response.
@@ -49,10 +50,11 @@ public class HTMLPageResponse {
 	 */
 	public HTMLPageResponse(PageURL pageUrl, int theResponseCode,
 			Map<String, String> theHeaders, String theBody, String theEncoding,
-			long theSize) {
+			long theSize, String theResponseType) {
 		encoding = theEncoding;
 		url = pageUrl;
 		responseCode = theResponseCode;
+		responseType = theResponseType;
 
 		// special hack:
 		// if the path contains a . (.html etc) then use the full path,
@@ -85,6 +87,10 @@ public class HTMLPageResponse {
 		return url.getUrl();
 	}
 	
+	public String getResponseType() {
+		return responseType;
+	}
+	
 	public PageURL getPageUrl() {
 		return url;
 	}
@@ -96,7 +102,7 @@ public class HTMLPageResponse {
 	@Override
 	public String toString() {
 		// left out the body for now
-		return this.getClass().getSimpleName() + "url:" + getUrl() + "responseCode:" + getResponseCode()+ "encoding:"+ encoding;
+		return this.getClass().getSimpleName() + "url:" + getUrl() + "responseCode:" + getResponseCode()+ "encoding:"+ encoding + " type:" + responseType;
 	}
 
 	@Override

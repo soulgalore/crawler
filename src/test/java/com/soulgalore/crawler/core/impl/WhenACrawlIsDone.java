@@ -152,7 +152,7 @@ public class WhenACrawlIsDone {
 		String html = TestFileHelper.fetchFileFromClasspathAsString(file);
 
 		return new HTMLPageResponse(new PageURL(url), HttpStatus.SC_OK,
-				new HashMap<String, String>(), html, "UTF-8", html.length());
+				new HashMap<String, String>(), html, "UTF-8", html.length(),"text/html");
 
 	}
 

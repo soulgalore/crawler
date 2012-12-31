@@ -80,7 +80,7 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 
 		if (url.isWrongSyntax()) {
 			return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0);
+					Collections.<String, String>emptyMap(), "", "", 0, "");
 		}
 	
 		final HttpGet get = new HttpGet(url.getUri());
@@ -106,21 +106,23 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 
 			final String body = getPage ? getBody(entity, "".equals(encoding)?"UTF-8":encoding) : "";
 			final long size = entity.getContentLength();
-
+			final String type = entity.getContentType().getValue();
+			
 			return new HTMLPageResponse(url, resp.getStatusLine()
-					.getStatusCode(), headersAndValues, body, encoding, size);
+					.getStatusCode(), headersAndValues, body, encoding, size, type);
 
 		} catch (SocketTimeoutException e) {
+			System.err.println(e);
 			return new HTMLPageResponse(url,
 					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0);
+					Collections.<String, String>emptyMap(), "", "", 0, "");
 			}
 
 		catch (IOException e) {
-			System.out.println(e);
+			System.err.println(e);
 			return new HTMLPageResponse(url,
 					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0);
+					Collections.<String, String>emptyMap(), "", "", 0, "");
 		}
 		finally {
 			try {

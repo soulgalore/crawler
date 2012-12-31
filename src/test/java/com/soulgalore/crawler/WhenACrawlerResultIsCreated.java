@@ -32,7 +32,7 @@ public class WhenACrawlerResultIsCreated {
 	public void setup() {
 		workingUrls.add(new PageURL("http://www.facebook.com"));
 		workingUrls.add(new PageURL("http://www.twitter.com"));
-		nonWorkingUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook2.com"), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(), Collections.EMPTY_MAP, "", "", 0) );
+		nonWorkingUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook2.com"), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(), Collections.EMPTY_MAP, "", "", 0,"") );
 		result = new CrawlerResult(STARTPOINT, workingUrls, nonWorkingUrls);
 	}
 

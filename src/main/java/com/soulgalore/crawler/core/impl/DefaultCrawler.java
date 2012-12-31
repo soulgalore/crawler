@@ -205,7 +205,7 @@ public class DefaultCrawler implements Crawler {
 			} catch (InterruptedException | ExecutionException e) {
 				nonWorkingUrls.add(new HTMLPageResponse(entry.getValue(),
 						StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), Collections
-								.<String, String> emptyMap(), "", "", 0));
+								.<String, String> emptyMap(), "", "", 0,""));
 			}
 		}
 		return nextLevel;
@@ -243,7 +243,7 @@ public class DefaultCrawler implements Crawler {
 			for (Future<HTMLPageResponse> future : responses) {
 				if (!future.isCancelled()) {
 					HTMLPageResponse response = future.get();
-					if (response.getResponseCode() == HttpStatus.SC_OK) {
+					if (response.getResponseCode() == HttpStatus.SC_OK && response.getResponseType().indexOf("html")>0) {						
 						// remove, way of catching interrupted / execution e
 						urlsThatNeedsVerification.remove(response.getPageUrl());
 						verifiedUrls.add(response.getPageUrl());
