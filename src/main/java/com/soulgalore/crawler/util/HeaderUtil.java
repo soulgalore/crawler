@@ -21,7 +21,9 @@
 package com.soulgalore.crawler.util;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -59,14 +61,14 @@ public final class HeaderUtil {
 	 *            by the header1:value1,header2:value2...
 	 * @return the Headers as a Set
 	 */
-	public Set<Header> createHeadersFromString(String headersAndValues) {
+	public Map<String,String> createHeadersFromString(String headersAndValues) {
 
 		if (headersAndValues == null || headersAndValues.isEmpty())
-			return Collections.emptySet();
+			return Collections.emptyMap();
 
 		final StringTokenizer token = new StringTokenizer(headersAndValues, ",");
 
-		final Set<Header> theHeaders = new LinkedHashSet<Header>(
+		final Map<String,String> theHeaders = new HashMap<String,String>(
 				token.countTokens());
 
 		while (token.hasMoreTokens()) {
@@ -81,7 +83,7 @@ public final class HeaderUtil {
 					headerAndValue.indexOf(":"));
 			final String value = headerAndValue.substring(
 					headerAndValue.indexOf(":") + 1, headerAndValue.length());
-			theHeaders.add(new BasicHeader(header, value));
+			theHeaders.put(header, value);
 		}
 
 		return theHeaders;

@@ -20,6 +20,7 @@
  */
 package com.soulgalore.crawler.core;
 
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 
@@ -33,6 +34,7 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
 	private final HTMLPageResponseFetcher fetcher;
 	private final PageURL url;
 	private final boolean fetchPage;
+	private final Map<String,String> requestHeaders;
 
 
 	/**
@@ -45,11 +47,12 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
 	 * @param fetchTheBody
 	 *            if true, the response body is fetched, else not.
 	 */
-	public HTMLPageResponseCallable(PageURL theUrl, HTMLPageResponseFetcher theFetcher, boolean fetchTheBody) {
+	public HTMLPageResponseCallable(PageURL theUrl, HTMLPageResponseFetcher theFetcher, boolean fetchTheBody, Map<String,String> theRequestHeaders) {
 
 		url = theUrl;
 		fetcher = theFetcher;
 		fetchPage = fetchTheBody; 
+		requestHeaders = theRequestHeaders;
 
 	}
 
@@ -62,11 +65,12 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
 	 *             the response
 	 */
 	public HTMLPageResponse call() throws InterruptedException {
-		return fetcher.get(url, fetchPage);
+		return fetcher.get(url, fetchPage, requestHeaders);
 	}
 
 	@Override
 	public String toString() {
+		// TODO add request headers
 		return this.getClass().getSimpleName() + " url:" + url;
 	}
 }

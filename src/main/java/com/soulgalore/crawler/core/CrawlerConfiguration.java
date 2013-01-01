@@ -1,5 +1,10 @@
 package com.soulgalore.crawler.core;
 
+import java.util.Collections;
+import java.util.Map;
+
+import com.soulgalore.crawler.util.HeaderUtil;
+
 /**
  * Configuration for a crawl.
  * 
@@ -19,8 +24,10 @@ public final class CrawlerConfiguration {
 	private int maxLevels = DEFAULT_CRAWL_LEVEL;
 	private String notOnPath = "";
 	private String onlyOnPath = "";
+	private String requestHeaders = "";
 
 	private String startUrl;
+	private Map<String, String> requestHeadersMap = Collections.emptyMap();
 
 	private boolean verifyUrls =  DEFAULT_SHOULD_VERIFY_URLS;
 
@@ -28,6 +35,14 @@ public final class CrawlerConfiguration {
 
 	}
 
+	public String getRequestHeaders() {
+		return requestHeaders;
+	}
+	
+	public Map<String,String> getRequestHeadersMap() {
+		return requestHeadersMap;
+	}
+	
 	public int getMaxLevels() {
 		return maxLevels;
 	}
@@ -55,10 +70,16 @@ public final class CrawlerConfiguration {
 		conf.setOnlyOnPath(getOnlyOnPath());
 		conf.setStartUrl(getStartUrl());
 		conf.setVerifyUrls(isVerifyUrls());
+		conf.setRequestHeaders(getRequestHeaders());
 		return conf;
 
 	}
 
+	private void setRequestHeaders(String requestHeaders) {
+		this.requestHeaders = requestHeaders;
+		requestHeadersMap = HeaderUtil.getInstance().createHeadersFromString(
+				requestHeaders);
+	}
 	private void setMaxLevels(int maxLevels) {
 		this.maxLevels = maxLevels;
 	}
@@ -161,6 +182,11 @@ public final class CrawlerConfiguration {
 
 		public Builder setVerifyUrls(boolean verifyUrls) {
 			configuration.setVerifyUrls(verifyUrls);
+			return this;
+		}
+		
+		public Builder setRequestHeaders(String requestHeaders) {
+			configuration.setRequestHeaders(requestHeaders);
 			return this;
 		}
 	}

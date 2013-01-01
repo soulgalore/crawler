@@ -9,7 +9,9 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Matchers.eq;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 
 import org.apache.http.HttpStatus;
@@ -35,11 +37,11 @@ public class WhenACrawlIsDone {
 
 		// the first one is for the url verification
 		// verification!
-		when(fetcher.get((PageURL) anyObject(), eq(false))).thenReturn(
+		when(fetcher.get((PageURL) anyObject(), eq(false), (Map<String, String>) anyObject())).thenReturn(
 				getResponse("/crawler/crawler1.html",
 						"http://soulislove.com/crawler/crawler1.html"));
 
-		when(fetcher.get((PageURL) anyObject(), eq(true))).thenReturn(
+		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject())).thenReturn(
 				getResponse("/crawler/crawler1.html",
 						"http://soulislove.com/crawler/crawler1.html"),
 				getResponse("/crawler/crawler2.html",

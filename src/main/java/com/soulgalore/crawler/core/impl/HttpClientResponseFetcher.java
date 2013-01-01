@@ -36,6 +36,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 
 import com.google.inject.Inject;
+import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.core.PageURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
@@ -76,7 +77,7 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 	 * @param getPage the body of the page or not
 	 * @return the response
 	 */
-	public HTMLPageResponse get(PageURL url, boolean getPage) {
+	public HTMLPageResponse get(PageURL url, boolean getPage, Map<String,String> requestHeaders) {
 
 		if (url.isWrongSyntax()) {
 			return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
@@ -84,6 +85,11 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 		}
 	
 		final HttpGet get = new HttpGet(url.getUri());
+		
+		for (String key : requestHeaders.keySet()) {
+			get.setHeader(key, requestHeaders.get(key));
+		}
+
 		HttpEntity entity = null;
 		
 		try {
@@ -106,7 +112,8 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 
 			final String body = getPage ? getBody(entity, "".equals(encoding)?"UTF-8":encoding) : "";
 			final long size = entity.getContentLength();
-			final String type = entity.getContentType().getValue();
+			// TODO add log when null
+			final String type = (entity.getContentType() !=null) ? entity.getContentType().getValue() : "";
 			
 			return new HTMLPageResponse(url, resp.getStatusLine()
 					.getStatusCode(), headersAndValues, body, encoding, size, type);

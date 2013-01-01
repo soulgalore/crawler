@@ -38,6 +38,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 	private static final String FOLLOW_PATH = "followPath";
 	private static final String NO_FOLLOW_PATH = "notFollowPath";
 	private static final String VERIFY = "verify";
+	private static final String REQUEST_HEADERS = "requestHeaders";
 	private final CrawlerConfiguration configuration;
 	
 
@@ -66,6 +67,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 										Boolean.toString(CrawlerConfiguration.DEFAULT_SHOULD_VERIFY_URLS))))
 				.setOnlyOnPath(getLine().getOptionValue(FOLLOW_PATH, ""))
 				.setNotOnPath(getLine().getOptionValue(NO_FOLLOW_PATH, ""))
+				.setRequestHeaders(getLine().getOptionValue(REQUEST_HEADERS, ""))
 				.setStartUrl(getLine().getOptionValue(URL)).build();
 
 	}
@@ -122,6 +124,14 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		verifyOption.setRequired(false);
 		verifyOption.setArgs(1);
 		options.addOption(verifyOption);
+		
+		final Option requestHeadersOption = new Option("rh",
+				"the request headers by the form of header1:value1,header2:value2 [optional]");
+		requestHeadersOption.setArgName("REQUEST-HEADERS");
+		requestHeadersOption.setLongOpt(REQUEST_HEADERS);
+		requestHeadersOption.setRequired(false);
+		requestHeadersOption.setArgs(1);
+		options.addOption(requestHeadersOption);
 		
 		return options;
 	}

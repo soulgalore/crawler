@@ -58,6 +58,7 @@ public class DefaultCrawler implements Crawler {
 	private final ExecutorService service;
 	private final Parser parser;
 
+	
 	/**
 	 * Create a new crawler.
 	 * 
@@ -95,8 +96,9 @@ public class DefaultCrawler implements Crawler {
 	 */
 	public CrawlerResult getUrls(CrawlerConfiguration configuration) {
 
+		final Map<String,String> requestHeaders = configuration.getRequestHeadersMap();
 		final PageURL pageUrl = verifyInput(configuration.getStartUrl(),
-				configuration.getOnlyOnPath());
+				configuration.getOnlyOnPath(), requestHeaders);
 
 		int level = 0;
 
@@ -122,7 +124,7 @@ public class DefaultCrawler implements Crawler {
 
 				for (PageURL testURL : nextToFetch) {
 					futures.put(service.submit(new HTMLPageResponseCallable(
-							testURL, responseFetcher, true)), testURL);
+							testURL, responseFetcher, true, requestHeaders)), testURL);
 				}
 
 				nextToFetch = fetchNextLevelLinks(futures, allUrls,
@@ -136,7 +138,7 @@ public class DefaultCrawler implements Crawler {
 		}
 
 		if (configuration.isVerifyUrls())
-			verifyUrls(allUrls, verifiedUrls, nonWorkingResponses);
+			verifyUrls(allUrls, verifiedUrls, nonWorkingResponses, requestHeaders);
 
 		return new CrawlerResult(configuration.getStartUrl(),
 				(configuration.isVerifyUrls() ? verifiedUrls : allUrls),
@@ -221,7 +223,7 @@ public class DefaultCrawler implements Crawler {
 	 *            links that are not working
 	 */
 	private void verifyUrls(Set<PageURL> allUrls, Set<PageURL> verifiedUrls,
-			Set<HTMLPageResponse> nonWorkingUrls) {
+			Set<HTMLPageResponse> nonWorkingUrls, Map<String,String> requestHeaders) {
 
 		Set<PageURL> urlsThatNeedsVerification = new LinkedHashSet<PageURL>(
 				allUrls);
@@ -233,7 +235,7 @@ public class DefaultCrawler implements Crawler {
 
 		for (PageURL testURL : urlsThatNeedsVerification) {
 			tasks.add(new HTMLPageResponseCallable(testURL, responseFetcher,
-					true));
+					true,requestHeaders ));
 		}
 
 		try {
@@ -261,12 +263,12 @@ public class DefaultCrawler implements Crawler {
 		
 	}
 
-	private HTMLPageResponse fetchOnePage(PageURL url) {
-		return responseFetcher.get(url, false);
+	private HTMLPageResponse fetchOnePage(PageURL url, Map<String,String> requestHeaders) {
+		return responseFetcher.get(url, false, requestHeaders);
 
 	}
 
-	private PageURL verifyInput(String startUrl, String onlyOnPath) {
+	private PageURL verifyInput(String startUrl, String onlyOnPath, Map<String,String> requestHeaders) {
 
 		final PageURL pageUrl = new PageURL(startUrl);
 
@@ -275,7 +277,7 @@ public class DefaultCrawler implements Crawler {
 					+ " isn't a valid url ");
 
 		// verify that the first url is reachable
-		final HTMLPageResponse resp = fetchOnePage(pageUrl);
+		final HTMLPageResponse resp = fetchOnePage(pageUrl, requestHeaders);
 
 		if (!StatusCode.isResponseCodeOk(resp.getResponseCode()))
 			throw new IllegalArgumentException("The start url: " + startUrl

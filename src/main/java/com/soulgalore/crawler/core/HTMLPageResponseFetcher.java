@@ -20,6 +20,8 @@
  */
 package com.soulgalore.crawler.core;
 
+import java.util.Map;
+
 /**
  * Interface for the response fetchers.
  *
@@ -34,7 +36,7 @@ public interface HTMLPageResponseFetcher {
 	 * @param fetchBody fetch the body or not          
 	 * @return the response
 	 */
-	HTMLPageResponse get(PageURL url, boolean fetchBody);
+	HTMLPageResponse get(PageURL url, boolean fetchBody,  Map<String,String> requestHeaders);
 
 	/**
 	 * Shutdown the fetcher and all of it's assets.
