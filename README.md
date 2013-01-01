@@ -19,7 +19,8 @@ usage: CrawlToSystemOut [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL> [-v <VE
  -np,--notFollowPath <NOPATH>  no url:s on this path will be crawled [optional]
  -p,--followPath <PATH>        stay on this path when crawling [optional]
  -u,--url <URL>                the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
- -v,--verify <VERIFY>          verify that all links are returning 200, default is set to true [optional]                    
+ -v,--verify <VERIFY>          verify that all links are returning 200, default is set to true [optional] 
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional]
 </pre>
 
 
@@ -34,6 +35,7 @@ usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-np <NOPA
  -u,--url <URL>                        the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
  -v,--verify <VERIFY>                  verify that all links are returning 200, default is set to true [optional]
  -ve,--verbose <VERBOSE>               verbose logging, default is false [optional]
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional] 
 </pre>
 
 
@@ -46,6 +48,7 @@ usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <UR
  -p,--followPath <PATH>         stay on this path when crawling [optional]
  -u,--url <URL>                 the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
  -v,--verify <VERIFY>           verify that all links are returning 200, default is set to true [optional]
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional] 
 </pre>
 
 Crawl and output urls that contains specific keyword in the html
@@ -57,6 +60,7 @@ usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-np <NOPATH>] [-p 
  -p,--followPath <PATH>         stay on this path when crawling [optional]
  -u,--url <URL>                 the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
  -v,--verify <VERIFY>           verify that all links are returning 200, default is set to true [optional]
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional] 
 </pre>
 
 
@@ -68,18 +72,12 @@ com.soulgalore.crawler.nrofhttpthreads=5
 com.soulgalore.crawler.threadsinworkingpool=5
 com.soulgalore.crawler.http.socket.timeout=5000
 com.soulgalore.crawler.http.connection.timeout=5000
-# Request headers like:
-# header1:value1,header2:value2
-com.soulgalore.crawler.requestheaders=
 # Auth like:
 # soulislove.com:80:username:password,...
 com.soulgalore.crawler.auth=
 # Proxy properties, if you are behind a proxy.                                                                                                                                                          
 ## The host by this special format: http:proxy.soulgalore.com:80                                                                                                                                        
 com.soulgalore.crawler.proxy=
-
-# The user agent
-com.soulgalore.crawler.useragent=
 </pre>
 The location of crawler.properties file can be set with the system property com.soulgalore.crawler.propertydir.
 
@@ -95,7 +93,7 @@ or <a href="http://github.com/downloads/soulgalore/crawler/crawler-1.0-full.jar"
 
 Running from the jar, fetching two levels depth and only fetch urls that contains "/tagg/"
 <pre>
-java -jar crawler-1.0.full.jar -u http://soulislove.com -l 2 -p /tagg/
+java -jar crawler-1.3.full.jar -u http://soulislove.com -l 2 -p /tagg/
 </pre>
 
 Running from the jar, adding base auth
@@ -105,12 +103,12 @@ java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-1
 
 Running from the jar, output urls in csv file
 <pre>
-java -cp crawler-1.0-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
+java -cp crawler-1.3-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
 </pre>
 
 Running from the jar, output urls into two text files: workingurls.txt and nonworkingurls.txt
 <pre>
-java -cp crawler-1.0-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
+java -cp crawler-1.3-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
 </pre>
 
 
