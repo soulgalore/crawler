@@ -250,6 +250,9 @@ public class DefaultCrawler implements Crawler {
 						urlsThatNeedsVerification.remove(response.getPageUrl());
 						verifiedUrls.add(response.getPageUrl());
 					}
+					else if (response.getResponseCode() == HttpStatus.SC_OK) {
+						urlsThatNeedsVerification.remove(response.getPageUrl());
+					}
 					else nonWorkingUrls.add(response);
 				}
 			}
