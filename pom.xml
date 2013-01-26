@@ -1,25 +1,26 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.soulgalore</groupId>
-  <artifactId>crawler</artifactId>
-  <version>1.3</version>
-  <name>Crawler</name>
-   	<packaging>jar</packaging>
-   	<description>Simple java (1.6) crawler to crawl web pages on one and same domain.</description>
-   	<url>https://github.com/soulgalore/crawler</url>
-   	<licenses>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.soulgalore</groupId>
+	<artifactId>crawler</artifactId>
+	<version>1.3</version>
+	<name>Crawler</name>
+	<packaging>jar</packaging>
+	<description>Simple java (1.6) crawler to crawl web pages on one and same domain.</description>
+	<url>https://github.com/soulgalore/crawler</url>
+	<licenses>
 		<license>
 			<name>Apache License 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-   	
-   	<properties>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-  	
-  	<developers>
+
+	<developers>
 		<developer>
 			<name>Peter Hedenskog</name>
 			<email>peter@soulgalore.com</email>
@@ -30,17 +31,17 @@
 	<scm>
 		<connection>scm:git:git://github.com/soulgalore/crawler.git</connection>
 		<developerConnection>scm:git:git@github.com:soulgalore/crawler.git</developerConnection>
-		<url>http://github.com/soulgalore/crawler/</url>
+		<url>https://github.com/soulgalore/crawler/</url>
 	</scm>
 
 	<issueManagement>
 		<system>github</system>
 		<url>http://github.com/soulgalore/crawler/issues#issue/</url>
 	</issueManagement>
-  	
-  	
-  	
-  	<dependencies>
+
+
+
+	<dependencies>
 		<!-- glue -->
 		<dependency>
 			<groupId>com.google.inject</groupId>
@@ -64,7 +65,7 @@
 			<version>4.2.2</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- Used for getting fancy input to the command line -->
 		<dependency>
 			<groupId>commons-cli</groupId>
@@ -80,7 +81,7 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Woho, testing again! -->
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -98,9 +99,9 @@
 		</dependency>
 
 	</dependencies>
-  
-  
-  <build>
+
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -120,8 +121,8 @@
 					<parallel>classes</parallel>
 					<threadCount>5</threadCount>
 					<includes>
-            			<include>**/*.java</include>
-          			</includes>
+						<include>**/*.java</include>
+					</includes>
 				</configuration>
 			</plugin>
 
@@ -167,7 +168,7 @@
 							<exclude>jmock:*</exclude>
 						</excludes>
 					</artifactSet>
-					<!--<minimizeJar>true</minimizeJar>-->
+					<!--<minimizeJar>true</minimizeJar> -->
 				</configuration>
 				<executions>
 					<execution>
@@ -228,8 +229,21 @@
 					</reportPlugins>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-  
+
 </project>
