@@ -1,6 +1,6 @@
 # Java web crawler [![Build Status](https://secure.travis-ci.org/soulgalore/crawler.png?branch=master)](http://travis-ci.org/soulgalore/crawler)
 
-Simple java (1.7) crawler to crawl webpages on one and same domain. Basicly you can do this:
+Simple java (1.6) crawler to crawl webpages on one and same domain. Basicly you can do this:
 <ul>
 <li>Crawl from a start point, defining the depth of the crawl and decide to crawl only a specific path</li>
 <li>Output all working urls</li>
