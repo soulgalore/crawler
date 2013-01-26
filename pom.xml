@@ -5,6 +5,15 @@
   <version>1.3</version>
   <name>Crawler</name>
    	<packaging>jar</packaging>
+   	<description>Simple java (1.6) crawler to crawl web pages on one and same domain.</description>
+   	<url>https://github.com/soulgalore/crawler</url>
+   	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
    	
    	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
