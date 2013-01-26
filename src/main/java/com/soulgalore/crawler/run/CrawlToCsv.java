@@ -21,10 +21,13 @@ package com.soulgalore.crawler.run;
  *******************************************************
  */
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -102,13 +105,33 @@ public class CrawlToCsv extends AbstractCrawl {
 
 		System.out.println("Start storing file " + fileName);
 
+		
+		Writer out = null;
 		try {
-			Files.write(FileSystems.getDefault().getPath(fileName), builder
-					.toString().getBytes("UTF-8"), StandardOpenOption.CREATE);
+			out = new BufferedWriter(new OutputStreamWriter(
+				    new FileOutputStream(fileName), "UTF-8"));
+			  out.write(builder.toString());
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			System.err.println(e);
 		}
-
+		finally {
+		    if (out!=null)
+				try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.err.println(e);
+				}
+		}
+		
+		
 		crawler.shutdown();
 	}
 

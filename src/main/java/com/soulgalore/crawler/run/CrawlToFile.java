@@ -20,10 +20,14 @@
  */
 package com.soulgalore.crawler.run;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -39,10 +43,11 @@ import com.soulgalore.crawler.guice.CrawlModule;
 import com.soulgalore.crawler.util.StatusCode;
 
 /**
- * Crawl to File. To files will be created, one with the working urls & one with the none working urls.
- * Each url will be on one new line.
+ * Crawl to File. To files will be created, one with the working urls & one with
+ * the none working urls. Each url will be on one new line.
+ * 
  * @author peter
- *
+ * 
  */
 public class CrawlToFile extends AbstractCrawl {
 
@@ -52,14 +57,13 @@ public class CrawlToFile extends AbstractCrawl {
 	private final String fileName;
 	private final String errorFileName;
 	private final boolean verbose;
-	
+
 	CrawlToFile(String[] args) throws ParseException {
 		super(args);
 		fileName = getLine().getOptionValue("filename", DEFAULT_FILENAME);
 		errorFileName = getLine().getOptionValue("errorfilename",
 				DEFAULT_ERROR_FILENAME);
-		verbose = Boolean.valueOf(getLine().getOptionValue("verbose","false"));
-		
+		verbose = Boolean.valueOf(getLine().getOptionValue("verbose", "false"));
 
 	}
 
@@ -88,50 +92,32 @@ public class CrawlToFile extends AbstractCrawl {
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = crawler.getUrls(getConfiguration());
-	
+
 		final StringBuilder workingUrls = new StringBuilder();
 		final StringBuilder nonWorkingUrls = new StringBuilder();
-		
+
 		for (PageURL workingUrl : result.getUrls()) {
 			workingUrls.append(workingUrl.getUrl()).append("\n");
 
 		}
-	
+
 		if (verbose)
-			System.out.println("Start storing file working urls " 
-				+ fileName);
+			System.out.println("Start storing file working urls " + fileName);
 
-		try {
-			Files.write(FileSystems.getDefault().getPath(fileName),
-					workingUrls.toString().getBytes("UTF-8"),
-					StandardOpenOption.CREATE);
-	
-		} catch (IOException e) {
-			System.err.println(e);
-		}
+		writeFile(fileName, workingUrls.toString());
 
-	
 		if (result.getNonWorkingUrls().size() > 0) {
 			for (HTMLPageResponse nonWorkingUrl : result.getNonWorkingUrls()) {
-				nonWorkingUrls.append(StatusCode.toFriendlyName(nonWorkingUrl.getResponseCode()))
-						.append(",").append(nonWorkingUrl.getUrl())
-						.append("\n");
-		}
+				nonWorkingUrls
+						.append(StatusCode.toFriendlyName(nonWorkingUrl
+								.getResponseCode())).append(",")
+						.append(nonWorkingUrl.getUrl()).append("\n");
+			}
 
 			if (verbose)
-				System.out.println("Start storing file non working urls " 
-					+ errorFileName);
-			
-			try {
-				
-				Files.write(FileSystems.getDefault().getPath(errorFileName),
-						nonWorkingUrls.toString().getBytes("UTF-8"),
-						StandardOpenOption.CREATE);
-				
-
-			} catch (IOException e) {
-				System.err.println(e);
-			}
+				System.out.println("Start storing file non working urls "
+						+ errorFileName);
+			writeFile(errorFileName, nonWorkingUrls.toString());
 		}
 
 		crawler.shutdown();
@@ -165,7 +151,7 @@ public class CrawlToFile extends AbstractCrawl {
 		errorFilenameOption.setArgs(1);
 
 		options.addOption(errorFilenameOption);
-		
+
 		final Option verboseOption = new Option("ve",
 				"verbose logging, default is false [optional]");
 		verboseOption.setArgName("VERBOSE");
@@ -175,9 +161,34 @@ public class CrawlToFile extends AbstractCrawl {
 		verboseOption.setType(Boolean.class);
 
 		options.addOption(verboseOption);
-		
 
 		return options;
 
+	}
+
+	private void writeFile(String fileName, String output) {
+		Writer out = null;
+		try {
+			out = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(fileName), "UTF-8"));
+			out.write(output);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e);
+		} finally {
+			if (out != null)
+				try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.err.println(e);
+				}
+		}
 	}
 }

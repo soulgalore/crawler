@@ -79,9 +79,8 @@ public class PageURL {
 			tmpURI = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(),
 					u.getPort(), u.getPath(), u.getQuery(), null);
 
-		} catch (MalformedURLException | URISyntaxException
-				| UnsupportedEncodingException | IllegalArgumentException e) {
-		// TODO log
+		} catch (Exception e) {
+		// an ugly catch all, we should act on it somehow
 		}
 		uri = tmpURI;
 		isWrongSyntax = (uri == null) ? true : false;

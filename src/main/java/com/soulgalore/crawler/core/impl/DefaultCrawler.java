@@ -204,7 +204,11 @@ public class DefaultCrawler implements Crawler {
 					nonWorkingUrls.add(response);
 				}
 
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (InterruptedException e) {
+				nonWorkingUrls.add(new HTMLPageResponse(entry.getValue(),
+						StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), Collections
+								.<String, String> emptyMap(), "", "", 0,""));
+			} catch (ExecutionException e) {
 				nonWorkingUrls.add(new HTMLPageResponse(entry.getValue(),
 						StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), Collections
 								.<String, String> emptyMap(), "", "", 0,""));
@@ -257,9 +261,12 @@ public class DefaultCrawler implements Crawler {
 				}
 			}
 
-		} catch (InterruptedException | ExecutionException e1) {
+		} catch (InterruptedException e1) {
 			// TODO add some logging
 			e1.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		// TODO: We can have a delta here if the exception occur
