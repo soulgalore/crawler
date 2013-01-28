@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.soulgalore</groupId>
 	<artifactId>crawler</artifactId>
-	<version>1.3</version>
+	<version>1.3-SNAPSHOT</version>
 	<name>Crawler</name>
 	<packaging>jar</packaging>
 	<description>Simple java (1.6) crawler to crawl web pages on one and same domain.</description>
@@ -28,10 +28,16 @@
 		</developer>
 	</developers>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<scm>
 		<connection>scm:git:git://github.com/soulgalore/crawler.git</connection>
 		<developerConnection>scm:git:git@github.com:soulgalore/crawler.git</developerConnection>
-		<url>https://github.com/soulgalore/crawler/</url>
+		<url>git@github.com:soulgalore/crawler.git</url>
 	</scm>
 
 	<issueManagement>
@@ -206,7 +212,52 @@
 					</descriptorRefs>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
