@@ -111,6 +111,14 @@ Running from the jar, output urls into two text files: workingurls.txt and nonwo
 java -cp crawler-1.3-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
 </pre>
 
+## Maven
+<pre>
+&lt;dependency&gt;
+ &lt;groupId&gt;com.soulgalore&lt;/groupId&gt;
+ &lt;artifactId&gt;crawler&lt;/artifactId&gt;
+ &lt;version&gt;1.3&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
 
 ## License
 
