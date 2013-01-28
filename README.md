@@ -86,8 +86,16 @@ The location of crawler.properties file can be set with the system property com.
 Checkout the project:
 <pre>git clone git@github.com:soulgalore/crawler.git</pre>
 
-or <a href="http://github.com/downloads/soulgalore/crawler/crawler-1.0-full.jar">download</a> the jar (the jar contains all libs needed).
+or <a href="http://github.com/downloads/soulgalore/crawler/crawler-1.3-full.jar">download</a> the jar (the jar contains all libs needed)
 
+or add this to Maven, if you want to include the crawler in your project:
+<pre>
+&lt;dependency&gt;
+ &lt;groupId&gt;com.soulgalore&lt;/groupId&gt;
+ &lt;artifactId&gt;crawler&lt;/artifactId&gt;
+ &lt;version&gt;1.3&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
 
 ## Examples
 
