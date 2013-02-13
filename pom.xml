@@ -55,6 +55,9 @@
 			<scope>compile</scope>
 		</dependency>
 
+
+
+
 		<!-- Used for fetching HTML elements within pages -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
@@ -211,26 +214,10 @@
 					</descriptorRefs>
 				</configuration>
 			</plugin>
-
-	<!-- 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
- -->
 		</plugins>
 	</build>
 
-<!-- 
+ 
 	<profiles>
 		<profile>
 			<id>release-sign-artifacts</id>
@@ -260,5 +247,5 @@
 			</build>
 		</profile>
 	</profiles>
- -->
+
 </project>
