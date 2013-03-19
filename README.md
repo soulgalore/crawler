@@ -91,7 +91,7 @@ or add it to Maven, if you want to include the crawler in your project:
 &lt;dependency&gt;
  &lt;groupId&gt;com.soulgalore&lt;/groupId&gt;
  &lt;artifactId&gt;crawler&lt;/artifactId&gt;
- &lt;version&gt;1.3&lt;/version&gt;
+ &lt;version&gt;1.3.1&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 
