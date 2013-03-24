@@ -20,12 +20,12 @@
  */
 package com.soulgalore.crawler.core;
 
+
 /**
  * Interface of a web crawler.
  *
  */
 public interface Crawler {
-
 	/**
 	 * Get the urls.
 	 * 

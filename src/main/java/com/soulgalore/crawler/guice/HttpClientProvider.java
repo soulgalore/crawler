@@ -37,6 +37,7 @@ import org.apache.http.params.HttpProtocolParams;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.util.Auth;
 import com.soulgalore.crawler.util.AuthUtil;
 import com.soulgalore.crawler.util.HTTPSFaker;
@@ -95,11 +96,11 @@ public class HttpClientProvider implements Provider<HttpClient> {
 	 */
 	@Inject
 	public HttpClientProvider(
-			@Named("com.soulgalore.crawler.nrofhttpthreads") int maxNrOfThreads,
-			@Named("com.soulgalore.crawler.http.socket.timeout") int theSocketTimeout,
-			@Named("com.soulgalore.crawler.http.connection.timeout") int theConnectionTimeout,
-			@Named("com.soulgalore.crawler.auth") String authAsString,
-			@Named("com.soulgalore.crawler.proxy") String theProxy){
+			@Named(CrawlerConfiguration.MAX_THREADS_PROPERTY_NAME) int maxNrOfThreads,
+			@Named(CrawlerConfiguration.SOCKET_TIMEOUT_PROPERTY_NAME) int theSocketTimeout,
+			@Named(CrawlerConfiguration.CONNECTION_TIMEOUT_PROPERTY_NAME) int theConnectionTimeout,
+			@Named(CrawlerConfiguration.AUTH_PROPERTY_NAME) String authAsString,
+			@Named(CrawlerConfiguration.PROXY_PROPERTY_NAME) String theProxy){
 		nrOfThreads = maxNrOfThreads;
 		maxToRoute = maxNrOfThreads;
 		connectionTimeout = theConnectionTimeout;

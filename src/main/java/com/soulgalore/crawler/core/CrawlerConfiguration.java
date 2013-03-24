@@ -11,6 +11,32 @@ import com.soulgalore.crawler.util.HeaderUtil;
  */
 public final class CrawlerConfiguration {
 
+	// Property names for System properties.
+	
+	/**
+	 * System property for max number of http threads.
+	 */
+	public final static String MAX_THREADS_PROPERTY_NAME = "com.soulgalore.crawler.nrofhttpthreads";
+	/**
+	 * System property for socket timeout (in ms).
+	 */
+	public final static String SOCKET_TIMEOUT_PROPERTY_NAME = "com.soulgalore.crawler.http.socket.timeout";
+	/**
+	 * System property for connection timeout (in ms).
+	 */
+	public final static String CONNECTION_TIMEOUT_PROPERTY_NAME = "com.soulgalore.crawler.http.connection.timeout";
+	
+	/**
+	 * System property for auth.
+	 */
+	public final static String AUTH_PROPERTY_NAME = "com.soulgalore.crawler.auth";
+	
+	/**
+	 * System property for proxy config.
+	 */
+    public final static String PROXY_PROPERTY_NAME = "com.soulgalore.crawler.proxy";	
+
+	
 	/**
 	 * The default crawl level if no is supplied.
 	 */
