@@ -97,25 +97,25 @@ public class DefaultCrawler implements Crawler {
 	public CrawlerResult getUrls(CrawlerConfiguration configuration) {
 
 		final Map<String,String> requestHeaders = configuration.getRequestHeadersMap();
-		final PageURL pageUrl = verifyInput(configuration.getStartUrl(),
+		final HTMLPageResponse resp = verifyInput(configuration.getStartUrl(),
 				configuration.getOnlyOnPath(), requestHeaders);
 
 		int level = 0;
 
 		final Set<PageURL> allUrls = new LinkedHashSet<PageURL>();
-		final Set<PageURL> verifiedUrls = new LinkedHashSet<PageURL>();
+		final Set<HTMLPageResponse> verifiedUrls = new LinkedHashSet<HTMLPageResponse>();
 		final Set<HTMLPageResponse> nonWorkingResponses = new LinkedHashSet<HTMLPageResponse>();
 		
 		// add the already verified url
-		verifiedUrls.add(pageUrl);
+		verifiedUrls.add(resp);
 
-		final String host = pageUrl.getHost();
+		final String host = resp.getPageUrl().getHost();
 
 		if (configuration.getMaxLevels() > 0) {
 
 			// set the start url
 			Set<PageURL> nextToFetch = new LinkedHashSet<PageURL>();
-			nextToFetch.add(pageUrl);
+			nextToFetch.add(resp.getPageUrl());
 
 			while (level < configuration.getMaxLevels()) {
 
@@ -134,14 +134,19 @@ public class DefaultCrawler implements Crawler {
 				level++;
 			}
 		} else {
-			allUrls.add(pageUrl);
+			allUrls.add(resp.getPageUrl());
 		}
 
 		if (configuration.isVerifyUrls())
 			verifyUrls(allUrls, verifiedUrls, nonWorkingResponses, requestHeaders);
 
+		Set<PageURL> workingUrls = new LinkedHashSet<PageURL>();
+		for (HTMLPageResponse workingResponses : verifiedUrls) {
+			workingUrls.add(workingResponses.getPageUrl());
+		}
+		
 		return new CrawlerResult(configuration.getStartUrl(),
-				(configuration.isVerifyUrls() ? verifiedUrls : allUrls),
+				configuration.isVerifyUrls()? workingUrls: allUrls, verifiedUrls,
 				nonWorkingResponses);
 
 	}
@@ -167,7 +172,7 @@ public class DefaultCrawler implements Crawler {
 	protected Set<PageURL> fetchNextLevelLinks(
 			Map<Future<HTMLPageResponse>, PageURL> responses,
 			Set<PageURL> allUrls, Set<HTMLPageResponse> nonWorkingUrls,
-			Set<PageURL> verifiedUrls, String host, String onlyOnPath,
+			Set<HTMLPageResponse> verifiedUrls, String host, String onlyOnPath,
 			String notOnPath) {
 
 		final Set<PageURL> nextLevel = new LinkedHashSet<PageURL>();
@@ -184,7 +189,7 @@ public class DefaultCrawler implements Crawler {
 				final HTMLPageResponse response = entry.getKey().get();
 				if (HttpStatus.SC_OK == response.getResponseCode()) {
 					// we know that this links work
-					verifiedUrls.add(entry.getValue());
+					verifiedUrls.add(response);
 					final Set<PageURL> allLinks = parser.get(response);
 
 					for (PageURL link : allLinks) {
@@ -226,7 +231,7 @@ public class DefaultCrawler implements Crawler {
 	 * @param nonWorkingUrls
 	 *            links that are not working
 	 */
-	private void verifyUrls(Set<PageURL> allUrls, Set<PageURL> verifiedUrls,
+	private void verifyUrls(Set<PageURL> allUrls, Set<HTMLPageResponse> verifiedUrls,
 			Set<HTMLPageResponse> nonWorkingUrls, Map<String,String> requestHeaders) {
 
 		Set<PageURL> urlsThatNeedsVerification = new LinkedHashSet<PageURL>(
@@ -252,7 +257,7 @@ public class DefaultCrawler implements Crawler {
 					if (response.getResponseCode() == HttpStatus.SC_OK && response.getResponseType().indexOf("html")>0) {						
 						// remove, way of catching interrupted / execution e
 						urlsThatNeedsVerification.remove(response.getPageUrl());
-						verifiedUrls.add(response.getPageUrl());
+						verifiedUrls.add(response);
 					}
 					else if (response.getResponseCode() == HttpStatus.SC_OK) {
 						urlsThatNeedsVerification.remove(response.getPageUrl());
@@ -278,7 +283,7 @@ public class DefaultCrawler implements Crawler {
 
 	}
 
-	private PageURL verifyInput(String startUrl, String onlyOnPath, Map<String,String> requestHeaders) {
+	private HTMLPageResponse verifyInput(String startUrl, String onlyOnPath, Map<String,String> requestHeaders) {
 
 		final PageURL pageUrl = new PageURL(startUrl);
 
@@ -293,7 +298,7 @@ public class DefaultCrawler implements Crawler {
 			throw new IllegalArgumentException("The start url: " + startUrl
 					+ " couldn't be fetched, response code "
 					+ resp.getResponseCode());
-		return pageUrl;
+		return resp;
 	}
 
 }

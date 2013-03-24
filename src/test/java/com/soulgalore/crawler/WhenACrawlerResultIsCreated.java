@@ -18,9 +18,10 @@ import com.soulgalore.crawler.util.StatusCode;
 public class WhenACrawlerResultIsCreated {
 
 	private static final String STARTPOINT = "http://www.google.com";
-	private final Set<PageURL> workingUrls = new HashSet<PageURL>();
+	private final Set<PageURL> allUrls = new HashSet<PageURL>();
 	private final Set<HTMLPageResponse> nonWorkingUrls = new HashSet<HTMLPageResponse>();
-
+	private final Set<HTMLPageResponse> verifiedUrls = new HashSet<HTMLPageResponse>();
+	
 	private CrawlerResult result;
 
 	@Test
@@ -30,10 +31,12 @@ public class WhenACrawlerResultIsCreated {
 
 	@Before
 	public void setup() {
-		workingUrls.add(new PageURL("http://www.facebook.com"));
-		workingUrls.add(new PageURL("http://www.twitter.com"));
+		allUrls.add(new PageURL("http://www.facebook.com"));
+		allUrls.add(new PageURL("http://www.twitter.com"));
 		nonWorkingUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook2.com"), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(), Collections.EMPTY_MAP, "", "", 0,"") );
-		result = new CrawlerResult(STARTPOINT, workingUrls, nonWorkingUrls);
+		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook.com"),200, Collections.EMPTY_MAP, "", "", 0,"") );
+		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.twitter.com"),200, Collections.EMPTY_MAP, "", "", 0,"") );
+		result = new CrawlerResult(STARTPOINT, allUrls, verifiedUrls, nonWorkingUrls);
 	}
 
 	@Test

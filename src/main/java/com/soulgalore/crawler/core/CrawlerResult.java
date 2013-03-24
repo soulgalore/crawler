@@ -32,6 +32,7 @@ public class CrawlerResult {
 
 	private final Set<PageURL> urls;
 	private final Set<HTMLPageResponse> nonWorkingResponses;
+	private final Set<HTMLPageResponse> verifiedResponses;
 	private final String startPoint;
 
 	/**
@@ -44,11 +45,12 @@ public class CrawlerResult {
 	 * @param theNonWorkingResponses
 	 *            the non working urls
 	 */
-	public CrawlerResult(String theStartPoint, Set<PageURL> theUrls,
+	public CrawlerResult(String theStartPoint, Set<PageURL> theUrls, Set<HTMLPageResponse> theVerifiedResponses,
 			Set<HTMLPageResponse> theNonWorkingResponses) {
 		startPoint = theStartPoint;
 		urls = theUrls;
 		nonWorkingResponses = theNonWorkingResponses;
+		verifiedResponses = theVerifiedResponses;
 	}
 
 	/**
@@ -58,6 +60,15 @@ public class CrawlerResult {
 	 */
 	public Set<HTMLPageResponse> getNonWorkingUrls() {
 		return Collections.unmodifiableSet(nonWorkingResponses);
+	}
+	
+	/**
+	 * Get verified working responses. Can be empty is verification is turned off.
+	 * 
+	 * @return non working urls.
+	 */
+	public Set<HTMLPageResponse> getVerifiedURLResponses() {
+		return Collections.unmodifiableSet(verifiedResponses);
 	}
 
 	/**
@@ -72,7 +83,7 @@ public class CrawlerResult {
 	/**
 	 * Get the fetched urls.
 	 * 
-	 * @return the fetched urls. Contains only working urls.
+	 * @return the fetched urls. Contains only working url if verification is turned on.
 	 */
 	public Set<PageURL> getUrls() {
 		return Collections.unmodifiableSet(urls);
