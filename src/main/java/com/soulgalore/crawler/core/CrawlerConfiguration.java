@@ -43,7 +43,7 @@ public final class CrawlerConfiguration {
 	public static final int DEFAULT_CRAWL_LEVEL = 1;
 	
 	/**
-	 * The default value if url:s shourl be verified to be ok or not.
+	 * The default value if url:s should be verified to be ok or not.
 	 */
 	public static final boolean DEFAULT_SHOULD_VERIFY_URLS = true;
 	
