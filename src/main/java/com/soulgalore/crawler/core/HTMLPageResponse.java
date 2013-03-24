@@ -104,6 +104,11 @@ public class HTMLPageResponse {
 	public Map<String, String> getResponseHeaders() {
 		return headers;
 	}
+	
+	public String getHeaderValue(String key) {
+		return headers.get(key);
+
+	}
 
 	@Override
 	public String toString() {
