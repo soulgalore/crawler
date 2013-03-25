@@ -83,7 +83,7 @@ The location of crawler.properties file can be set with the system property com.
 
 ## Examples
 
-Checkout the project:
+Checkout the project and compile your own full jar (all dependencies included):
 <pre>git clone git@github.com:soulgalore/crawler.git</pre>
 
 or add it to Maven, if you want to include the crawler in your project:
@@ -91,7 +91,7 @@ or add it to Maven, if you want to include the crawler in your project:
 &lt;dependency&gt;
  &lt;groupId&gt;com.soulgalore&lt;/groupId&gt;
  &lt;artifactId&gt;crawler&lt;/artifactId&gt;
- &lt;version&gt;1.4.1&lt;/version&gt;
+ &lt;version&gt;1.4&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 
@@ -99,28 +99,28 @@ or add it to Maven, if you want to include the crawler in your project:
 
 Running from the jar, fetching two levels depth and only fetch urls that contains "/tagg/"
 <pre>
-java -jar crawler-1.3.full.jar -u http://soulislove.com -l 2 -p /tagg/
+java -jar crawler-1.4.full.jar -u http://soulislove.com -l 2 -p /tagg/
 </pre>
 
 Running from the jar, adding base auth
 <pre>
-java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-1.0-full.jar -u http://soulislove.com
+java -jar -Dcom.soulgalore.crawler.auth=soulgalore.com:80:peter:secret crawler-1.4-full.jar -u http://soulislove.com
 </pre>
 
 Running from the jar, output urls in csv file
 <pre>
-java -cp crawler-1.3-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
+java -cp crawler-1.4-full.jar com.soulgalore.crawler.run.CrawlToCsv -u http://soulislove.com
 </pre>
 
 Running from the jar, output urls into two text files: workingurls.txt and nonworkingurls.txt
 <pre>
-java -cp crawler-1.3-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
+java -cp crawler-1.4-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
 </pre>
 
 
 ## License
 
-Copyright 2012 Peter Hedenskog
+Copyright 2013 Peter Hedenskog
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
