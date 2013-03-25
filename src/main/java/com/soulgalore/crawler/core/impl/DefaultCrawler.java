@@ -106,6 +106,8 @@ public class DefaultCrawler implements Crawler {
 		final Set<HTMLPageResponse> verifiedUrls = new LinkedHashSet<HTMLPageResponse>();
 		final Set<HTMLPageResponse> nonWorkingResponses = new LinkedHashSet<HTMLPageResponse>();
 		
+		verifiedUrls.add(resp);
+		
 		final String host = resp.getPageUrl().getHost();
 
 		if (configuration.getMaxLevels() > 0) {
@@ -276,7 +278,7 @@ public class DefaultCrawler implements Crawler {
 	}
 
 	private HTMLPageResponse fetchOnePage(PageURL url, Map<String,String> requestHeaders) {
-		return responseFetcher.get(url, false, requestHeaders);
+		return responseFetcher.get(url, true, requestHeaders);
 
 	}
 

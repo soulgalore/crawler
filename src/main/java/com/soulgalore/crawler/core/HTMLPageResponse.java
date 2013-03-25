@@ -119,10 +119,11 @@ public class HTMLPageResponse {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((doc == null) ? 0 : doc.hashCode());
+		int result = 1;
+		result = prime * result + responseCode;
 		result = prime * result
-				+ ((encoding == null) ? 0 : encoding.hashCode());
+				+ ((responseType == null) ? 0 : responseType.hashCode());
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
 
@@ -130,22 +131,26 @@ public class HTMLPageResponse {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final HTMLPageResponse other = (HTMLPageResponse) obj;
-		if (doc == null) {
-			if (other.doc != null)
-				return false;
-		} else if (!doc.equals(other.doc))
+		HTMLPageResponse other = (HTMLPageResponse) obj;
+		if (responseCode != other.responseCode)
 			return false;
-		if (encoding == null) {
-			if (other.encoding != null)
+		if (responseType == null) {
+			if (other.responseType != null)
 				return false;
-		} else if (!encoding.equals(other.encoding))
+		} else if (!responseType.equals(other.responseType))
+			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
 			return false;
 		return true;
 	}
+
+	
 
 }

@@ -36,12 +36,10 @@ public class WhenACrawlIsDone {
 		HTMLPageResponseFetcher fetcher = mock(HTMLPageResponseFetcher.class);
 
 		// the first one is for the url verification
-		// verification!
-		when(fetcher.get((PageURL) anyObject(), eq(false), (Map<String, String>) anyObject())).thenReturn(
-				getResponse("/crawler/crawler1.html",
-						"http://soulislove.com/crawler/crawler1.html"));
-
+				// verification!
 		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject())).thenReturn(
+				getResponse("/crawler/crawler1.html",
+						"http://soulislove.com/crawler/crawler1.html"),
 				getResponse("/crawler/crawler1.html",
 						"http://soulislove.com/crawler/crawler1.html"),
 				getResponse("/crawler/crawler2.html",
