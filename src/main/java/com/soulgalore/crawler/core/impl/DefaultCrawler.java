@@ -106,9 +106,6 @@ public class DefaultCrawler implements Crawler {
 		final Set<HTMLPageResponse> verifiedUrls = new LinkedHashSet<HTMLPageResponse>();
 		final Set<HTMLPageResponse> nonWorkingResponses = new LinkedHashSet<HTMLPageResponse>();
 		
-		// add the already verified url
-		verifiedUrls.add(resp);
-
 		final String host = resp.getPageUrl().getHost();
 
 		if (configuration.getMaxLevels() > 0) {
