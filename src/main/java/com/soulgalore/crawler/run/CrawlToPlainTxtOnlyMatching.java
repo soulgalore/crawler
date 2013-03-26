@@ -28,7 +28,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
-import com.soulgalore.crawler.guice.CrawlModuleAndMatch;
+import com.soulgalore.crawler.core.HTMLPageResponse;
+import com.soulgalore.crawler.guice.CrawlModule;
 
 /**
  * Crawl and print urls that contains specific keyword in the HTML body.
@@ -65,11 +66,17 @@ public class CrawlToPlainTxtOnlyMatching extends AbstractCrawl {
 	}
 
 	private void crawl() {
-		final Injector injector = Guice.createInjector(new CrawlModuleAndMatch(
-				keyword));
+		final Injector injector = Guice.createInjector(new CrawlModule());
 		final Crawler crawler = injector.getInstance(Crawler.class);
 
 		final CrawlerResult result = crawler.getUrls(getConfiguration());
+		for (HTMLPageResponse response : result.getVerifiedURLResponses()) {
+			
+			if (response.getBody().toString().contains(keyword)) {
+				System.out.println(response.getUrl());
+			}
+		}
+		
 		crawler.shutdown();
 	}
 
