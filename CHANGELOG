@@ -1,0 +1,6 @@
+CHANGELOG crawler
+
+version 1.5
+------------------------
+* Added changelog (finally)
+* Cleaner implementation in CrawlToPlainTxtOnlyMatching
