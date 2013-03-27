@@ -33,10 +33,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.util.EntityUtils;
 
 import com.google.inject.Inject;
-import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.core.PageURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
@@ -49,7 +49,7 @@ import com.soulgalore.crawler.util.StatusCode;
  * 
  * 
  */
-public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
+public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 
 	private final HttpClient httpClient;
 
@@ -60,7 +60,7 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 	 *            the client to use
 	 */
 	@Inject
-	public HttpClientResponseFetcher(HttpClient client) {
+	public HTTPClientResponseFetcher(HttpClient client) {
 		httpClient = client;
 	}
 
@@ -125,6 +125,13 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 					Collections.<String, String>emptyMap(), "", "", 0, "");
 			}
 
+		catch (ConnectTimeoutException e) {
+			System.err.println(e);
+			return new HTMLPageResponse(url,
+					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
+					Collections.<String, String>emptyMap(), "", "", 0, "");
+		}
+		
 		catch (IOException e) {
 			System.err.println(e);
 			return new HTMLPageResponse(url,
@@ -186,4 +193,5 @@ public class HttpClientResponseFetcher implements HTMLPageResponseFetcher {
 		}
 		return headersAndValues;
 	}
+
 }
