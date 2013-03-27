@@ -52,7 +52,7 @@ public class WhenACrawlIsDone {
 						"http://soulislove.com/crawler/crawler5.html"));
 
 		crawler = new DefaultCrawler(fetcher,
-				Executors.newSingleThreadExecutor(), new AhrefParser());
+				Executors.newSingleThreadExecutor(), new AhrefPageURLParser());
 	}
 
 	@Test

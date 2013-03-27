@@ -28,7 +28,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.soulgalore.crawler.core.Parser;
+import com.soulgalore.crawler.core.PageURLParser;
 import com.soulgalore.crawler.core.PageURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 
@@ -38,7 +38,7 @@ import com.soulgalore.crawler.core.HTMLPageResponse;
  * 
  * 
  */
-public class AhrefParser implements Parser {
+public class AhrefPageURLParser implements PageURLParser {
 
 	private static final String AHREF = "a[href]";
 	private static final String ABS_HREF = "abs:href";
@@ -49,7 +49,7 @@ public class AhrefParser implements Parser {
 	/**
 	 * Create a parser.
 	 */
-	public AhrefParser() {
+	public AhrefPageURLParser() {
 
 	}
 

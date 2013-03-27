@@ -24,12 +24,18 @@ import java.util.concurrent.ExecutorService;
 
 import org.apache.http.client.HttpClient;
 
-import com.soulgalore.crawler.core.Parser;
+import com.soulgalore.crawler.core.PageURLParser;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
+import com.soulgalore.crawler.core.assets.AssetFetcher;
+import com.soulgalore.crawler.core.assets.AssetsParser;
+import com.soulgalore.crawler.core.assets.AssetsVerifier;
+import com.soulgalore.crawler.core.assets.impl.DefaultAssetsParser;
+import com.soulgalore.crawler.core.assets.impl.DefaultAssetsVerifier;
+import com.soulgalore.crawler.core.assets.impl.HTTPClientAssetFetcher;
 import com.soulgalore.crawler.core.impl.DefaultCrawler;
-import com.soulgalore.crawler.core.impl.AhrefParser;
-import com.soulgalore.crawler.core.impl.HttpClientResponseFetcher;
+import com.soulgalore.crawler.core.impl.AhrefPageURLParser;
+import com.soulgalore.crawler.core.impl.HTTPClientResponseFetcher;
 
 
 /**
@@ -47,9 +53,14 @@ public class CrawlModule extends AbstractPropertiesModule {
 		super.configure();
 		bind(Crawler.class).to(DefaultCrawler.class);
 		bind(ExecutorService.class).toProvider(ExecutorServiceProvider.class);
-		bind(HTMLPageResponseFetcher.class).to(HttpClientResponseFetcher.class);
+		bind(HTMLPageResponseFetcher.class).to(HTTPClientResponseFetcher.class);
 		bind(HttpClient.class).toProvider(HttpClientProvider.class);
-		bind(Parser.class).to(AhrefParser.class);
+		bind(PageURLParser.class).to(AhrefPageURLParser.class);
+		
+		// For parsing assets
+		bind(AssetsParser.class).to(DefaultAssetsParser.class);
+		bind(AssetsVerifier.class).to(DefaultAssetsVerifier.class);
+		bind(AssetFetcher.class).to(HTTPClientAssetFetcher.class);
 
 	}
 }

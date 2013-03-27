@@ -39,7 +39,7 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
-import com.soulgalore.crawler.core.Parser;
+import com.soulgalore.crawler.core.PageURLParser;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
 import com.soulgalore.crawler.core.HTMLPageResponseCallable;
@@ -56,7 +56,7 @@ public class DefaultCrawler implements Crawler {
 
 	private final HTMLPageResponseFetcher responseFetcher;
 	private final ExecutorService service;
-	private final Parser parser;
+	private final PageURLParser parser;
 
 	
 	/**
@@ -71,7 +71,7 @@ public class DefaultCrawler implements Crawler {
 	 */
 	@Inject
 	public DefaultCrawler(HTMLPageResponseFetcher theResponseFetcher,
-			ExecutorService theService, Parser theParser) {
+			ExecutorService theService, PageURLParser theParser) {
 		service = theService;
 		responseFetcher = theResponseFetcher;
 		parser = theParser;

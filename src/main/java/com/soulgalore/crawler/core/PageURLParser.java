@@ -27,7 +27,7 @@ import java.util.Set;
  * Fetch all a href:s within a response.
  *
  */
-public interface Parser {
+public interface PageURLParser {
 
 	/**
 	 * Get the a links, parsed by this parser.

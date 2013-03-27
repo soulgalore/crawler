@@ -24,7 +24,7 @@ public class WhenAhrefsIsParsedFromResponse {
 		PageURL pageUrl = new PageURL("http://soulislove.com");
 		
 		HTMLPageResponse response = new HTMLPageResponse(pageUrl, HttpStatus.SC_OK, new HashMap<String,String>(), html, "UTF-8", html.length(),"text/html");
-		AhrefParser parser = new AhrefParser();
+		AhrefPageURLParser parser = new AhrefPageURLParser();
 		Set<PageURL> urls = parser.get(response);
 		assertThat(urls.size(), is(10));
 	}
@@ -35,7 +35,7 @@ public class WhenAhrefsIsParsedFromResponse {
 		PageURL pageUrl = new PageURL("http://soulislove.com");
 		
 		HTMLPageResponse response = new HTMLPageResponse(pageUrl, HttpStatus.SC_OK, new HashMap<String,String>(), html, "UTF-8", html.length(),"text/html");
-		AhrefParser parser = new AhrefParser();
+		AhrefPageURLParser parser = new AhrefPageURLParser();
 		Set<PageURL> urls = parser.get(response);
 		assertThat(urls.size(), is(3));
 	}

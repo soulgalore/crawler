@@ -38,6 +38,7 @@ public interface HTMLPageResponseFetcher {
 	 */
 	HTMLPageResponse get(PageURL url, boolean fetchBody,  Map<String,String> requestHeaders);
 
+	
 	/**
 	 * Shutdown the fetcher and all of it's assets.
 	 */
