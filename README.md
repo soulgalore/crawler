@@ -7,6 +7,7 @@ Simple java (1.6) crawler to crawl webpages on one and same domain. Basicly you 
 <li>Output the data to a csv file, separated by working (200 response code) and non working url</li>
 <li>Output the data to two text files, one with working urls and one with none working. Each url will be on one new line.</li>
 <li>Output url:s that contains a keyword in the html</li>
+<li>Verify that assets on a page work</li>
 </ul>
 
 
