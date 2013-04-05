@@ -296,7 +296,7 @@ public class DefaultCrawler implements Crawler {
 		if (!StatusCode.isResponseCodeOk(resp.getResponseCode()))
 			throw new IllegalArgumentException("The start url: " + startUrl
 					+ " couldn't be fetched, response code "
-					+ resp.getResponseCode());
+					+ StatusCode.toFriendlyName(resp.getResponseCode()));
 		return resp;
 	}
 
