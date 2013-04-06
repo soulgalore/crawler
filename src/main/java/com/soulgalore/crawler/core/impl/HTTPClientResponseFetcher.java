@@ -91,10 +91,9 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 		}
 
 		HttpEntity entity = null;
-		
+		final long start = System.currentTimeMillis();
 		try {
-			
-			final long start = System.currentTimeMillis();
+	
 			final HttpResponse resp = httpClient.execute(get);
 			final long fetchTime = System.currentTimeMillis() - start;
 			entity = resp.getEntity();
@@ -124,14 +123,14 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 			System.err.println(e);
 			return new HTMLPageResponse(url,
 					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "",-1);
+					Collections.<String, String>emptyMap(), "", "", 0, "",System.currentTimeMillis() - start);
 			}
 
 		catch (ConnectTimeoutException e) {
 			System.err.println(e);
 			return new HTMLPageResponse(url,
 					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "",-1);
+					Collections.<String, String>emptyMap(), "", "", 0, "",System.currentTimeMillis() - start);
 		}
 		
 		catch (IOException e) {
