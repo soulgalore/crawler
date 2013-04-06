@@ -33,9 +33,9 @@ public class WhenACrawlerResultIsCreated {
 	public void setup() {
 		allUrls.add(new PageURL("http://www.facebook.com"));
 		allUrls.add(new PageURL("http://www.twitter.com"));
-		nonWorkingUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook2.com"), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(), Collections.EMPTY_MAP, "", "", 0,"") );
-		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook.com"),200, Collections.EMPTY_MAP, "", "", 0,"") );
-		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.twitter.com"),200, Collections.EMPTY_MAP, "", "", 0,"") );
+		nonWorkingUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook2.com"), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(), Collections.EMPTY_MAP, "", "", 0,"",1) );
+		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook.com"),200, Collections.EMPTY_MAP, "", "", 0,"",21212) );
+		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.twitter.com"),200, Collections.EMPTY_MAP, "", "", 0,"",212) );
 		result = new CrawlerResult(STARTPOINT, allUrls, verifiedUrls, nonWorkingUrls);
 	}
 

@@ -117,10 +117,10 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
 
 			} catch (InterruptedException e) {
 				nonWorking.add(new AssetResponse(entry.getValue(),
-						StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode()));
+						StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),-1));
 			} catch (ExecutionException e) {
 				nonWorking.add(new AssetResponse(entry.getValue(),
-						StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode()));
+						StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),-1));
 			}
 
 		}

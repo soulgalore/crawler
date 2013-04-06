@@ -28,11 +28,13 @@ public class AssetResponse {
 
 	private final String url;
 	private final int responseCode;
+	private final long fetchTime;
 	
-	public AssetResponse(String url, int responseCode) {
+	public AssetResponse(String url, int responseCode, long fetchTime) {
 		super();
 		this.url = url;
 		this.responseCode = responseCode;
+		this.fetchTime = fetchTime;
 	}
 	/**
 	 * Get the URL of the asset.
@@ -49,6 +51,11 @@ public class AssetResponse {
 	public int getResponseCode() {
 		return responseCode;
 	}
+	
+	public long getFetchTime() {
+		return fetchTime;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

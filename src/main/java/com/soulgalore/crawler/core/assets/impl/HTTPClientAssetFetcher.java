@@ -65,24 +65,26 @@ public class HTTPClientAssetFetcher implements AssetFetcher {
 		HttpEntity entity = null;
 
 		try {
+			final long start = System.currentTimeMillis();
 			final HttpResponse resp = httpClient.execute(get);
+			final long time =System.currentTimeMillis() - start;
 			entity = resp.getEntity();
-			return new AssetResponse(url, resp.getStatusLine().getStatusCode());
+			return new AssetResponse(url, resp.getStatusLine().getStatusCode(), time);
 
 		} catch (ConnectTimeoutException e) {
 			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode());
+					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),-1);
 		} catch (SocketTimeoutException e) {
 			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode());
+					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),-1);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode());
+					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),-1);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode());
+					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),-1);
 		}
 
 		finally {

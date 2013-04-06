@@ -39,6 +39,7 @@ public class HTMLPageResponse {
 	private final int responseCode;
 	private final String responseType;
 	private final Map<String, String> headers;
+	private final long fetchTime;
 
 	/**
 	 * Create a response.
@@ -48,15 +49,17 @@ public class HTMLPageResponse {
 	 * @param theBody the body
 	 * @param theEncoding the encoding
 	 * @param theSize the size
+	 * @param fetchTime the time it took to fetch the response
 	 */
 	public HTMLPageResponse(PageURL pageUrl, int theResponseCode,
 			Map<String, String> theHeaders, String theBody, String theEncoding,
-			long theSize, String theResponseType) {
+			long theSize, String theResponseType, long theFetchTime) {
 		encoding = theEncoding;
 		url = pageUrl;
 		responseCode = theResponseCode;
 		responseType = theResponseType;
 		headers = theHeaders;
+		fetchTime = theFetchTime;
 
 		// special hack:
 		// if the path contains a . (.html etc) then use the full path,
@@ -110,6 +113,10 @@ public class HTMLPageResponse {
 
 	}
 
+	public long getFetchTime() {
+		return fetchTime;
+	}
+	
 	@Override
 	public String toString() {
 		// left out the body & headers for now

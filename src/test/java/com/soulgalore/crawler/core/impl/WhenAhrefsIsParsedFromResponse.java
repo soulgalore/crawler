@@ -23,7 +23,7 @@ public class WhenAhrefsIsParsedFromResponse {
 		String html = TestFileHelper.fetchFileFromClasspathAsString("/crawler/pageToParse.html");
 		PageURL pageUrl = new PageURL("http://soulislove.com");
 		
-		HTMLPageResponse response = new HTMLPageResponse(pageUrl, HttpStatus.SC_OK, new HashMap<String,String>(), html, "UTF-8", html.length(),"text/html");
+		HTMLPageResponse response = new HTMLPageResponse(pageUrl, HttpStatus.SC_OK, new HashMap<String,String>(), html, "UTF-8", html.length(),"text/html",211);
 		AhrefPageURLParser parser = new AhrefPageURLParser();
 		Set<PageURL> urls = parser.get(response);
 		assertThat(urls.size(), is(10));
@@ -34,7 +34,7 @@ public class WhenAhrefsIsParsedFromResponse {
 		String html = TestFileHelper.fetchFileFromClasspathAsString("/crawler/pageWithMailToLinks.html");
 		PageURL pageUrl = new PageURL("http://soulislove.com");
 		
-		HTMLPageResponse response = new HTMLPageResponse(pageUrl, HttpStatus.SC_OK, new HashMap<String,String>(), html, "UTF-8", html.length(),"text/html");
+		HTMLPageResponse response = new HTMLPageResponse(pageUrl, HttpStatus.SC_OK, new HashMap<String,String>(), html, "UTF-8", html.length(),"text/html",473);
 		AhrefPageURLParser parser = new AhrefPageURLParser();
 		Set<PageURL> urls = parser.get(response);
 		assertThat(urls.size(), is(3));

@@ -81,7 +81,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 
 		if (url.isWrongSyntax()) {
 			return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "");
+					Collections.<String, String>emptyMap(), "", "", 0, "",0);
 		}
 	
 		final HttpGet get = new HttpGet(url.getUri());
@@ -93,8 +93,10 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 		HttpEntity entity = null;
 		
 		try {
-
+			
+			final long start = System.currentTimeMillis();
 			final HttpResponse resp = httpClient.execute(get);
+			final long fetchTime = System.currentTimeMillis() - start;
 			entity = resp.getEntity();
 
 			// this is a hack to minimize the amount of memory used
@@ -116,27 +118,27 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 			final String type = (entity.getContentType() !=null) ? entity.getContentType().getValue() : "";
 			
 			return new HTMLPageResponse(url, resp.getStatusLine()
-					.getStatusCode(), headersAndValues, body, encoding, size, type);
+					.getStatusCode(), headersAndValues, body, encoding, size, type, fetchTime);
 
 		} catch (SocketTimeoutException e) {
 			System.err.println(e);
 			return new HTMLPageResponse(url,
 					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "");
+					Collections.<String, String>emptyMap(), "", "", 0, "",-1);
 			}
 
 		catch (ConnectTimeoutException e) {
 			System.err.println(e);
 			return new HTMLPageResponse(url,
 					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "");
+					Collections.<String, String>emptyMap(), "", "", 0, "",-1);
 		}
 		
 		catch (IOException e) {
 			System.err.println(e);
 			return new HTMLPageResponse(url,
 					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "");
+					Collections.<String, String>emptyMap(), "", "", 0, "",-1);
 		}
 		finally {
 			try {
