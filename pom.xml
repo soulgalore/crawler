@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.soulgalore</groupId>
 	<artifactId>crawler</artifactId>
-	<version>1.7-SNAPSHOT</version>
+	<version>1.5-SNAPSHOT</version>
 	<name>Crawler</name>
 	<packaging>jar</packaging>
 	<description>Simple java (1.6) crawler to crawl web pages on one and same domain.</description>
