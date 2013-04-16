@@ -67,6 +67,7 @@ public class HTMLPageResponse {
 		// relative links using ../ get's confused if the path don't
 		// ends with an /
 
+		if (!pageUrl.isWrongSyntax()) {
 		final String baseUri = pageUrl.getUri().getScheme()
 				+ "://"
 				+ pageUrl.getUri().getHost()
@@ -77,6 +78,10 @@ public class HTMLPageResponse {
 						+ (pageUrl.getUri().getPath().endsWith("/") ? "" : "/"));
 	
 		doc = Jsoup.parse(theBody, baseUri);
+		}
+		else {
+			doc = null;
+		}
 
 	}
 

@@ -2,6 +2,7 @@ CHANGELOG crawler
 
 version 1.6
 ------------------------
+* Bug fix: URL:s that not following RFC 2396 gave null pointers
 
 version 1.5
 ------------------------
