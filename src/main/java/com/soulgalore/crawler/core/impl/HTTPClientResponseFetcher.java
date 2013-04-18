@@ -115,9 +115,9 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 			final long size = entity.getContentLength();
 			// TODO add log when null
 			final String type = (entity.getContentType() !=null) ? entity.getContentType().getValue() : "";
-			
-			return new HTMLPageResponse(url, resp.getStatusLine()
-					.getStatusCode(), headersAndValues, body, encoding, size, type, fetchTime);
+			final int sc = resp.getStatusLine().getStatusCode();
+			EntityUtils.consume(entity);
+			return new HTMLPageResponse(url, sc, headersAndValues, body, encoding, size, type, fetchTime);
 
 		} catch (SocketTimeoutException e) {
 			System.err.println(e);
@@ -140,12 +140,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 					Collections.<String, String>emptyMap(), "", "", 0, "",-1);
 		}
 		finally {
-			try {
-				EntityUtils.consume(entity);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			get.releaseConnection();
 		}
 		
 

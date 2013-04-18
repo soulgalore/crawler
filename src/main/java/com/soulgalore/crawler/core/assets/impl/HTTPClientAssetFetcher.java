@@ -69,8 +69,10 @@ public class HTTPClientAssetFetcher implements AssetFetcher {
 		
 			final HttpResponse resp = httpClient.execute(get);
 			final long time =System.currentTimeMillis() - start;
+			final int sc = resp.getStatusLine().getStatusCode();
 			entity = resp.getEntity();
-			return new AssetResponse(url, resp.getStatusLine().getStatusCode(), time);
+			EntityUtils.consume(entity);
+			return new AssetResponse(url, sc, time);
 
 		} catch (ConnectTimeoutException e) {
 			return new AssetResponse(url,
@@ -89,12 +91,9 @@ public class HTTPClientAssetFetcher implements AssetFetcher {
 		}
 
 		finally {
-			try {
-				EntityUtils.consume(entity);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			get.releaseConnection();
+
 		}
 
 	}

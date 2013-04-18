@@ -1,5 +1,9 @@
 CHANGELOG crawler
 
+version 1.5.2
+------------------------
+* Bug fix: Follow the exact default example of closing the connection for http client
+
 version 1.5.1
 ------------------------
 * Bug fix: URL:s that not following RFC 2396 gave null pointers
