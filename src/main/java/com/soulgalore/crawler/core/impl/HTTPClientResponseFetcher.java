@@ -92,9 +92,11 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 
 		HttpEntity entity = null;
 		final long start = System.currentTimeMillis();
+				
 		try {
 	
 			final HttpResponse resp = httpClient.execute(get);
+			
 			final long fetchTime = System.currentTimeMillis() - start;
 			entity = resp.getEntity();
 

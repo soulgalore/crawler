@@ -29,9 +29,18 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.cookie.CookieSpec;
+import org.apache.http.cookie.CookieSpecFactory;
+import org.apache.http.cookie.MalformedCookieException;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.cookie.CookieOrigin;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.cookie.BestMatchSpec;
+import org.apache.http.impl.cookie.BrowserCompatSpec;
+import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
 import com.google.inject.Inject;
@@ -124,6 +133,17 @@ public class HttpClientProvider implements Provider<HttpClient> {
 		client.getParams().setParameter("http.connection.timeout",
 				connectionTimeout);
 		
+		
+		CookieSpecFactory csf = new CookieSpecFactory() {
+		    public CookieSpec newInstance(HttpParams params) {
+		        return new BestMatchSpecWithURLErrorLog();
+		    }
+		};
+		
+		client.getCookieSpecs().register("bestmatchwithurl", csf);
+		client.getParams().setParameter(
+		     ClientPNames.COOKIE_POLICY, "bestmatchwithurl");
+		
 		if (!"".equals(proxy)) {
 			StringTokenizer token = new StringTokenizer(proxy, ":");
 
@@ -154,5 +174,25 @@ public class HttpClientProvider implements Provider<HttpClient> {
 		}
 		
 		return client;
+	}
+	
+	private class BestMatchSpecWithURLErrorLog extends BestMatchSpec {
+		@Override
+		public void validate(Cookie cookie, CookieOrigin origin)
+				throws MalformedCookieException {
+			try {
+				super.validate(cookie, origin);
+			} catch (MalformedCookieException e) {
+				System.err
+						.println("Cookie rejected for url: "
+								+ origin.getHost()
+								+ (origin.getPort() != 80 ? ":"
+										+ origin.getPort() : "")
+								+ origin.getPath() + " the error:"
+								+ e.getMessage() + " for cookie:"
+								+ cookie.toString());
+				throw e;
+			}
+		}
 	}
 }

@@ -1,5 +1,9 @@
 CHANGELOG crawler
 
+version 1.5.3
+------------------------
+* When a cookie is not following the spec, the url of the page setting the cookie, is now logged to system error
+
 version 1.5.2
 ------------------------
 * Bug fix: Follow the exact default example of closing the connection for http client
