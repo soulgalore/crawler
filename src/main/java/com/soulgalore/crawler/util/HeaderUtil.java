@@ -66,14 +66,13 @@ public final class HeaderUtil {
 		if (headersAndValues == null || headersAndValues.isEmpty())
 			return Collections.emptyMap();
 
-		final StringTokenizer token = new StringTokenizer(headersAndValues, ",");
+		final StringTokenizer token = new StringTokenizer(headersAndValues, "@");
 
 		final Map<String,String> theHeaders = new HashMap<String,String>(
 				token.countTokens());
 
 		while (token.hasMoreTokens()) {
 			final String headerAndValue = token.nextToken();
-
 			if (headerAndValue.indexOf(":") == -1)
 				throw new IllegalArgumentException(
 						"Request headers wrongly configured, missing separator :"

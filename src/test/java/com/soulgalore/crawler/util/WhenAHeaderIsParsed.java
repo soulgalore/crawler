@@ -13,7 +13,7 @@ public class WhenAHeaderIsParsed {
 
 	@Test
 	public void allValuesShouldBeFetched() {
-		String headersAndValues = "header1:value1,header2:value2";
+		String headersAndValues = "header1:value1@header2:value2";
 		Map<String,String> headers = HeaderUtil.getInstance().createHeadersFromString(
 				headersAndValues);
 		assertThat(headers.size(), is(2));
