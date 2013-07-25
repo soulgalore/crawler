@@ -126,7 +126,7 @@ public abstract class AbstractCrawl extends AbstractRunner {
 		options.addOption(verifyOption);
 		
 		final Option requestHeadersOption = new Option("rh",
-				"the request headers by the form of header1:value1,header2:value2 [optional]");
+				"the request headers by the form of header1:value1@header2:value2 [optional]");
 		requestHeadersOption.setArgName("REQUEST-HEADERS");
 		requestHeadersOption.setLongOpt(REQUEST_HEADERS);
 		requestHeadersOption.setRequired(false);

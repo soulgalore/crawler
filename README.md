@@ -21,7 +21,7 @@ usage: CrawlToSystemOut [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <URL> [-v <VE
  -p,--followPath <PATH>        stay on this path when crawling [optional]
  -u,--url <URL>                the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
  -v,--verify <VERIFY>          verify that all links are returning 200, default is set to true [optional] 
- -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional]
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1@header2:value2 [optional]
 </pre>
 
 
@@ -36,7 +36,7 @@ usage: CrawlToFile [-ef <ERRORFILENAME>] [-f <FILENAME>] [-l <LEVEL>] [-np <NOPA
  -u,--url <URL>                        the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
  -v,--verify <VERIFY>                  verify that all links are returning 200, default is set to true [optional]
  -ve,--verbose <VERBOSE>               verbose logging, default is false [optional]
- -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional] 
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1@header2:value2 [optional] 
 </pre>
 
 
@@ -49,7 +49,7 @@ usage: CrawlToCsv [-f <FILENAME>] [-l <LEVEL>] [-np <NOPATH>] [-p <PATH>] -u <UR
  -p,--followPath <PATH>         stay on this path when crawling [optional]
  -u,--url <URL>                 the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
  -v,--verify <VERIFY>           verify that all links are returning 200, default is set to true [optional]
- -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional] 
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1@header2:value2 [optional] 
 </pre>
 
 Crawl and output urls that contains specific keyword in the html
@@ -61,7 +61,7 @@ usage: CrawlToPlainTxtOnlyMatching -k <KEYWORD> [-l <LEVEL>] [-np <NOPATH>] [-p 
  -p,--followPath <PATH>         stay on this path when crawling [optional]
  -u,--url <URL>                 the page that is the startpoint of the crawl, examle http://mydomain.com/mypage
  -v,--verify <VERIFY>           verify that all links are returning 200, default is set to true [optional]
- -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1,header2:value2 [optional] 
+ -rh,--requestHeaders <REQUEST-HEADERS>   the request headers by the form of header1:value1@header2:value2 [optional] 
 </pre>
 
 
