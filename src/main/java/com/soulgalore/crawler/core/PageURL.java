@@ -114,9 +114,15 @@ public class PageURL {
 
 	@Override
 	public int hashCode() {
+		// here's a hack for saying http://example.com is the same as http://example.com/
+		if (uri.toString() == null) return 0;
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+		String hash = uri.toString();
+		if (hash.endsWith("/"))
+			hash=hash.substring(0, hash.length()-1);
+		result = prime * result + hash.hashCode();
+	
 		return result;
 	}
 
@@ -132,9 +138,18 @@ public class PageURL {
 		if (uri == null) {
 			if (other.uri != null)
 				return false;
-		} else if (!uri.equals(other.uri))
-			return false;
-		return true;
+		} else if (uri.equals(other.uri))
+			return true;
+		// here's a hack for saying http://example.com is the same as
+		// http://example.com/
+		else if (uri.toString().endsWith("/")) {
+			String withoutEndingSlash = uri.toString().substring(0,
+					uri.toString().length() - 1);
+			if (withoutEndingSlash.equals(other.uri.toString()))
+				return true;
+		}
+
+		return false;
 	}
 
 }
