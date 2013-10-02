@@ -115,7 +115,7 @@ public class PageURL {
 	@Override
 	public int hashCode() {
 		// here's a hack for saying http://example.com is the same as http://example.com/
-		if (uri.toString() == null) return 0;
+		if (uri == null) return 0;
 		final int prime = 31;
 		int result = 1;
 		String hash = uri.toString();
