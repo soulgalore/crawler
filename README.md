@@ -1,4 +1,4 @@
-# Java web crawler [![Build Status](https://secure.travis-ci.org/soulgalore/crawler.png?branch=master)](http://travis-ci.org/soulgalore/crawler)
+# Java web crawler [![Build Status](https://secure.travis-ci.org/sitespeedio/crawler.png?branch=master)](http://travis-ci.org/sitespeedio/crawler)
 
 Simple java (1.6) crawler to crawl webpages on one and same domain. Basicly you can do this:
 <ul>
