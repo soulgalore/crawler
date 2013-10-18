@@ -1,4 +1,4 @@
-# Java web crawler [![Build Status](https://secure.travis-ci.org/soulgalore/crawler.png?branch=master)](http://travis-ci.org/soulgalore/crawler)
+# Java web crawler [![Build Status](https://secure.travis-ci.org/sitespeedio/crawler.png?branch=master)](http://travis-ci.org/sitespeedio/crawler)
 
 Simple java (1.6) crawler to crawl webpages on one and same domain. Basicly you can do this:
 <ul>
@@ -134,3 +134,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/soulgalore/crawler/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
