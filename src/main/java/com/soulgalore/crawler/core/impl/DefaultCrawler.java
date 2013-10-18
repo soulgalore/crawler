@@ -186,7 +186,7 @@ public class DefaultCrawler implements Crawler {
 			try {
 
 				final HTMLPageResponse response = entry.getKey().get();
-				if (HttpStatus.SC_OK == response.getResponseCode()) {
+				if (HttpStatus.SC_OK == response.getResponseCode() && response.getResponseType().indexOf("html")>0) {
 					// we know that this links work
 					verifiedUrls.add(response);
 					final Set<PageURL> allLinks = parser.get(response);
@@ -203,9 +203,13 @@ public class DefaultCrawler implements Crawler {
 							}
 						}
 					}
-				} else {
+				} else if (HttpStatus.SC_OK != response.getResponseCode()) {
 					allUrls.remove(entry.getValue());
 					nonWorkingUrls.add(response);
+				}
+				else {
+					// it is of another content type than HTML
+					allUrls.remove(entry.getValue());
 				}
 
 			} catch (InterruptedException e) {
@@ -259,9 +263,12 @@ public class DefaultCrawler implements Crawler {
 						verifiedUrls.add(response);
 					}
 					else if (response.getResponseCode() == HttpStatus.SC_OK) {
+						// it is not HTML
 						urlsThatNeedsVerification.remove(response.getPageUrl());
 					}
-					else nonWorkingUrls.add(response);
+					else { 
+						nonWorkingUrls.add(response);
+					}
 				}
 			}
 
