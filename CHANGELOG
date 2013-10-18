@@ -1,6 +1,6 @@
 CHANGELOG crawler
 
-version 1.5.6
+version 1.5.7
 ------------------------
 * Fix for only picking up HTML links
 
