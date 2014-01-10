@@ -1,22 +1,23 @@
 /******************************************************
  * Web crawler
  * 
- *
- * Copyright (C) 2013 by Peter Hedenskog (http://peterhedenskog.com)
- *
- ******************************************************
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in 
- * compliance with the License. You may obtain a copy of the License at
  * 
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is 
- * distributed  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   
- * See the License for the specific language governing permissions and limitations under the License.
- *
- *******************************************************
+ * Copyright (C) 2013 by Peter Hedenskog (http://peterhedenskog.com)
+ * 
+ ****************************************************** 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ ******************************************************* 
  */
 package com.soulgalore.crawler.core.assets.impl;
 
@@ -39,63 +40,61 @@ import com.soulgalore.crawler.util.StatusCode;
 
 public class HTTPClientAssetFetcher implements AssetFetcher {
 
-	private final HttpClient httpClient;
+  private final HttpClient httpClient;
 
-	@Inject
-	public HTTPClientAssetFetcher(HttpClient client) {
-		httpClient = client;
-	}
+  @Inject
+  public HTTPClientAssetFetcher(HttpClient client) {
+    httpClient = client;
+  }
 
-	/**
-	 * Shutdown the client.
-	 */
-	public void shutdown() {
-		httpClient.getConnectionManager().shutdown();
-	}
+  /**
+   * Shutdown the client.
+   */
+  public void shutdown() {
+    httpClient.getConnectionManager().shutdown();
+  }
 
-	@Override
-	public AssetResponse getAsset(String url, Map<String, String> requestHeaders) {
+  @Override
+  public AssetResponse getAsset(String url, Map<String, String> requestHeaders) {
 
-		final HttpGet get = new HttpGet(url);
+    final HttpGet get = new HttpGet(url);
 
-		for (String key : requestHeaders.keySet()) {
-			get.setHeader(key, requestHeaders.get(key));
-		}
+    for (String key : requestHeaders.keySet()) {
+      get.setHeader(key, requestHeaders.get(key));
+    }
 
-		HttpEntity entity = null;
+    HttpEntity entity = null;
 
-		final long start = System.currentTimeMillis();
-		try {
-		
-			final HttpResponse resp = httpClient.execute(get);
-			final long time =System.currentTimeMillis() - start;
-			final int sc = resp.getStatusLine().getStatusCode();
-			entity = resp.getEntity();
-			EntityUtils.consume(entity);
-			return new AssetResponse(url, sc, time);
+    final long start = System.currentTimeMillis();
+    try {
 
-		} catch (ConnectTimeoutException e) {
-			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),System.currentTimeMillis() - start);
-		} catch (SocketTimeoutException e) {
-			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),System.currentTimeMillis() - start);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),-1);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new AssetResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),-1);
-		}
+      final HttpResponse resp = httpClient.execute(get);
+      final long time = System.currentTimeMillis() - start;
+      final int sc = resp.getStatusLine().getStatusCode();
+      entity = resp.getEntity();
+      EntityUtils.consume(entity);
+      return new AssetResponse(url, sc, time);
 
-		finally {
+    } catch (ConnectTimeoutException e) {
+      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
+          System.currentTimeMillis() - start);
+    } catch (SocketTimeoutException e) {
+      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
+          System.currentTimeMillis() - start);
+    } catch (ClientProtocolException e) {
+      e.printStackTrace();
+      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), -1);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), -1);
+    }
 
-			get.releaseConnection();
+    finally {
 
-		}
+      get.releaseConnection();
 
-	}
+    }
+
+  }
 
 }

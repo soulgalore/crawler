@@ -1,22 +1,23 @@
 /******************************************************
  * Web crawler
  * 
- *
- * Copyright (C) 2012 by Peter Hedenskog (http://peterhedenskog.com)
- *
- ******************************************************
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in 
- * compliance with the License. You may obtain a copy of the License at
  * 
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is 
- * distributed  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   
- * See the License for the specific language governing permissions and limitations under the License.
- *
- *******************************************************
+ * Copyright (C) 2012 by Peter Hedenskog (http://peterhedenskog.com)
+ * 
+ ****************************************************** 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ ******************************************************* 
  */
 package com.soulgalore.crawler.core.impl;
 
@@ -43,153 +44,145 @@ import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
 import com.soulgalore.crawler.util.StatusCode;
 
 /**
- * Fetch urls by a HTTPClient. Note: Will only fetch response headers for
- * resources that fails and for pages (meaning where the body of the response is
- * fetched).
+ * Fetch urls by a HTTPClient. Note: Will only fetch response headers for resources that fails and
+ * for pages (meaning where the body of the response is fetched).
  * 
  * 
  */
 public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
 
-	private final HttpClient httpClient;
+  private final HttpClient httpClient;
 
-	/**
-	 * Create a new fetcher.
-	 * 
-	 * @param client
-	 *            the client to use
-	 */
-	@Inject
-	public HTTPClientResponseFetcher(HttpClient client) {
-		httpClient = client;
-	}
+  /**
+   * Create a new fetcher.
+   * 
+   * @param client the client to use
+   */
+  @Inject
+  public HTTPClientResponseFetcher(HttpClient client) {
+    httpClient = client;
+  }
 
-	/**
-	 * Shutdown the client.
-	 */
-	public void shutdown() {
-		httpClient.getConnectionManager().shutdown();
-	}
+  /**
+   * Shutdown the client.
+   */
+  public void shutdown() {
+    httpClient.getConnectionManager().shutdown();
+  }
 
-	/**
-	 * Get a response.
-	 * @param url the url
-	 * @param getPage the body of the page or not
-	 * @return the response
-	 */
-	public HTMLPageResponse get(PageURL url, boolean getPage, Map<String,String> requestHeaders) {
+  /**
+   * Get a response.
+   * 
+   * @param url the url
+   * @param getPage the body of the page or not
+   * @return the response
+   */
+  public HTMLPageResponse get(PageURL url, boolean getPage, Map<String, String> requestHeaders) {
 
-		if (url.isWrongSyntax()) {
-			return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "",0);
-		}
-	
-		final HttpGet get = new HttpGet(url.getUri());
-		
-		for (String key : requestHeaders.keySet()) {
-			get.setHeader(key, requestHeaders.get(key));
-		}
+    if (url.isWrongSyntax()) {
+      return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
+          Collections.<String, String>emptyMap(), "", "", 0, "", 0);
+    }
 
-		HttpEntity entity = null;
-		final long start = System.currentTimeMillis();
-				
-		try {
-	
-			final HttpResponse resp = httpClient.execute(get);
-			
-			final long fetchTime = System.currentTimeMillis() - start;
-			entity = resp.getEntity();
+    final HttpGet get = new HttpGet(url.getUri());
 
-			// this is a hack to minimize the amount of memory used
-			// should make this configurable maybe
-			// don't fetch headers for request that don't fetch the body and
-			// response isn't 200
-			// these headers will not be shown in the results
-			final Map<String, String> headersAndValues = getPage
-					|| !StatusCode.isResponseCodeOk(
-							resp.getStatusLine().getStatusCode()) ? getHeaders(resp)
-					: Collections.<String, String>emptyMap();
+    for (String key : requestHeaders.keySet()) {
+      get.setHeader(key, requestHeaders.get(key));
+    }
 
-			final String encoding = entity.getContentEncoding() != null ? entity
-					.getContentEncoding().getValue() : "";
+    HttpEntity entity = null;
+    final long start = System.currentTimeMillis();
 
-			final String body = getPage ? getBody(entity, "".equals(encoding)?"UTF-8":encoding) : "";
-			final long size = entity.getContentLength();
-			// TODO add log when null
-			final String type = (entity.getContentType() !=null) ? entity.getContentType().getValue() : "";
-			final int sc = resp.getStatusLine().getStatusCode();
-			EntityUtils.consume(entity);
-			return new HTMLPageResponse(url, sc, headersAndValues, body, encoding, size, type, fetchTime);
+    try {
 
-		} catch (SocketTimeoutException e) {
-			System.err.println(e);
-			return new HTMLPageResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "",System.currentTimeMillis() - start);
-			}
+      final HttpResponse resp = httpClient.execute(get);
 
-		catch (ConnectTimeoutException e) {
-			System.err.println(e);
-			return new HTMLPageResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "",System.currentTimeMillis() - start);
-		}
-		
-		catch (IOException e) {
-			System.err.println(e);
-			return new HTMLPageResponse(url,
-					StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
-					Collections.<String, String>emptyMap(), "", "", 0, "",-1);
-		}
-		finally {
-			get.releaseConnection();
-		}
-		
+      final long fetchTime = System.currentTimeMillis() - start;
+      entity = resp.getEntity();
 
-	}
+      // this is a hack to minimize the amount of memory used
+      // should make this configurable maybe
+      // don't fetch headers for request that don't fetch the body and
+      // response isn't 200
+      // these headers will not be shown in the results
+      final Map<String, String> headersAndValues =
+          getPage || !StatusCode.isResponseCodeOk(resp.getStatusLine().getStatusCode())
+              ? getHeaders(resp)
+              : Collections.<String, String>emptyMap();
 
-	/**
-	 * Get the body.
-	 * 
-	 * @param entity
-	 *            the http entity from the response
-	 * @param enc
-	 *            the encoding
-	 * @return the body as a String
-	 * @throws IOException
-	 *             if the body couldn't be fetched
-	 */
+      final String encoding =
+          entity.getContentEncoding() != null ? entity.getContentEncoding().getValue() : "";
 
-	protected String getBody(HttpEntity entity, String enc) throws IOException {
-		final StringBuilder body = new StringBuilder();
-		String buffer = "";
-		if (entity != null) {
-			final BufferedReader reader = new BufferedReader(
-					new InputStreamReader(entity.getContent(), enc));
-			while ((buffer = reader.readLine()) != null) {
-				body.append(buffer);
-			}
+      final String body = getPage ? getBody(entity, "".equals(encoding) ? "UTF-8" : encoding) : "";
+      final long size = entity.getContentLength();
+      // TODO add log when null
+      final String type =
+          (entity.getContentType() != null) ? entity.getContentType().getValue() : "";
+      final int sc = resp.getStatusLine().getStatusCode();
+      EntityUtils.consume(entity);
+      return new HTMLPageResponse(url, sc, headersAndValues, body, encoding, size, type, fetchTime);
 
-			reader.close();
-		}
-		return body.toString();
-	}
+    } catch (SocketTimeoutException e) {
+      System.err.println(e);
+      return new HTMLPageResponse(url, StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
+          Collections.<String, String>emptyMap(), "", "", 0, "", System.currentTimeMillis() - start);
+    }
 
-	/**
-	 * Get the headers from the response.
-	 * 
-	 * @param resp
-	 *            the response
-	 * @return the headers as a key/value map.
-	 */
-	protected Map<String, String> getHeaders(HttpResponse resp) {
-		final Map<String, String> headersAndValues = new HashMap<String, String>();
+    catch (ConnectTimeoutException e) {
+      System.err.println(e);
+      return new HTMLPageResponse(url, StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
+          Collections.<String, String>emptyMap(), "", "", 0, "", System.currentTimeMillis() - start);
+    }
 
-		final Header[] httpHeaders = resp.getAllHeaders();
-		for (Header header : httpHeaders) {
-			headersAndValues.put(header.getName(), header.getValue());
-		}
-		return headersAndValues;
-	}
+    catch (IOException e) {
+      System.err.println(e);
+      return new HTMLPageResponse(url, StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
+          Collections.<String, String>emptyMap(), "", "", 0, "", -1);
+    } finally {
+      get.releaseConnection();
+    }
+
+
+  }
+
+  /**
+   * Get the body.
+   * 
+   * @param entity the http entity from the response
+   * @param enc the encoding
+   * @return the body as a String
+   * @throws IOException if the body couldn't be fetched
+   */
+
+  protected String getBody(HttpEntity entity, String enc) throws IOException {
+    final StringBuilder body = new StringBuilder();
+    String buffer = "";
+    if (entity != null) {
+      final BufferedReader reader =
+          new BufferedReader(new InputStreamReader(entity.getContent(), enc));
+      while ((buffer = reader.readLine()) != null) {
+        body.append(buffer);
+      }
+
+      reader.close();
+    }
+    return body.toString();
+  }
+
+  /**
+   * Get the headers from the response.
+   * 
+   * @param resp the response
+   * @return the headers as a key/value map.
+   */
+  protected Map<String, String> getHeaders(HttpResponse resp) {
+    final Map<String, String> headersAndValues = new HashMap<String, String>();
+
+    final Header[] httpHeaders = resp.getAllHeaders();
+    for (Header header : httpHeaders) {
+      headersAndValues.put(header.getName(), header.getValue());
+    }
+    return headersAndValues;
+  }
 
 }
