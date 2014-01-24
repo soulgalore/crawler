@@ -141,7 +141,7 @@ public class DefaultCrawler implements Crawler {
     // TODO find a better fix for this
     // wow, this is a hack to fix if the first URL is redirected,
     // then we want to keep that original start url
-    if (workingUrls.size() > 1) {
+    if (workingUrls.size() >= 1) {
       List<PageURL> list = new ArrayList<PageURL>(workingUrls);
       list.add(0, new PageURL(configuration.getStartUrl()));
       list.remove(1);
