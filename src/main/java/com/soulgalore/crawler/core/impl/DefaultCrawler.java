@@ -21,6 +21,7 @@
  */
 package com.soulgalore.crawler.core.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,7 +30,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -133,9 +133,20 @@ public class DefaultCrawler implements Crawler {
     if (configuration.isVerifyUrls())
       verifyUrls(allUrls, verifiedUrls, nonWorkingResponses, requestHeaders);
 
-    Set<PageURL> workingUrls = new LinkedHashSet<PageURL>();
+    LinkedHashSet<PageURL> workingUrls = new LinkedHashSet<PageURL>();
     for (HTMLPageResponse workingResponses : verifiedUrls) {
       workingUrls.add(workingResponses.getPageUrl());
+    }
+    
+    // TODO find a better fix for this
+    // wow, this is a hack to fix if the first URL is redirected,
+    // then we want to keep that original start url
+    if (workingUrls.size() > 1) {
+      List<PageURL> list = new ArrayList<PageURL>(workingUrls);
+      list.add(0, new PageURL(configuration.getStartUrl()));
+      list.remove(1);
+      workingUrls.clear();
+      workingUrls.addAll(list);
     }
 
     return new CrawlerResult(configuration.getStartUrl(), configuration.isVerifyUrls()
