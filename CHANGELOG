@@ -1,5 +1,9 @@
 CHANGELOG crawler
 
+version 1.5.8
+------------------------
+* Bug fix: When a request is redirected, always use the end location
+
 version 1.5.7
 ------------------------
 * Fix for only picking up HTML links
