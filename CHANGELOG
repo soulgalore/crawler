@@ -1,5 +1,9 @@
 CHANGELOG crawler
 
+version 1.5.9
+------------------------
+* Added support for accepting compressed content
+
 version 1.5.8
 ------------------------
 * Bug fix: When a request is redirected, always use the end location

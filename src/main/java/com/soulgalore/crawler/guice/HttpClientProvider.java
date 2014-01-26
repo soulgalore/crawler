@@ -31,6 +31,8 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.protocol.RequestAcceptEncoding;
+import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.cookie.CookieSpec;
@@ -127,7 +129,9 @@ public class HttpClientProvider implements Provider<HttpClient> {
     client.getParams().setParameter("http.socket.timeout", socketTimeout);
     client.getParams().setParameter("http.connection.timeout", connectionTimeout);
 
-
+    client.addRequestInterceptor(new RequestAcceptEncoding());
+    client.addResponseInterceptor(new ResponseContentEncoding());
+    
     CookieSpecFactory csf = new CookieSpecFactory() {
       public CookieSpec newInstance(HttpParams params) {
         return new BestMatchSpecWithURLErrorLog();
