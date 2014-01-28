@@ -21,10 +21,10 @@
  */
 package com.soulgalore.crawler.core;
 
-import java.util.Map;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import java.util.Map;
 
 /**
  * The response for a html page.
@@ -51,7 +51,7 @@ public class HTMLPageResponse {
    * @param theBody the body
    * @param theEncoding the encoding
    * @param theSize the size
-   * @param fetchTime the time it took to fetch the response
+   * @param theFetchTime the time it took to fetch the response
    */
   public HTMLPageResponse(PageURL pageUrl, int theResponseCode, Map<String, String> theHeaders,
       String theBody, String theEncoding, long theSize, String theResponseType, long theFetchTime) {

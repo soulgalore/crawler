@@ -21,10 +21,7 @@
  */
 package com.soulgalore.crawler.core;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 
@@ -82,7 +79,7 @@ public class PageURL {
       // an ugly catch all, we should act on it somehow
     }
     uri = tmpURI;
-    isWrongSyntax = (uri == null) ? true : false;
+    isWrongSyntax = (uri == null);
     host = (uri == null) ? null : uri.getHost();
   }
 

@@ -21,11 +21,22 @@
  */
 package com.soulgalore.crawler.core.impl;
 
+import com.google.inject.Inject;
+import com.soulgalore.crawler.core.Crawler;
+import com.soulgalore.crawler.core.CrawlerConfiguration;
+import com.soulgalore.crawler.core.CrawlerResult;
+import com.soulgalore.crawler.core.HTMLPageResponse;
+import com.soulgalore.crawler.core.HTMLPageResponseCallable;
+import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
+import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.PageURLParser;
+import com.soulgalore.crawler.util.StatusCode;
+import org.apache.http.HttpStatus;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,19 +46,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
-import org.apache.http.HttpStatus;
-
-import com.google.inject.Inject;
-import com.soulgalore.crawler.core.CrawlerConfiguration;
-import com.soulgalore.crawler.core.PageURLParser;
-import com.soulgalore.crawler.core.Crawler;
-import com.soulgalore.crawler.core.CrawlerResult;
-import com.soulgalore.crawler.core.HTMLPageResponseCallable;
-import com.soulgalore.crawler.core.PageURL;
-import com.soulgalore.crawler.core.HTMLPageResponse;
-import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
-import com.soulgalore.crawler.util.StatusCode;
 
 /**
  * Crawl urls within the same domain.
@@ -163,7 +161,7 @@ public class DefaultCrawler implements Crawler {
    * @param nonWorkingUrls the urls that didn't work to fetch
    * @param host the host we are working on
    * @param onlyOnPath only fetch files that match the following path. If empty, all will match.
-   * @param don 't collect/follow urls that contains this text in the url
+   * @param notOnPath don't collect/follow urls that contains this text in the url
    * @return the next level of links that we should fetch
    */
   protected Set<PageURL> fetchNextLevelLinks(Map<Future<HTMLPageResponse>, PageURL> responses,
@@ -172,25 +170,21 @@ public class DefaultCrawler implements Crawler {
 
     final Set<PageURL> nextLevel = new LinkedHashSet<PageURL>();
 
-    final Iterator<Entry<Future<HTMLPageResponse>, PageURL>> it = responses.entrySet().iterator();
-
-    while (it.hasNext()) {
-
-      final Entry<Future<HTMLPageResponse>, PageURL> entry = it.next();
-
+    for (Entry<Future<HTMLPageResponse>, PageURL> entry : responses.entrySet()) {
       try {
 
         final HTMLPageResponse response = entry.getKey().get();
         if (HttpStatus.SC_OK == response.getResponseCode()
-            && response.getResponseType().indexOf("html") > 0) {
+                && response.getResponseType().indexOf("html") > 0) {
           // we know that this links work
           verifiedUrls.add(response);
           final Set<PageURL> allLinks = parser.get(response);
 
           for (PageURL link : allLinks) {
             // only add if it is the same host
-            if (host.equals(link.getHost()) && link.getUrl().contains(onlyOnPath)
-                && (notOnPath.equals("") ? true : (!link.getUrl().contains(notOnPath)))) {
+            String url = link.getUrl();
+            if (host.equals(link.getHost()) && url.contains(onlyOnPath)
+                    && (notOnPath.equals("") || (!url.contains(notOnPath)))) {
               if (!allUrls.contains(link)) {
                 nextLevel.add(link);
                 allUrls.add(link);
@@ -207,12 +201,12 @@ public class DefaultCrawler implements Crawler {
 
       } catch (InterruptedException e) {
         nonWorkingUrls.add(new HTMLPageResponse(entry.getValue(),
-            StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
-            Collections.<String, String>emptyMap(), "", "", 0, "", -1));
+                StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
+                Collections.<String, String>emptyMap(), "", "", 0, "", -1));
       } catch (ExecutionException e) {
         nonWorkingUrls.add(new HTMLPageResponse(entry.getValue(),
-            StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
-            Collections.<String, String>emptyMap(), "", "", 0, "", -1));
+                StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(),
+                Collections.<String, String>emptyMap(), "", "", 0, "", -1));
       }
     }
     return nextLevel;

@@ -21,14 +21,11 @@
  */
 package com.soulgalore.crawler.core.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.SocketTimeoutException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.inject.Inject;
+import com.soulgalore.crawler.core.HTMLPageResponse;
+import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
+import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.util.StatusCode;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -42,11 +39,13 @@ import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
-import com.google.inject.Inject;
-import com.soulgalore.crawler.core.PageURL;
-import com.soulgalore.crawler.core.HTMLPageResponse;
-import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
-import com.soulgalore.crawler.util.StatusCode;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Fetch urls by a HTTPClient. Note: Will only fetch response headers for resources that fails and
@@ -134,7 +133,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
           (entity.getContentType() != null) ? entity.getContentType().getValue() : "";
       final int sc = resp.getStatusLine().getStatusCode();
       EntityUtils.consume(entity);
-      return new HTMLPageResponse(url.getUrl()!=newURL?new PageURL(newURL,url.getReferer()):url, sc, headersAndValues, body, encoding, size, type, fetchTime);
+      return new HTMLPageResponse(!url.getUrl().equals(newURL) ?new PageURL(newURL,url.getReferer()):url, sc, headersAndValues, body, encoding, size, type, fetchTime);
 
     } catch (SocketTimeoutException e) {
       System.err.println(e);

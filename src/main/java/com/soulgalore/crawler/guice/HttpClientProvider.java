@@ -21,39 +21,52 @@
  */
 package com.soulgalore.crawler.guice;
 
+import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.http.Header;
+import javax.net.ssl.SSLContext;
+
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.params.ClientPNames;
-import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.protocol.RequestAcceptEncoding;
 import org.apache.http.client.protocol.ResponseContentEncoding;
-import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.cookie.CookieOrigin;
 import org.apache.http.cookie.CookieSpec;
 import org.apache.http.cookie.CookieSpecFactory;
+import org.apache.http.cookie.CookieSpecProvider;
 import org.apache.http.cookie.MalformedCookieException;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.cookie.CookieOrigin;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BestMatchSpec;
-import org.apache.http.impl.cookie.BrowserCompatSpec;
+import org.apache.http.impl.cookie.BestMatchSpecFactory;
+import org.apache.http.impl.cookie.BrowserCompatSpecFactory;
 import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.ProvisionException;
 import com.google.inject.name.Named;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.util.Auth;
 import com.soulgalore.crawler.util.AuthUtil;
-import com.soulgalore.crawler.util.HTTPSFaker;
-import com.soulgalore.crawler.util.HeaderUtil;
+import org.apache.http.protocol.HttpContext;
 
 /**
  * Provide a HTTPClient.
@@ -96,8 +109,7 @@ public class HttpClientProvider implements Provider<HttpClient> {
    * @param maxNrOfThreads the max number of threads in the client
    * @param theSocketTimeout the socket timeout time
    * @param theConnectionTimeout the connection timeout time
-   * @param headersAsString the request headers, in the form at of ...
-   * @param auth the auth string
+   * @param authAsString the auth string
    * @param theProxy the proxy
    */
   @Inject
@@ -121,26 +133,40 @@ public class HttpClientProvider implements Provider<HttpClient> {
    * @return the client
    */
   public HttpClient get() {
-    final ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager();
-    cm.setMaxTotal(nrOfThreads);
-    cm.setDefaultMaxPerRoute(maxToRoute);
-    final DefaultHttpClient client = HTTPSFaker.getClientThatAllowAnyHTTPS(cm);
+    CloseableHttpClient httpClient = null;
+    try {
+      SSLConnectionSocketFactory sslsf = createSslConnectionSocketFactory();
 
-    client.getParams().setParameter("http.socket.timeout", socketTimeout);
-    client.getParams().setParameter("http.connection.timeout", connectionTimeout);
+      RequestConfig requestConfig = createDefaultRequestConfig();
 
-    client.addRequestInterceptor(new RequestAcceptEncoding());
-    client.addResponseInterceptor(new ResponseContentEncoding());
-    
-    CookieSpecFactory csf = new CookieSpecFactory() {
-      public CookieSpec newInstance(HttpParams params) {
-        return new BestMatchSpecWithURLErrorLog();
-      }
-    };
+      PoolingHttpClientConnectionManager cm = createHttpClientConnectionManager();
 
-    client.getCookieSpecs().register("bestmatchwithurl", csf);
-    client.getParams().setParameter(ClientPNames.COOKIE_POLICY, "bestmatchwithurl");
+      HttpHost proxyHost = createProxyHost();
 
+      Registry<CookieSpecProvider> cookieSpecProviderRegistry =
+          RegistryBuilder.<CookieSpecProvider>create()
+              .register(CookieSpecs.BEST_MATCH, new BestMatchSpecProvider()).build();
+
+      httpClient =
+          HttpClients.custom().setSSLSocketFactory(sslsf).setDefaultRequestConfig(requestConfig)
+              .setConnectionManager(cm).setDefaultCookieSpecRegistry(cookieSpecProviderRegistry)
+              .setProxy(proxyHost).setDefaultAuthSchemeRegistry(null)
+              .addInterceptorFirst(new RequestAcceptEncoding())
+              .addInterceptorFirst(new ResponseContentEncoding()).build();
+    } catch (GeneralSecurityException e) {
+      throw new ProvisionException("", e);
+    }
+
+    for (Auth authObject : auths) {
+      client.getCredentialsProvider().setCredentials(
+          new AuthScope(authObject.getScope(), authObject.getPort()),
+          new UsernamePasswordCredentials(authObject.getUserName(), authObject.getPassword()));
+    }
+
+    return httpClient;
+  }
+
+  private HttpHost createProxyHost() {
     if (!"".equals(proxy)) {
       StringTokenizer token = new StringTokenizer(proxy, ":");
 
@@ -151,34 +177,52 @@ public class HttpClientProvider implements Provider<HttpClient> {
 
         System.out.println("Will use host:" + proxy);
 
-        HttpHost proxy = new HttpHost(proxyHost, proxyPort, proxyProtocol);
-        client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+        return new HttpHost(proxyHost, proxyPort, proxyProtocol);
       } else
         System.err.println("Invalid proxy configuration: " + proxy);
     }
 
-    if (auths.size() > 0) {
-
-      for (Auth authObject : auths) {
-        client.getCredentialsProvider().setCredentials(
-            new AuthScope(authObject.getScope(), authObject.getPort()),
-            new UsernamePasswordCredentials(authObject.getUserName(), authObject.getPassword()));
-      }
-    }
-
-    return client;
+    return null;
   }
 
-  private class BestMatchSpecWithURLErrorLog extends BestMatchSpec {
+  private RequestConfig createDefaultRequestConfig() {
+    return RequestConfig.custom().setConnectTimeout(connectionTimeout)
+        .setSocketTimeout(socketTimeout).build();
+  }
+
+  private PoolingHttpClientConnectionManager createHttpClientConnectionManager() {
+    PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+    cm.setMaxTotal(nrOfThreads);
+    cm.setDefaultMaxPerRoute(maxToRoute);
+    return cm;
+  }
+
+  private SSLConnectionSocketFactory createSslConnectionSocketFactory() throws KeyStoreException,
+      NoSuchAlgorithmException, KeyManagementException {
+    KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+    // Trust own CA and all self-signed certs
+    SSLContext sslcontext =
+        SSLContexts.custom().loadTrustMaterial(trustStore, new TrustSelfSignedStrategy()).build();
+    return new SSLConnectionSocketFactory(sslcontext);
+  }
+
+  private static class BestMatchSpecProvider implements CookieSpecProvider {
     @Override
-    public void validate(Cookie cookie, CookieOrigin origin) throws MalformedCookieException {
-      try {
-        super.validate(cookie, origin);
-      } catch (MalformedCookieException e) {
-        System.err.println("Cookie rejected for url: " + origin.getHost()
-            + (origin.getPort() != 80 ? ":" + origin.getPort() : "") + origin.getPath()
-            + " the error:" + e.getMessage() + " for cookie:" + cookie.toString());
-        throw e;
+    public CookieSpec create(HttpContext context) {
+      return new BestMatchSpecWithURLErrorLog();
+    }
+
+    private static class BestMatchSpecWithURLErrorLog extends BestMatchSpec {
+      @Override
+      public void validate(Cookie cookie, CookieOrigin origin) throws MalformedCookieException {
+        try {
+          super.validate(cookie, origin);
+        } catch (MalformedCookieException e) {
+          System.err.println("Cookie rejected for url: " + origin.getHost()
+              + (origin.getPort() != 80 ? ":" + origin.getPort() : "") + origin.getPath()
+              + " the error:" + e.getMessage() + " for cookie:" + cookie.toString());
+          throw e;
+        }
       }
     }
   }
