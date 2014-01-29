@@ -101,17 +101,23 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
     try {
 
       HttpContext localContext = new BasicHttpContext();
-      final HttpResponse resp = httpClient.execute(get,localContext);
+      final HttpResponse resp = httpClient.execute(get, localContext);
 
       final long fetchTime = System.currentTimeMillis() - start;
-      
+
       // Get the last URL in the redirect chain
-      final HttpHost target = (HttpHost) localContext.getAttribute(
-        ExecutionContext.HTTP_TARGET_HOST);
-      final HttpUriRequest req = (HttpUriRequest) localContext.getAttribute(
-        ExecutionContext.HTTP_REQUEST);
-      final String newURL = target + req.getURI().toString();
- 
+      final HttpHost target =
+          (HttpHost) localContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+      final HttpUriRequest req =
+          (HttpUriRequest) localContext.getAttribute(ExecutionContext.HTTP_REQUEST);
+      // Fix when using proxy, relative URI (no proxy used)
+      String newURL;
+      if (req.getURI().toString().startsWith("http")) {
+        newURL = req.getURI().toString();
+      } else {
+        newURL = target + req.getURI().toString();
+      }
+
       entity = resp.getEntity();
 
       // this is a hack to minimize the amount of memory used
@@ -134,7 +140,10 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
           (entity.getContentType() != null) ? entity.getContentType().getValue() : "";
       final int sc = resp.getStatusLine().getStatusCode();
       EntityUtils.consume(entity);
-      return new HTMLPageResponse(url.getUrl()!=newURL?new PageURL(newURL,url.getReferer()):url, sc, headersAndValues, body, encoding, size, type, fetchTime);
+
+      return new HTMLPageResponse(url.getUrl() != newURL
+          ? new PageURL(newURL, url.getReferer())
+          : url, sc, headersAndValues, body, encoding, size, type, fetchTime);
 
     } catch (SocketTimeoutException e) {
       System.err.println(e);
