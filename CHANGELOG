@@ -1,5 +1,9 @@
 CHANGELOG crawler
 
+version 1.5.10
+------------------------
+* Bug fix: The proxy support was broken in 1.5.9.
+
 version 1.5.9
 ------------------------
 * Added support for accepting compressed content
