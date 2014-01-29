@@ -149,8 +149,6 @@ public class HttpClientProvider implements Provider<HttpClient> {
         String proxyHost = token.nextToken();
         int proxyPort = Integer.parseInt(token.nextToken());
 
-        System.out.println("Will use host:" + proxy);
-
         HttpHost proxy = new HttpHost(proxyHost, proxyPort, proxyProtocol);
         client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
       } else
