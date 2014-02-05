@@ -21,23 +21,17 @@
  */
 package com.soulgalore.crawler.guice;
 
-import java.security.GeneralSecurityException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.net.ssl.SSLContext;
-
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.ProvisionException;
+import com.google.inject.name.Named;
+import com.soulgalore.crawler.core.CrawlerConfiguration;
+import com.soulgalore.crawler.util.Auth;
+import com.soulgalore.crawler.util.AuthUtil;
 import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.RequestAcceptEncoding;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.config.Registry;
@@ -48,25 +42,23 @@ import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.cookie.CookieOrigin;
 import org.apache.http.cookie.CookieSpec;
-import org.apache.http.cookie.CookieSpecFactory;
 import org.apache.http.cookie.CookieSpecProvider;
 import org.apache.http.cookie.MalformedCookieException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BestMatchSpec;
-import org.apache.http.impl.cookie.BestMatchSpecFactory;
-import org.apache.http.impl.cookie.BrowserCompatSpecFactory;
-import org.apache.http.params.HttpParams;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.ProvisionException;
-import com.google.inject.name.Named;
-import com.soulgalore.crawler.core.CrawlerConfiguration;
-import com.soulgalore.crawler.util.Auth;
-import com.soulgalore.crawler.util.AuthUtil;
 import org.apache.http.protocol.HttpContext;
+
+import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * Provide a HTTPClient.
@@ -157,11 +149,13 @@ public class HttpClientProvider implements Provider<HttpClient> {
       throw new ProvisionException("", e);
     }
 
+/*
     for (Auth authObject : auths) {
       client.getCredentialsProvider().setCredentials(
           new AuthScope(authObject.getScope(), authObject.getPort()),
           new UsernamePasswordCredentials(authObject.getUserName(), authObject.getPassword()));
     }
+*/
 
     return httpClient;
   }
