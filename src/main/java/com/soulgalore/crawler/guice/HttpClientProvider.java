@@ -28,7 +28,11 @@ import com.google.inject.name.Named;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.util.Auth;
 import com.soulgalore.crawler.util.AuthUtil;
+
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -44,6 +48,7 @@ import org.apache.http.cookie.CookieOrigin;
 import org.apache.http.cookie.CookieSpec;
 import org.apache.http.cookie.CookieSpecProvider;
 import org.apache.http.cookie.MalformedCookieException;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -142,20 +147,13 @@ public class HttpClientProvider implements Provider<HttpClient> {
       httpClient =
           HttpClients.custom().setSSLSocketFactory(sslsf).setDefaultRequestConfig(requestConfig)
               .setConnectionManager(cm).setDefaultCookieSpecRegistry(cookieSpecProviderRegistry)
-              .setProxy(proxyHost).setDefaultAuthSchemeRegistry(null)
+              .setProxy(proxyHost).setDefaultAuthSchemeRegistry(null).setDefaultCredentialsProvider(getCredentialProvider())
               .addInterceptorFirst(new RequestAcceptEncoding())
               .addInterceptorFirst(new ResponseContentEncoding()).build();
     } catch (GeneralSecurityException e) {
       throw new ProvisionException("", e);
     }
 
-/*
-    for (Auth authObject : auths) {
-      client.getCredentialsProvider().setCredentials(
-          new AuthScope(authObject.getScope(), authObject.getPort()),
-          new UsernamePasswordCredentials(authObject.getUserName(), authObject.getPassword()));
-    }
-*/
 
     return httpClient;
   }
@@ -169,14 +167,27 @@ public class HttpClientProvider implements Provider<HttpClient> {
         String proxyHost = token.nextToken();
         int proxyPort = Integer.parseInt(token.nextToken());
 
-        System.out.println("Will use host:" + proxy);
-
         return new HttpHost(proxyHost, proxyPort, proxyProtocol);
       } else
         System.err.println("Invalid proxy configuration: " + proxy);
     }
 
     return null;
+  }
+  
+  private CredentialsProvider getCredentialProvider() {
+    if (auths.size() > 0) {
+
+      for (Auth authObject : auths) {
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(
+                new AuthScope(authObject.getScope(), authObject.getPort()),
+                new UsernamePasswordCredentials(authObject.getUserName(), authObject.getPassword()));
+        return credsProvider;
+      }
+    }
+    return null;
+   
   }
 
   private RequestConfig createDefaultRequestConfig() {
