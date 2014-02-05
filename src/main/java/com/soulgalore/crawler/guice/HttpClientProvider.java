@@ -166,7 +166,6 @@ public class HttpClientProvider implements Provider<HttpClient> {
         String proxyProtocol = token.nextToken();
         String proxyHost = token.nextToken();
         int proxyPort = Integer.parseInt(token.nextToken());
-
         return new HttpHost(proxyHost, proxyPort, proxyProtocol);
       } else
         System.err.println("Invalid proxy configuration: " + proxy);
