@@ -35,6 +35,7 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
   private final HTMLPageResponseFetcher fetcher;
   private final PageURL url;
   private final boolean fetchPage;
+  private final boolean followRedirectsToNewDomain;
   private final Map<String, String> requestHeaders;
 
 
@@ -46,12 +47,13 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
    * @param fetchTheBody if true, the response body is fetched, else not.
    */
   public HTMLPageResponseCallable(PageURL theUrl, HTMLPageResponseFetcher theFetcher,
-      boolean fetchTheBody, Map<String, String> theRequestHeaders) {
+      boolean fetchTheBody, Map<String, String> theRequestHeaders, boolean followRedirectsToNewDomain) {
 
     url = theUrl;
     fetcher = theFetcher;
     fetchPage = fetchTheBody;
     requestHeaders = theRequestHeaders;
+    this.followRedirectsToNewDomain = followRedirectsToNewDomain;
 
   }
 
@@ -63,7 +65,7 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
    *         response
    */
   public HTMLPageResponse call() throws InterruptedException {
-    return fetcher.get(url, fetchPage, requestHeaders);
+    return fetcher.get(url, fetchPage, requestHeaders, followRedirectsToNewDomain);
   }
 
   @Override

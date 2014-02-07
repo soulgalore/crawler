@@ -82,7 +82,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
    * @param getPage the body of the page or not
    * @return the response
    */
-  public HTMLPageResponse get(PageURL url, boolean getPage, Map<String, String> requestHeaders) {
+  public HTMLPageResponse get(PageURL url, boolean getPage, Map<String, String> requestHeaders, boolean followRedirectsToNewDomain) {
 
     if (url.isWrongSyntax()) {
       return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
@@ -118,7 +118,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
         newURL = target + req.getURI().toString();
       }
 
-      entity = resp.getEntity();
+       entity = resp.getEntity();
 
       // this is a hack to minimize the amount of memory used
       // should make this configurable maybe
@@ -141,6 +141,14 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
       final int sc = resp.getStatusLine().getStatusCode();
       EntityUtils.consume(entity);
 
+      // If we want to only collect only URLS that don't redirect to a new domain
+      // This solves the problem with local links like:
+      // http://www.peterhedenskog.com/facebook that redirects to http://www.facebook.com/u/peter.hedenskog
+      // TODO the host check can be done better :)
+      if (!followRedirectsToNewDomain && !newURL.contains(url.getHost())) {
+        return new HTMLPageResponse(url, StatusCode.SC_SERVER_REDIRECT_TO_NEW_DOMAIN.getCode(),
+          Collections.<String, String>emptyMap(), "", "", 0, "", fetchTime);
+      }
       return new HTMLPageResponse(url.getUrl() != newURL
           ? new PageURL(newURL, url.getReferer())
           : url, sc, headersAndValues, body, encoding, size, type, fetchTime);

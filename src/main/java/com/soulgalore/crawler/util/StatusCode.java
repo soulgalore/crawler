@@ -31,7 +31,7 @@ public enum StatusCode {
 
   SC_SERVER_RESPONSE_TIMEOUT(580, "Response timed out"), SC_SERVER_RESPONSE_UNKNOWN(581,
       "Unknown error"), SC_MALFORMED_URI(582, "Malformed url"), SC_WRONG_CONTENT_TYPE(583,
-      "Wrong content type");
+      "Wrong content type"),SC_SERVER_REDIRECT_TO_NEW_DOMAIN(308, "Redirected to new domain");
 
   private final int code;
   private final String friendlyName;

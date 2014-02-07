@@ -118,7 +118,7 @@ public class DefaultCrawler implements Crawler {
 
         for (PageURL testURL : nextToFetch) {
           futures.put(service.submit(new HTMLPageResponseCallable(testURL, responseFetcher, true,
-              requestHeaders)), testURL);
+              requestHeaders, false)), testURL);
         }
 
         nextToFetch =
@@ -197,11 +197,11 @@ public class DefaultCrawler implements Crawler {
               }
             }
           }
-        } else if (HttpStatus.SC_OK != response.getResponseCode()) {
+        } else if (HttpStatus.SC_OK != response.getResponseCode() || StatusCode.SC_SERVER_REDIRECT_TO_NEW_DOMAIN.getCode() ==  response.getResponseCode()) {
           allUrls.remove(entry.getValue());
           nonWorkingUrls.add(response);
         } else {
-          // it is of another content type than HTML
+          // it is of another content type than HTML or if it redirected to another domain
           allUrls.remove(entry.getValue());
         }
 
@@ -236,7 +236,7 @@ public class DefaultCrawler implements Crawler {
         new HashSet<Callable<HTMLPageResponse>>(urlsThatNeedsVerification.size());
 
     for (PageURL testURL : urlsThatNeedsVerification) {
-      tasks.add(new HTMLPageResponseCallable(testURL, responseFetcher, true, requestHeaders));
+      tasks.add(new HTMLPageResponseCallable(testURL, responseFetcher, true, requestHeaders, false));
     }
 
     try {
@@ -273,7 +273,7 @@ public class DefaultCrawler implements Crawler {
   }
 
   private HTMLPageResponse fetchOnePage(PageURL url, Map<String, String> requestHeaders) {
-    return responseFetcher.get(url, true, requestHeaders);
+    return responseFetcher.get(url, true, requestHeaders, true);
 
   }
 
