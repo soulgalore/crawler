@@ -37,19 +37,21 @@ public class WhenACrawlIsDone {
 
 		// the first one is for the url verification
 				// verification!
-		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(true)) ).thenReturn(
+		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(true) )).thenReturn(
 				getResponse("/crawler/crawler1.html",
-						"http://soulislove.com/crawler/crawler1.html"),
-				getResponse("/crawler/crawler1.html",
-						"http://soulislove.com/crawler/crawler1.html"),
-				getResponse("/crawler/crawler2.html",
-						"http://soulislove.com/crawler/crawler2.html"),
-				getResponse("/crawler/crawler3.html",
-						"http://soulislove.com/crawler/crawler3.html"),
-				getResponse("/crawler/crawler4.html",
-						"http://soulislove.com/crawler/crawler4.html"),
-				getResponse("/crawler/crawler5.html",
-						"http://soulislove.com/crawler/crawler5.html"));
+						"http://soulislove.com/crawler/crawler1.html"));
+		
+		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(false) )).thenReturn(
+          getResponse("/crawler/crawler1.html",
+                  "http://soulislove.com/crawler/crawler1.html"),
+          getResponse("/crawler/crawler2.html",
+                  "http://soulislove.com/crawler/crawler2.html"),
+          getResponse("/crawler/crawler3.html",
+                  "http://soulislove.com/crawler/crawler3.html"),
+          getResponse("/crawler/crawler4.html",
+                  "http://soulislove.com/crawler/crawler4.html"),
+          getResponse("/crawler/crawler5.html",
+                  "http://soulislove.com/crawler/crawler5.html"));
 
 		crawler = new DefaultCrawler(fetcher,
 				Executors.newSingleThreadExecutor(), new AhrefPageURLParser());
