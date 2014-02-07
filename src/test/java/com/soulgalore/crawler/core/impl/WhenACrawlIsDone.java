@@ -37,7 +37,7 @@ public class WhenACrawlIsDone {
 
 		// the first one is for the url verification
 				// verification!
-		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject())).thenReturn(
+		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(true)) ).thenReturn(
 				getResponse("/crawler/crawler1.html",
 						"http://soulislove.com/crawler/crawler1.html"),
 				getResponse("/crawler/crawler1.html",
