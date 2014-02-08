@@ -7,7 +7,7 @@ Simple java (1.6) crawler to crawl web pages on one and same domain. If your pag
 <li>Output the data to a csv file, separated by working (200 response code) and non working url</li>
 <li>Output the data to two text files, one with working urls and one with none working. Each url will be on one new line.</li>
 <li>Output url:s that contains a keyword in the html</li>
-<li>Verify that assets on a page work</li>
+<li>Exprimental support for verifying that assets on a page work</li>
 </ul>
 
 
@@ -120,7 +120,7 @@ java -cp crawler-1.5.11-full.jar com.soulgalore.crawler.run.CrawlToFile -u http:
 
 Running from the jar, verify that assets are ok
 <pre>
-java -jar crawler-1.5.11-full.jar com.soulgalore.crawler.run.CrawlAndVerifyAssets -u http://www.peterhedenskog.com
+java -cp crawler-1.5.11-full.jar com.soulgalore.crawler.run.CrawlAndVerifyAssets -u http://www.peterhedenskog.com
 </pre>
 
 ## License
