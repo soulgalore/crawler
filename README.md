@@ -1,6 +1,6 @@
 # Java web crawler [![Build Status](https://secure.travis-ci.org/sitespeedio/crawler.png?branch=master)](http://travis-ci.org/sitespeedio/crawler)
 
-Simple java (1.6) crawler to crawl webpages on one and same domain. Basicly you can do this:
+Simple java (1.6) crawler to crawl web pages on one and same domain. If your page is redirected to another domain, that page is not picked up EXCEPT if it is the first URL that is tested. Basicly you can do this:
 <ul>
 <li>Crawl from a start point, defining the depth of the crawl and decide to crawl only a specific path</li>
 <li>Output all working urls</li>
@@ -118,10 +118,14 @@ Running from the jar, output urls into two text files: workingurls.txt and nonwo
 java -cp crawler-1.5.11-full.jar com.soulgalore.crawler.run.CrawlToFile -u http://soulislove.com -f workingurls.txt -ef nonworkingurls.txt
 </pre>
 
+Running from the jar, verify that assets are ok
+<pre>
+java -jar crawler-1.5.11-full.jar com.soulgalore.crawler.run.CrawlAndVerifyAssets -u http://www.peterhedenskog.com
+</pre>
 
 ## License
 
-Copyright 2013 Peter Hedenskog
+Copyright 2014 Peter Hedenskog
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
