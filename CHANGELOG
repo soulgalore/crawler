@@ -1,5 +1,9 @@
 CHANGELOG crawler
 
+version 1.5.12
+------------------------
+* Show the referer of an asset.
+
 version 1.5.11
 ------------------------
 * Bug fix: When following redirects, URL:s that don't match the domain is picked up #11
