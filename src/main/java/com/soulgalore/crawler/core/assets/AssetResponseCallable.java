@@ -33,16 +33,17 @@ public class AssetResponseCallable implements Callable<AssetResponse> {
   private final AssetFetcher getter;
   private final Map<String, String> requestHeaders;
   private final String url;
-
+  private final String referer;
   public AssetResponseCallable(String theUrl, AssetFetcher theGetter,
-      Map<String, String> theRequestHeaders) {
+      Map<String, String> theRequestHeaders, String theReferer) {
     url = theUrl;
     getter = theGetter;
     requestHeaders = theRequestHeaders;
+    referer = theReferer;
   }
 
   public AssetResponse call() throws InterruptedException {
-    return getter.getAsset(url, requestHeaders);
+    return getter.getAsset(new AssetURL(url,referer), requestHeaders);
   }
 
   @Override

@@ -37,10 +37,10 @@ import org.jsoup.nodes.Document;
 import com.google.inject.Inject;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.core.HTMLPageResponse;
-
 import com.soulgalore.crawler.core.assets.AssetFetcher;
 import com.soulgalore.crawler.core.assets.AssetResponse;
 import com.soulgalore.crawler.core.assets.AssetResponseCallable;
+import com.soulgalore.crawler.core.assets.AssetURL;
 import com.soulgalore.crawler.core.assets.AssetsParser;
 import com.soulgalore.crawler.core.assets.AssetsVerificationResult;
 import com.soulgalore.crawler.core.assets.AssetsVerifier;
@@ -67,15 +67,15 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
 
     final Map<String, String> requestHeaders = configuration.getRequestHeadersMap();
 
-    Set<String> urls = new HashSet<String>();
+    Set<AssetURL> urls = new HashSet<AssetURL>();
 
-    final Set<Future<Set<String>>> fut = new HashSet<Future<Set<String>>>();
+    final Set<Future<Set<AssetURL>>> fut = new HashSet<Future<Set<AssetURL>>>();
 
     for (HTMLPageResponse response : responses) {
-      fut.add(service.submit(new AssetsParserCallable(response.getBody(), parser)));
+      fut.add(service.submit(new AssetsParserCallable(response.getBody(), parser, response.getUrl())));
     }
 
-    for (Future<Set<String>> future : fut) {
+    for (Future<Set<AssetURL>> future : fut) {
       try {
         urls.addAll(future.get());
       } catch (InterruptedException e) {
@@ -93,9 +93,9 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
     final Map<Future<AssetResponse>, String> futures =
         new HashMap<Future<AssetResponse>, String>(urls.size());
 
-    for (String url : urls) {
+    for (AssetURL url : urls) {
       futures.put(
-          service.submit(new AssetResponseCallable(url, responseCodeGetter, requestHeaders)), url);
+          service.submit(new AssetResponseCallable(url.getURL(), responseCodeGetter, requestHeaders, url.getReferer())), url.getURL());
 
     }
 
@@ -113,10 +113,11 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
           nonWorking.add(assetResponse);
 
       } catch (InterruptedException e) {
-        nonWorking.add(new AssetResponse(entry.getValue(), StatusCode.SC_SERVER_RESPONSE_UNKNOWN
+        // TODO fix real referer
+        nonWorking.add(new AssetResponse(entry.getValue(),"INteruptedExpetion", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
             .getCode(), -1));
       } catch (ExecutionException e) {
-        nonWorking.add(new AssetResponse(entry.getValue(), StatusCode.SC_SERVER_RESPONSE_UNKNOWN
+        nonWorking.add(new AssetResponse(entry.getValue(),"ExecutionException" + e.getCause(), StatusCode.SC_SERVER_RESPONSE_UNKNOWN
             .getCode(), -1));
       }
 
@@ -131,19 +132,21 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
 
   }
 
-  private static class AssetsParserCallable implements Callable<Set<String>> {
+  private static class AssetsParserCallable implements Callable<Set<AssetURL>> {
 
     private final Document doc;
     private final AssetsParser parser;
+    private final String referer;
 
-    private AssetsParserCallable(Document theDoc, AssetsParser theParsers) {
+    private AssetsParserCallable(Document theDoc, AssetsParser theParsers, String theReferer) {
       doc = theDoc;
       parser = theParsers;
+      referer = theReferer;
     }
 
     @Override
-    public Set<String> call() throws Exception {
-      return parser.getAssets(doc);
+    public Set<AssetURL> call() throws Exception {
+      return parser.getAssets(doc, referer);
     }
 
   }

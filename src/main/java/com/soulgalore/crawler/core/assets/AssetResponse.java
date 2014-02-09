@@ -28,14 +28,16 @@ package com.soulgalore.crawler.core.assets;
 public class AssetResponse {
 
   private final String url;
+  private final String referer;
   private final int responseCode;
   private final long fetchTime;
 
-  public AssetResponse(String url, int responseCode, long fetchTime) {
+  public AssetResponse(String url, String referer, int responseCode, long fetchTime) {
     super();
     this.url = url;
     this.responseCode = responseCode;
     this.fetchTime = fetchTime;
+    this.referer = referer;
   }
 
   /**
@@ -60,6 +62,11 @@ public class AssetResponse {
     return fetchTime;
   }
 
+  public String getReferer() {
+    return referer;
+  }
+  
+  
   @Override
   public int hashCode() {
     final int prime = 31;

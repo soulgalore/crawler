@@ -36,7 +36,7 @@ public interface AssetFetcher {
    * @param requestHeaders request headers for the fetch.
    * @return the asset response
    */
-  AssetResponse getAsset(String url, Map<String, String> requestHeaders);
+  AssetResponse getAsset(AssetURL url, Map<String, String> requestHeaders);
 
   /**
    * Shutdown the fetcher and all of it's assets.

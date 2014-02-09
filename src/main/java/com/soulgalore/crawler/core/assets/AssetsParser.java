@@ -31,5 +31,5 @@ import org.jsoup.nodes.Document;
  */
 public interface AssetsParser {
 
-  Set<String> getAssets(Document doc);
+  Set<AssetURL> getAssets(Document doc, String referer);
 }

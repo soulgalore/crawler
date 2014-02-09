@@ -78,7 +78,7 @@ public class CrawlAndVerifyAssets extends AbstractCrawl {
 
     for (AssetResponse resp : assetsResult.getNonWorkingAssets()) {
       System.out.println(resp.getUrl() + " code:"
-          + StatusCode.toFriendlyName(resp.getResponseCode()));
+          + StatusCode.toFriendlyName(resp.getResponseCode()) + " from URL:" + resp.getReferer());
     }
 
     crawler.shutdown();

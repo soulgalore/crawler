@@ -28,6 +28,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.soulgalore.crawler.core.assets.AssetURL;
 import com.soulgalore.crawler.core.assets.AssetsParser;
 
 public class DefaultAssetsParser implements AssetsParser {
@@ -35,19 +36,19 @@ public class DefaultAssetsParser implements AssetsParser {
   public DefaultAssetsParser() {}
 
   @Override
-  public Set<String> getAssets(Document doc) {
+  public Set<AssetURL> getAssets(Document doc, String referer) {
 
     Elements media = doc.select("[src]");
     Elements imports = doc.select("link[href]");
 
-    Set<String> urls = new HashSet<String>(media.size() + imports.size());
+    Set<AssetURL> urls = new HashSet<AssetURL>(media.size() + imports.size());
 
     for (Element link : imports) {
-      urls.add(link.attr("abs:href"));
+      urls.add(new AssetURL(link.attr("abs:href"), referer));
     }
 
     for (Element src : media) {
-      urls.add(src.attr("abs:src"));
+      urls.add(new AssetURL(src.attr("abs:src"), referer));
     }
 
     return urls;

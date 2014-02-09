@@ -36,6 +36,7 @@ import org.apache.http.util.EntityUtils;
 import com.google.inject.Inject;
 import com.soulgalore.crawler.core.assets.AssetFetcher;
 import com.soulgalore.crawler.core.assets.AssetResponse;
+import com.soulgalore.crawler.core.assets.AssetURL;
 import com.soulgalore.crawler.util.StatusCode;
 
 public class HTTPClientAssetFetcher implements AssetFetcher {
@@ -55,9 +56,9 @@ public class HTTPClientAssetFetcher implements AssetFetcher {
   }
 
   @Override
-  public AssetResponse getAsset(String url, Map<String, String> requestHeaders) {
+  public AssetResponse getAsset(AssetURL url, Map<String, String> requestHeaders) {
 
-    final HttpGet get = new HttpGet(url);
+    final HttpGet get = new HttpGet(url.getURI());
 
     for (String key : requestHeaders.keySet()) {
       get.setHeader(key, requestHeaders.get(key));
@@ -73,20 +74,20 @@ public class HTTPClientAssetFetcher implements AssetFetcher {
       final int sc = resp.getStatusLine().getStatusCode();
       entity = resp.getEntity();
       EntityUtils.consume(entity);
-      return new AssetResponse(url, sc, time);
+      return new AssetResponse(url.getURL(), url.getReferer(), sc, time);
 
     } catch (ConnectTimeoutException e) {
-      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
+      return new AssetResponse(url.getURL(), url.getReferer(), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
           System.currentTimeMillis() - start);
     } catch (SocketTimeoutException e) {
-      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
+      return new AssetResponse(url.getURL(), url.getReferer(), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(),
           System.currentTimeMillis() - start);
     } catch (ClientProtocolException e) {
       e.printStackTrace();
-      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), -1);
+      return new AssetResponse(url.getURL(), url.getReferer(), StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), -1);
     } catch (IOException e) {
       e.printStackTrace();
-      return new AssetResponse(url, StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), -1);
+      return new AssetResponse(url.getURL(), url.getReferer(),  StatusCode.SC_SERVER_RESPONSE_UNKNOWN.getCode(), -1);
     }
 
     finally {
