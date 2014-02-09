@@ -25,11 +25,13 @@ import java.util.Set;
 
 import org.jsoup.nodes.Document;
 
+import com.soulgalore.crawler.core.CrawlerURL;
+
 /**
  * Interface for parsing all the assets of a HTML document.
  * 
  */
 public interface AssetsParser {
 
-  Set<AssetURL> getAssets(Document doc, String referer);
+  Set<CrawlerURL> getAssets(Document doc, String referer);
 }

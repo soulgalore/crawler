@@ -21,10 +21,7 @@
  */
 package com.soulgalore.crawler.core;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 
@@ -33,7 +30,7 @@ import java.net.URLDecoder;
  * A page url.
  * 
  */
-public class PageURL {
+public class CrawlerURL {
 
   private final String url;
   private final URI uri;
@@ -46,7 +43,7 @@ public class PageURL {
    * 
    * @param theUrl to the asset
    */
-  public PageURL(String theUrl) {
+  public CrawlerURL(String theUrl) {
     this(theUrl, "");
   }
 
@@ -56,7 +53,7 @@ public class PageURL {
    * @param theUrl to the asset.
    * @param theUrlReferer the url to the referer.
    */
-  public PageURL(String theUrl, String theUrlReferer) {
+  public CrawlerURL(String theUrl, String theUrlReferer) {
     url = theUrl;
     referer = theUrlReferer;
     URI tmpURI = null;
@@ -129,7 +126,7 @@ public class PageURL {
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
-    final PageURL other = (PageURL) obj;
+    final CrawlerURL other = (CrawlerURL) obj;
     if (uri == null) {
       if (other.uri != null) return false;
     } else if (uri.equals(other.uri))

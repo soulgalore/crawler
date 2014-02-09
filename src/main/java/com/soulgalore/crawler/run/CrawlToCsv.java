@@ -39,7 +39,7 @@ import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
 import com.soulgalore.crawler.core.HTMLPageResponse;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.guice.CrawlModule;
 
 /**
@@ -89,7 +89,7 @@ public class CrawlToCsv extends AbstractCrawl {
     final StringBuilder builder = new StringBuilder();
     builder.append("URL,parent\n");
 
-    for (PageURL workingUrl : result.getUrls()) {
+    for (CrawlerURL workingUrl : result.getUrls()) {
       builder.append(workingUrl.getUrl()).append(",").append(workingUrl.getReferer()).append("\n");
 
     }

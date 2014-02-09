@@ -31,7 +31,7 @@ import java.util.Set;
  */
 public class CrawlerResult {
 
-  private final Set<PageURL> urls;
+  private final Set<CrawlerURL> urls;
   private final Set<HTMLPageResponse> nonWorkingResponses;
   private final Set<HTMLPageResponse> verifiedResponses;
   private final String startPoint;
@@ -43,7 +43,7 @@ public class CrawlerResult {
    * @param theUrls the urls that was fetched
    * @param theNonWorkingResponses the non working urls
    */
-  public CrawlerResult(String theStartPoint, Set<PageURL> theUrls,
+  public CrawlerResult(String theStartPoint, Set<CrawlerURL> theUrls,
       Set<HTMLPageResponse> theVerifiedResponses, Set<HTMLPageResponse> theNonWorkingResponses) {
     startPoint = theStartPoint;
     urls = theUrls;
@@ -83,7 +83,7 @@ public class CrawlerResult {
    * 
    * @return the fetched urls. Contains only working url if verification is turned on.
    */
-  public Set<PageURL> getUrls() {
+  public Set<CrawlerURL> getUrls() {
     return Collections.unmodifiableSet(urls);
   }
 

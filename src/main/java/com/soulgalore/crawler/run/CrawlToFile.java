@@ -38,7 +38,7 @@ import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
 import com.soulgalore.crawler.core.HTMLPageResponse;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.guice.CrawlModule;
 import com.soulgalore.crawler.util.StatusCode;
 
@@ -94,7 +94,7 @@ public class CrawlToFile extends AbstractCrawl {
     final StringBuilder workingUrls = new StringBuilder();
     final StringBuilder nonWorkingUrls = new StringBuilder();
 
-    for (PageURL workingUrl : result.getUrls()) {
+    for (CrawlerURL workingUrl : result.getUrls()) {
       workingUrls.append(workingUrl.getUrl()).append("\n");
 
     }

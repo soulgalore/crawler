@@ -30,7 +30,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.soulgalore.crawler.core.PageURLParser;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 
 /**
@@ -59,11 +59,11 @@ public class AhrefPageURLParser implements PageURLParser {
    * @param theResponse the response from the request to this page
    * @return the urls.
    */
-  public Set<PageURL> get(HTMLPageResponse theResponse) {
+  public Set<CrawlerURL> get(HTMLPageResponse theResponse) {
 
     final String url = theResponse.getUrl();
 
-    Set<PageURL> ahrefs = new HashSet<PageURL>();
+    Set<CrawlerURL> ahrefs = new HashSet<CrawlerURL>();
 
     // only populate if we have a valid response, else return empty set
     if (theResponse.getResponseCode() == HttpStatus.SC_OK) {
@@ -73,9 +73,9 @@ public class AhrefPageURLParser implements PageURLParser {
     return ahrefs;
   }
 
-  private Set<PageURL> fetch(String query, String attributeKey, Document doc, String url) {
+  private Set<CrawlerURL> fetch(String query, String attributeKey, Document doc, String url) {
 
-    final Set<PageURL> urls = new HashSet<PageURL>();
+    final Set<CrawlerURL> urls = new HashSet<CrawlerURL>();
 
     final Elements elements = doc.select(query);
 
@@ -88,10 +88,10 @@ public class AhrefPageURLParser implements PageURLParser {
         continue;
 
       else if (IFRAME.equals(src.tag().getName()))
-        urls.add(new PageURL(src.attr(attributeKey), url));
+        urls.add(new CrawlerURL(src.attr(attributeKey), url));
 
       else
-        urls.add(new PageURL(src.attr(attributeKey), url));
+        urls.add(new CrawlerURL(src.attr(attributeKey), url));
 
     }
 

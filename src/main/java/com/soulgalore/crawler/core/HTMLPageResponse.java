@@ -36,7 +36,7 @@ public class HTMLPageResponse {
 
   private final Document doc;
   private final String encoding;
-  private final PageURL url;
+  private final CrawlerURL url;
   private final int responseCode;
   private final String responseType;
   private final Map<String, String> headers;
@@ -53,7 +53,7 @@ public class HTMLPageResponse {
    * @param theSize the size
    * @param fetchTime the time it took to fetch the response
    */
-  public HTMLPageResponse(PageURL pageUrl, int theResponseCode, Map<String, String> theHeaders,
+  public HTMLPageResponse(CrawlerURL pageUrl, int theResponseCode, Map<String, String> theHeaders,
       String theBody, String theEncoding, long theSize, String theResponseType, long theFetchTime) {
     encoding = theEncoding;
     url = pageUrl;
@@ -102,7 +102,7 @@ public class HTMLPageResponse {
     return responseType;
   }
 
-  public PageURL getPageUrl() {
+  public CrawlerURL getPageUrl() {
     return url;
   }
 

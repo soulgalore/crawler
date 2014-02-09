@@ -44,7 +44,7 @@ import com.soulgalore.crawler.core.PageURLParser;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
 import com.soulgalore.crawler.core.HTMLPageResponseCallable;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
 import com.soulgalore.crawler.util.StatusCode;
@@ -97,7 +97,7 @@ public class DefaultCrawler implements Crawler {
 
     int level = 0;
 
-    final Set<PageURL> allUrls = new LinkedHashSet<PageURL>();
+    final Set<CrawlerURL> allUrls = new LinkedHashSet<CrawlerURL>();
     final Set<HTMLPageResponse> verifiedUrls = new LinkedHashSet<HTMLPageResponse>();
     final Set<HTMLPageResponse> nonWorkingResponses = new LinkedHashSet<HTMLPageResponse>();
 
@@ -108,15 +108,15 @@ public class DefaultCrawler implements Crawler {
     if (configuration.getMaxLevels() > 0) {
 
       // set the start url
-      Set<PageURL> nextToFetch = new LinkedHashSet<PageURL>();
+      Set<CrawlerURL> nextToFetch = new LinkedHashSet<CrawlerURL>();
       nextToFetch.add(resp.getPageUrl());
 
       while (level < configuration.getMaxLevels()) {
 
-        final Map<Future<HTMLPageResponse>, PageURL> futures =
-            new HashMap<Future<HTMLPageResponse>, PageURL>(nextToFetch.size());
+        final Map<Future<HTMLPageResponse>, CrawlerURL> futures =
+            new HashMap<Future<HTMLPageResponse>, CrawlerURL>(nextToFetch.size());
 
-        for (PageURL testURL : nextToFetch) {
+        for (CrawlerURL testURL : nextToFetch) {
           futures.put(service.submit(new HTMLPageResponseCallable(testURL, responseFetcher, true,
               requestHeaders, false)), testURL);
         }
@@ -133,7 +133,7 @@ public class DefaultCrawler implements Crawler {
     if (configuration.isVerifyUrls())
       verifyUrls(allUrls, verifiedUrls, nonWorkingResponses, requestHeaders);
 
-    LinkedHashSet<PageURL> workingUrls = new LinkedHashSet<PageURL>();
+    LinkedHashSet<CrawlerURL> workingUrls = new LinkedHashSet<CrawlerURL>();
     for (HTMLPageResponse workingResponses : verifiedUrls) {
       workingUrls.add(workingResponses.getPageUrl());
     }
@@ -142,8 +142,8 @@ public class DefaultCrawler implements Crawler {
     // wow, this is a hack to fix if the first URL is redirected,
     // then we want to keep that original start url
     if (workingUrls.size() >= 1) {
-      List<PageURL> list = new ArrayList<PageURL>(workingUrls);
-      list.add(0, new PageURL(configuration.getStartUrl()));
+      List<CrawlerURL> list = new ArrayList<CrawlerURL>(workingUrls);
+      list.add(0, new CrawlerURL(configuration.getStartUrl()));
       list.remove(1);
       workingUrls.clear();
       workingUrls.addAll(list);
@@ -166,17 +166,17 @@ public class DefaultCrawler implements Crawler {
    * @param don 't collect/follow urls that contains this text in the url
    * @return the next level of links that we should fetch
    */
-  protected Set<PageURL> fetchNextLevelLinks(Map<Future<HTMLPageResponse>, PageURL> responses,
-      Set<PageURL> allUrls, Set<HTMLPageResponse> nonWorkingUrls,
+  protected Set<CrawlerURL> fetchNextLevelLinks(Map<Future<HTMLPageResponse>, CrawlerURL> responses,
+      Set<CrawlerURL> allUrls, Set<HTMLPageResponse> nonWorkingUrls,
       Set<HTMLPageResponse> verifiedUrls, String host, String onlyOnPath, String notOnPath) {
 
-    final Set<PageURL> nextLevel = new LinkedHashSet<PageURL>();
+    final Set<CrawlerURL> nextLevel = new LinkedHashSet<CrawlerURL>();
 
-    final Iterator<Entry<Future<HTMLPageResponse>, PageURL>> it = responses.entrySet().iterator();
+    final Iterator<Entry<Future<HTMLPageResponse>, CrawlerURL>> it = responses.entrySet().iterator();
 
     while (it.hasNext()) {
 
-      final Entry<Future<HTMLPageResponse>, PageURL> entry = it.next();
+      final Entry<Future<HTMLPageResponse>, CrawlerURL> entry = it.next();
 
       try {
 
@@ -185,9 +185,9 @@ public class DefaultCrawler implements Crawler {
             && response.getResponseType().indexOf("html") > 0) {
           // we know that this links work
           verifiedUrls.add(response);
-          final Set<PageURL> allLinks = parser.get(response);
+          final Set<CrawlerURL> allLinks = parser.get(response);
 
-          for (PageURL link : allLinks) {
+          for (CrawlerURL link : allLinks) {
             // only add if it is the same host
             if (host.equals(link.getHost()) && link.getUrl().contains(onlyOnPath)
                 && (notOnPath.equals("") ? true : (!link.getUrl().contains(notOnPath)))) {
@@ -225,17 +225,17 @@ public class DefaultCrawler implements Crawler {
    * @param allUrls all the links that has been fetched
    * @param nonWorkingUrls links that are not working
    */
-  private void verifyUrls(Set<PageURL> allUrls, Set<HTMLPageResponse> verifiedUrls,
+  private void verifyUrls(Set<CrawlerURL> allUrls, Set<HTMLPageResponse> verifiedUrls,
       Set<HTMLPageResponse> nonWorkingUrls, Map<String, String> requestHeaders) {
 
-    Set<PageURL> urlsThatNeedsVerification = new LinkedHashSet<PageURL>(allUrls);
+    Set<CrawlerURL> urlsThatNeedsVerification = new LinkedHashSet<CrawlerURL>(allUrls);
 
     urlsThatNeedsVerification.removeAll(verifiedUrls);
 
     final Set<Callable<HTMLPageResponse>> tasks =
         new HashSet<Callable<HTMLPageResponse>>(urlsThatNeedsVerification.size());
 
-    for (PageURL testURL : urlsThatNeedsVerification) {
+    for (CrawlerURL testURL : urlsThatNeedsVerification) {
       tasks.add(new HTMLPageResponseCallable(testURL, responseFetcher, true, requestHeaders, false));
     }
 
@@ -272,7 +272,7 @@ public class DefaultCrawler implements Crawler {
 
   }
 
-  private HTMLPageResponse fetchOnePage(PageURL url, Map<String, String> requestHeaders) {
+  private HTMLPageResponse fetchOnePage(CrawlerURL url, Map<String, String> requestHeaders) {
     return responseFetcher.get(url, true, requestHeaders, true);
 
   }
@@ -280,7 +280,7 @@ public class DefaultCrawler implements Crawler {
   private HTMLPageResponse verifyInput(String startUrl, String onlyOnPath,
       Map<String, String> requestHeaders) {
 
-    final PageURL pageUrl = new PageURL(startUrl);
+    final CrawlerURL pageUrl = new CrawlerURL(startUrl);
 
     if (pageUrl.isWrongSyntax())
       throw new IllegalArgumentException("The url " + startUrl + " isn't a valid url ");

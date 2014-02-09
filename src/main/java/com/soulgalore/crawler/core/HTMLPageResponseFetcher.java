@@ -36,7 +36,7 @@ public interface HTMLPageResponseFetcher {
    * @param fetchBody fetch the body or not
    * @return the response
    */
-  HTMLPageResponse get(PageURL url, boolean fetchBody, Map<String, String> requestHeaders, boolean followRedirectsToNewDomain);
+  HTMLPageResponse get(CrawlerURL url, boolean fetchBody, Map<String, String> requestHeaders, boolean followRedirectsToNewDomain);
 
 
   /**

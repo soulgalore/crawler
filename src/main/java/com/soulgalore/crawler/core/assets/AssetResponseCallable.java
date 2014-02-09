@@ -24,6 +24,8 @@ package com.soulgalore.crawler.core.assets;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import com.soulgalore.crawler.core.CrawlerURL;
+
 /**
  * 
  * A callable that fetch a HTTP response code and return response to the caller.
@@ -43,7 +45,7 @@ public class AssetResponseCallable implements Callable<AssetResponse> {
   }
 
   public AssetResponse call() throws InterruptedException {
-    return getter.getAsset(new AssetURL(url,referer), requestHeaders);
+    return getter.getAsset(new CrawlerURL(url,referer), requestHeaders);
   }
 
   @Override

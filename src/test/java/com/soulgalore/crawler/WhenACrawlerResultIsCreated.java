@@ -12,13 +12,13 @@ import org.junit.Test;
 
 import com.soulgalore.crawler.core.CrawlerResult;
 import com.soulgalore.crawler.core.HTMLPageResponse;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.util.StatusCode;
 
 public class WhenACrawlerResultIsCreated {
 
 	private static final String STARTPOINT = "http://www.google.com";
-	private final Set<PageURL> allUrls = new HashSet<PageURL>();
+	private final Set<CrawlerURL> allUrls = new HashSet<CrawlerURL>();
 	private final Set<HTMLPageResponse> nonWorkingUrls = new HashSet<HTMLPageResponse>();
 	private final Set<HTMLPageResponse> verifiedUrls = new HashSet<HTMLPageResponse>();
 	
@@ -31,11 +31,11 @@ public class WhenACrawlerResultIsCreated {
 
 	@Before
 	public void setup() {
-		allUrls.add(new PageURL("http://www.facebook.com"));
-		allUrls.add(new PageURL("http://www.twitter.com"));
-		nonWorkingUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook2.com"), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(), Collections.EMPTY_MAP, "", "", 0,"",1) );
-		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.facebook.com"),200, Collections.EMPTY_MAP, "", "", 0,"",21212) );
-		verifiedUrls.add(new HTMLPageResponse(new PageURL("http://www.twitter.com"),200, Collections.EMPTY_MAP, "", "", 0,"",212) );
+		allUrls.add(new CrawlerURL("http://www.facebook.com"));
+		allUrls.add(new CrawlerURL("http://www.twitter.com"));
+		nonWorkingUrls.add(new HTMLPageResponse(new CrawlerURL("http://www.facebook2.com"), StatusCode.SC_SERVER_RESPONSE_TIMEOUT.getCode(), Collections.EMPTY_MAP, "", "", 0,"",1) );
+		verifiedUrls.add(new HTMLPageResponse(new CrawlerURL("http://www.facebook.com"),200, Collections.EMPTY_MAP, "", "", 0,"",21212) );
+		verifiedUrls.add(new HTMLPageResponse(new CrawlerURL("http://www.twitter.com"),200, Collections.EMPTY_MAP, "", "", 0,"",212) );
 		result = new CrawlerResult(STARTPOINT, allUrls, verifiedUrls, nonWorkingUrls);
 	}
 

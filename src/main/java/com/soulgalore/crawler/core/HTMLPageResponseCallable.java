@@ -33,7 +33,7 @@ import java.util.concurrent.Callable;
 public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
 
   private final HTMLPageResponseFetcher fetcher;
-  private final PageURL url;
+  private final CrawlerURL url;
   private final boolean fetchPage;
   private final boolean followRedirectsToNewDomain;
   private final Map<String, String> requestHeaders;
@@ -46,7 +46,7 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
    * @param theFetcher the fetcher to use
    * @param fetchTheBody if true, the response body is fetched, else not.
    */
-  public HTMLPageResponseCallable(PageURL theUrl, HTMLPageResponseFetcher theFetcher,
+  public HTMLPageResponseCallable(CrawlerURL theUrl, HTMLPageResponseFetcher theFetcher,
       boolean fetchTheBody, Map<String, String> theRequestHeaders, boolean followRedirectsToNewDomain) {
 
     url = theUrl;

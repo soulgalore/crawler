@@ -27,7 +27,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerResult;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.core.assets.AssetResponse;
 import com.soulgalore.crawler.core.assets.AssetsVerificationResult;
 import com.soulgalore.crawler.core.assets.AssetsVerifier;

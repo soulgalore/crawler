@@ -43,7 +43,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import com.google.inject.Inject;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
 import com.soulgalore.crawler.util.StatusCode;
@@ -82,7 +82,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
    * @param getPage the body of the page or not
    * @return the response
    */
-  public HTMLPageResponse get(PageURL url, boolean getPage, Map<String, String> requestHeaders, boolean followRedirectsToNewDomain) {
+  public HTMLPageResponse get(CrawlerURL url, boolean getPage, Map<String, String> requestHeaders, boolean followRedirectsToNewDomain) {
 
     if (url.isWrongSyntax()) {
       return new HTMLPageResponse(url, StatusCode.SC_MALFORMED_URI.getCode(),
@@ -150,7 +150,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
           Collections.<String, String>emptyMap(), "", "", 0, "", fetchTime);
       }
       return new HTMLPageResponse(url.getUrl() != newURL
-          ? new PageURL(newURL, url.getReferer())
+          ? new CrawlerURL(newURL, url.getReferer())
           : url, sc, headersAndValues, body, encoding, size, type, fetchTime);
 
     } catch (SocketTimeoutException e) {

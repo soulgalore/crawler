@@ -36,11 +36,11 @@ import org.jsoup.nodes.Document;
 
 import com.google.inject.Inject;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
 import com.soulgalore.crawler.core.assets.AssetFetcher;
 import com.soulgalore.crawler.core.assets.AssetResponse;
 import com.soulgalore.crawler.core.assets.AssetResponseCallable;
-import com.soulgalore.crawler.core.assets.AssetURL;
 import com.soulgalore.crawler.core.assets.AssetsParser;
 import com.soulgalore.crawler.core.assets.AssetsVerificationResult;
 import com.soulgalore.crawler.core.assets.AssetsVerifier;
@@ -67,15 +67,15 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
 
     final Map<String, String> requestHeaders = configuration.getRequestHeadersMap();
 
-    Set<AssetURL> urls = new HashSet<AssetURL>();
+    Set<CrawlerURL> urls = new HashSet<CrawlerURL>();
 
-    final Set<Future<Set<AssetURL>>> fut = new HashSet<Future<Set<AssetURL>>>();
+    final Set<Future<Set<CrawlerURL>>> fut = new HashSet<Future<Set<CrawlerURL>>>();
 
     for (HTMLPageResponse response : responses) {
       fut.add(service.submit(new AssetsParserCallable(response.getBody(), parser, response.getUrl())));
     }
 
-    for (Future<Set<AssetURL>> future : fut) {
+    for (Future<Set<CrawlerURL>> future : fut) {
       try {
         urls.addAll(future.get());
       } catch (InterruptedException e) {
@@ -93,9 +93,9 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
     final Map<Future<AssetResponse>, String> futures =
         new HashMap<Future<AssetResponse>, String>(urls.size());
 
-    for (AssetURL url : urls) {
+    for (CrawlerURL url : urls) {
       futures.put(
-          service.submit(new AssetResponseCallable(url.getURL(), responseCodeGetter, requestHeaders, url.getReferer())), url.getURL());
+          service.submit(new AssetResponseCallable(url.getUrl(), responseCodeGetter, requestHeaders, url.getReferer())), url.getUrl());
 
     }
 
@@ -132,7 +132,7 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
 
   }
 
-  private static class AssetsParserCallable implements Callable<Set<AssetURL>> {
+  private static class AssetsParserCallable implements Callable<Set<CrawlerURL>> {
 
     private final Document doc;
     private final AssetsParser parser;
@@ -145,7 +145,7 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
     }
 
     @Override
-    public Set<AssetURL> call() throws Exception {
+    public Set<CrawlerURL> call() throws Exception {
       return parser.getAssets(doc, referer);
     }
 

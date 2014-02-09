@@ -22,7 +22,7 @@ import com.soulgalore.crawler.core.Crawler;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.core.CrawlerResult;
 import com.soulgalore.crawler.core.HTMLPageResponse;
-import com.soulgalore.crawler.core.PageURL;
+import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.core.HTMLPageResponseFetcher;
 import com.soulgalore.crawler.test.TestFileHelper;
 
@@ -37,11 +37,11 @@ public class WhenACrawlIsDone {
 
 		// the first one is for the url verification
 				// verification!
-		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(true) )).thenReturn(
+		when(fetcher.get((CrawlerURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(true) )).thenReturn(
 				getResponse("/crawler/crawler1.html",
 						"http://soulislove.com/crawler/crawler1.html"));
 		
-		when(fetcher.get((PageURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(false) )).thenReturn(
+		when(fetcher.get((CrawlerURL) anyObject(), eq(true), (Map<String, String>) anyObject(), eq(false) )).thenReturn(
           getResponse("/crawler/crawler1.html",
                   "http://soulislove.com/crawler/crawler1.html"),
           getResponse("/crawler/crawler2.html",
@@ -65,7 +65,7 @@ public class WhenACrawlIsDone {
 		CrawlerResult result = crawler.getUrls(conf);
 		assertThat(result.getUrls().size(), is(1));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/mypath/crawler2.html",
 				"http://soulislove.com")));
 	}
@@ -116,17 +116,17 @@ public class WhenACrawlIsDone {
 		CrawlerResult result = crawler.getUrls(conf);
 		assertThat(result.getUrls().size(), is(10));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/mypath/crawler2.html")));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/mypath/crawler3.html")));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/crawler4.html")));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/crawler5.html")));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/crawler6.html")));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/mypath/crawler7.html")));
 
 	}
@@ -141,11 +141,11 @@ public class WhenACrawlIsDone {
 		System.out.println(result.getUrls());
 		assertThat(result.getUrls().size(), is(3));
 		assertThat(result.getNonWorkingUrls().size(), is(0));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/mypath/crawler2.html")));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/mypath/crawler3.html")));
-		assertThat(result.getUrls(), hasItem(new PageURL(
+		assertThat(result.getUrls(), hasItem(new CrawlerURL(
 				"http://soulislove.com/crawler4.html")));
 	}
 
@@ -153,7 +153,7 @@ public class WhenACrawlIsDone {
 			throws IOException {
 		String html = TestFileHelper.fetchFileFromClasspathAsString(file);
 
-		return new HTMLPageResponse(new PageURL(url), HttpStatus.SC_OK,
+		return new HTMLPageResponse(new CrawlerURL(url), HttpStatus.SC_OK,
 				new HashMap<String, String>(), html, "UTF-8", html.length(),"text/html", 1283);
 
 	}

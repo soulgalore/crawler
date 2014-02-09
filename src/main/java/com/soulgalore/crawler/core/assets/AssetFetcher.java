@@ -23,6 +23,8 @@ package com.soulgalore.crawler.core.assets;
 
 import java.util.Map;
 
+import com.soulgalore.crawler.core.CrawlerURL;
+
 /**
  * Interface of a asset fetcher.
  * 
@@ -36,7 +38,7 @@ public interface AssetFetcher {
    * @param requestHeaders request headers for the fetch.
    * @return the asset response
    */
-  AssetResponse getAsset(AssetURL url, Map<String, String> requestHeaders);
+  AssetResponse getAsset(CrawlerURL url, Map<String, String> requestHeaders);
 
   /**
    * Shutdown the fetcher and all of it's assets.

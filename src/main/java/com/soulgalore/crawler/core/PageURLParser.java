@@ -36,6 +36,6 @@ public interface PageURLParser {
    * @param theResponse to parse
    * @return a set of urls
    */
-  Set<PageURL> get(HTMLPageResponse theResponse);
+  Set<CrawlerURL> get(HTMLPageResponse theResponse);
 
 }
