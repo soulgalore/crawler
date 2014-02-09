@@ -113,11 +113,11 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
           nonWorking.add(assetResponse);
 
       } catch (InterruptedException e) {
-        // TODO fix real referer
-        nonWorking.add(new AssetResponse(entry.getValue(),"INteruptedExpetion", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
+        nonWorking.add(new AssetResponse(entry.getValue(),"", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
             .getCode(), -1));
       } catch (ExecutionException e) {
-        nonWorking.add(new AssetResponse(entry.getValue(),"ExecutionException" + e.getCause(), StatusCode.SC_SERVER_RESPONSE_UNKNOWN
+        System.err.println(e.getCause());
+        nonWorking.add(new AssetResponse(entry.getValue(),"", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
             .getCode(), -1));
       }
 
