@@ -68,7 +68,7 @@ public class CrawlAndVerifyAssets extends AbstractCrawl {
     final CrawlerResult result = crawler.getUrls(getConfiguration());
     System.out.println("Crawled  " + result.getVerifiedURLResponses().size() + " pages");
 
-    System.out.println("Start verifyig assets ...");
+    System.out.println("Start verify assets ...");
     AssetsVerifier verifier = injector.getInstance(AssetsVerifier.class);
     AssetsVerificationResult assetsResult =
         verifier.verify(result.getVerifiedURLResponses(), getConfiguration());
