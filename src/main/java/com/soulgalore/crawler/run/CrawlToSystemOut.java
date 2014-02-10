@@ -49,9 +49,9 @@ public class CrawlToSystemOut extends AbstractCrawl {
       crawl.crawl();
 
     } catch (ParseException e) {
-      System.out.print(e.getMessage());
+      System.err.print(e.getMessage());
     } catch (IllegalArgumentException e) {
-      System.out.println(e.getMessage());
+      System.err.println(e.getMessage());
     }
 
   }
