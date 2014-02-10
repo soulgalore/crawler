@@ -22,11 +22,9 @@
 package com.soulgalore.crawler.run;
 
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import org.apache.commons.cli.ParseException;
@@ -101,13 +99,7 @@ public class CrawlAndVerifyAssetsToCsv extends AbstractCrawl {
     try {
       out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
       out.write(builder.toString());
-    } catch (UnsupportedEncodingException e) {
-      // TODO Auto-generated catch block
-      System.err.println(e);
-    } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
-      System.err.println(e);
-    } catch (IOException e) {
+    } catch (Exception e) {
       // TODO Auto-generated catch block
       System.err.println(e);
     } finally {
