@@ -1,9 +1,11 @@
 CHANGELOG crawler
+version 1.5.13
+------------------------
+* Catch a href that has a new line between a and href instead of a space (some WP plugin creates them that way)
 
 version 1.5.12
 ------------------------
 * Show the referer of an asset.
-* Catch a href that has a new line between a and href instead of a space (some WP plugin creates them that way)
 
 version 1.5.11
 ------------------------
