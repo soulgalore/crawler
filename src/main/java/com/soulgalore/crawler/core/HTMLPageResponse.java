@@ -79,6 +79,12 @@ public class HTMLPageResponse {
               + ((pageUrl.getUri().getPath().contains(".")) ? pageUrl.getUri().getPath() : pageUrl
                   .getUri().getPath() + (pageUrl.getUri().getPath().endsWith("/") ? "" : "/"));
 
+      // OK, here's a true story, There are some plugins (WP?) that create a href tags with a return instead 
+      // of a space between the a and the href. Lets catch them in this ugly way
+      if (theBody.contains("<ahref")) {
+        theBody = theBody.replaceAll("<ahref", "<a href");
+      }
+        
       doc = Jsoup.parse(theBody, baseUri);
     } else {
       doc = null;
