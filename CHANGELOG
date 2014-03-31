@@ -1,4 +1,9 @@
 CHANGELOG crawler
+
+version 1.5.14
+------------------------
+* Log referer URL if the a page get > 400 when verified
+
 version 1.5.13
 ------------------------
 * Catch a href that has a new line between a and href instead of a space (some WP plugin creates them that way)

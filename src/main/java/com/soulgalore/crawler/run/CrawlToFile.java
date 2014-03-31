@@ -32,6 +32,7 @@ import java.io.Writer;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.http.HttpStatus;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -106,7 +107,10 @@ public class CrawlToFile extends AbstractCrawl {
     if (result.getNonWorkingUrls().size() > 0) {
       for (HTMLPageResponse nonWorkingUrl : result.getNonWorkingUrls()) {
         nonWorkingUrls.append(StatusCode.toFriendlyName(nonWorkingUrl.getResponseCode()))
-            .append(",").append(nonWorkingUrl.getUrl()).append("\n");
+            .append(",").append(nonWorkingUrl.getUrl());
+        if (nonWorkingUrl.getResponseCode() >= HttpStatus.SC_NOT_FOUND)
+          nonWorkingUrls.append(" from ").append(nonWorkingUrl.getPageUrl().getReferer());
+        nonWorkingUrls.append("\n");
       }
 
       if (verbose) System.out.println("Start storing file non working urls " + errorFileName);
