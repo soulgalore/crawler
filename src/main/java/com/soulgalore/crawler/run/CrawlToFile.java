@@ -95,8 +95,10 @@ public class CrawlToFile extends AbstractCrawl {
     final StringBuilder workingUrls = new StringBuilder();
     final StringBuilder nonWorkingUrls = new StringBuilder();
 
+    String separator = System.getProperty( "line.separator" ); 
+    
     for (CrawlerURL workingUrl : result.getUrls()) {
-      workingUrls.append(workingUrl.getUrl()).append("\n");
+      workingUrls.append(workingUrl.getUrl()).append(separator);
 
     }
 
@@ -104,8 +106,7 @@ public class CrawlToFile extends AbstractCrawl {
 
     writeFile(fileName, workingUrls.toString());
 
-    String separator = System.getProperty( "line.separator" ); 
-    
+
     if (result.getNonWorkingUrls().size() > 0) {
       for (HTMLPageResponse nonWorkingUrl : result.getNonWorkingUrls()) {
         nonWorkingUrls.append(StatusCode.toFriendlyName(nonWorkingUrl.getResponseCode()))
