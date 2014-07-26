@@ -104,13 +104,15 @@ public class CrawlToFile extends AbstractCrawl {
 
     writeFile(fileName, workingUrls.toString());
 
+    String separator = System.getProperty( "line.separator" ); 
+    
     if (result.getNonWorkingUrls().size() > 0) {
       for (HTMLPageResponse nonWorkingUrl : result.getNonWorkingUrls()) {
         nonWorkingUrls.append(StatusCode.toFriendlyName(nonWorkingUrl.getResponseCode()))
             .append(",").append(nonWorkingUrl.getUrl());
         if (nonWorkingUrl.getResponseCode() >= HttpStatus.SC_NOT_FOUND)
           nonWorkingUrls.append(" from ").append(nonWorkingUrl.getPageUrl().getReferer());
-        nonWorkingUrls.append("\n");
+        nonWorkingUrls.append(separator);
       }
 
       if (verbose) System.out.println("Start storing file non working urls " + errorFileName);
