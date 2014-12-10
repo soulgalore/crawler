@@ -44,7 +44,7 @@ import com.soulgalore.crawler.guice.CrawlModule;
 import com.soulgalore.crawler.util.StatusCode;
 
 /**
- * Crawl to File. To files will be created, one with the working urls & one with the none working
+ * Crawl to File. To files will be created, one with the working urls &amp; one with the none working
  * urls. Each url will be on one new line.
  * 
  * @author peter

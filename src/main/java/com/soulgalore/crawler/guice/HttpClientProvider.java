@@ -96,8 +96,7 @@ public class HttpClientProvider implements Provider<HttpClient> {
    * @param maxNrOfThreads the max number of threads in the client
    * @param theSocketTimeout the socket timeout time
    * @param theConnectionTimeout the connection timeout time
-   * @param headersAsString the request headers, in the form at of ...
-   * @param auth the auth string
+   * @param authAsString the auth string
    * @param theProxy the proxy
    */
   @Inject
