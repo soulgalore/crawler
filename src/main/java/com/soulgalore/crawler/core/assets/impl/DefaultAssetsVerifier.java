@@ -21,30 +21,23 @@
  */
 package com.soulgalore.crawler.core.assets.impl;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-
-import org.jsoup.nodes.Document;
-
 import com.google.inject.Inject;
 import com.soulgalore.crawler.core.CrawlerConfiguration;
 import com.soulgalore.crawler.core.CrawlerURL;
 import com.soulgalore.crawler.core.HTMLPageResponse;
-import com.soulgalore.crawler.core.assets.AssetFetcher;
-import com.soulgalore.crawler.core.assets.AssetResponse;
-import com.soulgalore.crawler.core.assets.AssetResponseCallable;
-import com.soulgalore.crawler.core.assets.AssetsParser;
-import com.soulgalore.crawler.core.assets.AssetsVerificationResult;
-import com.soulgalore.crawler.core.assets.AssetsVerifier;
+import com.soulgalore.crawler.core.assets.*;
 import com.soulgalore.crawler.util.StatusCode;
+import org.jsoup.nodes.Document;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public class DefaultAssetsVerifier implements AssetsVerifier {
 
@@ -99,11 +92,7 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
 
     }
 
-    final Iterator<Entry<Future<AssetResponse>, String>> it = futures.entrySet().iterator();
-
-    while (it.hasNext()) {
-
-      final Entry<Future<AssetResponse>, String> entry = it.next();
+    for (Entry<Future<AssetResponse>, String> entry : futures.entrySet()) {
 
       try {
         AssetResponse assetResponse = entry.getKey().get();
@@ -113,12 +102,12 @@ public class DefaultAssetsVerifier implements AssetsVerifier {
           nonWorking.add(assetResponse);
 
       } catch (InterruptedException e) {
-        nonWorking.add(new AssetResponse(entry.getValue(),"", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
-            .getCode(), -1));
+        nonWorking.add(new AssetResponse(entry.getValue(), "", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
+                .getCode(), -1));
       } catch (ExecutionException e) {
-        System.err.println(e.getCause());
-        nonWorking.add(new AssetResponse(entry.getValue(),"", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
-            .getCode(), -1));
+        System.err.println(e.getMessage());
+        nonWorking.add(new AssetResponse(entry.getValue(), "", StatusCode.SC_SERVER_RESPONSE_UNKNOWN
+                .getCode(), -1));
       }
 
     }

@@ -70,7 +70,7 @@ public final class HeaderUtil {
 
     while (token.hasMoreTokens()) {
       final String headerAndValue = token.nextToken();
-      if (headerAndValue.indexOf(":") == -1)
+      if (!headerAndValue.contains(":"))
         throw new IllegalArgumentException(
             "Request headers wrongly configured, missing separator :" + headersAndValues);
 

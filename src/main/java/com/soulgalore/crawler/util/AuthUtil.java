@@ -37,7 +37,7 @@ public final class AuthUtil {
 
     if ("".equals(authInfo) || authInfo == null) return Collections.emptySet();
 
-    String[] parts = authInfo.split("\\,");
+    String[] parts = authInfo.split(",");
 
     final Set<Auth> auths = new HashSet<Auth>();
 

@@ -79,7 +79,7 @@ public class CrawlerURL {
       // an ugly catch all, we should act on it somehow
     }
     uri = tmpURI;
-    isWrongSyntax = (uri == null) ? true : false;
+    isWrongSyntax = (uri == null);
     host = (uri == null) ? null : uri.getHost();
   }
 
