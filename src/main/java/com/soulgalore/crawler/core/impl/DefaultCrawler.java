@@ -163,7 +163,7 @@ public class DefaultCrawler implements Crawler {
    * @param nonWorkingUrls the urls that didn't work to fetch
    * @param host the host we are working on
    * @param onlyOnPath only fetch files that match the following path. If empty, all will match.
-   * @param don 't collect/follow urls that contains this text in the url
+   * @param notOnPath don't collect/follow urls that contains this text in the url
    * @return the next level of links that we should fetch
    */
   protected Set<CrawlerURL> fetchNextLevelLinks(Map<Future<HTMLPageResponse>, CrawlerURL> responses,
