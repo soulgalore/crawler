@@ -149,7 +149,7 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
         return new HTMLPageResponse(url, StatusCode.SC_SERVER_REDIRECT_TO_NEW_DOMAIN.getCode(),
           Collections.<String, String>emptyMap(), "", "", 0, "", fetchTime);
       }
-      return new HTMLPageResponse(url.getUrl() != newURL
+      return new HTMLPageResponse(!url.getUrl().equals(newURL)
           ? new CrawlerURL(newURL, url.getReferer())
           : url, sc, headersAndValues, body, encoding, size, type, fetchTime);
 
