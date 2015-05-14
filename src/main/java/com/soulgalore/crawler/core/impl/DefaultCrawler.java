@@ -161,6 +161,7 @@ public class DefaultCrawler implements Crawler {
    * @param responses holding bodys where we should fetch the links.
    * @param allUrls every url we have fetched so far
    * @param nonWorkingUrls the urls that didn't work to fetch
+   * @param verifiedUrls responses that are already verified
    * @param host the host we are working on
    * @param onlyOnPath only fetch files that match the following path. If empty, all will match.
    * @param notOnPath don't collect/follow urls that contains this text in the url

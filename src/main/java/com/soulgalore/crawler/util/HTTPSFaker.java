@@ -54,7 +54,8 @@ public final class HTTPSFaker {
 
   /**
    * Get a HttpClient that accept any HTTP certificate.
-   * 
+   *
+   * @param cm the connection manager to use when creating the new HttpClient
    * @return a httpClient that accept any HTTP certificate
    */
   @SuppressWarnings("deprecation")

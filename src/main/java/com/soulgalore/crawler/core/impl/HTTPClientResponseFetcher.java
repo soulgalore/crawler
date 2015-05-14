@@ -68,20 +68,10 @@ public class HTTPClientResponseFetcher implements HTMLPageResponseFetcher {
     httpClient = client;
   }
 
-  /**
-   * Shutdown the client.
-   */
   public void shutdown() {
     httpClient.getConnectionManager().shutdown();
   }
 
-  /**
-   * Get a response.
-   * 
-   * @param url the url
-   * @param getPage the body of the page or not
-   * @return the response
-   */
   public HTMLPageResponse get(CrawlerURL url, boolean getPage, Map<String, String> requestHeaders, boolean followRedirectsToNewDomain) {
 
     if (url.isWrongSyntax()) {

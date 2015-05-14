@@ -34,9 +34,13 @@ public interface HTMLPageResponseFetcher {
    * 
    * @param url the url to fetch
    * @param fetchBody fetch the body or not
+   * @param requestHeaders request headers to add
+   * @param followRedirectsToNewDomain if true, follow redirects that lead to a different domain.
    * @return the response
    */
-  HTMLPageResponse get(CrawlerURL url, boolean fetchBody, Map<String, String> requestHeaders, boolean followRedirectsToNewDomain);
+  HTMLPageResponse get(CrawlerURL url, boolean fetchBody,
+                       Map<String, String> requestHeaders,
+                       boolean followRedirectsToNewDomain);
 
 
   /**

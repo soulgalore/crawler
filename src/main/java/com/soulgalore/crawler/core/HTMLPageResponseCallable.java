@@ -45,6 +45,8 @@ public class HTMLPageResponseCallable implements Callable<HTMLPageResponse> {
    * @param theUrl the url to call.
    * @param theFetcher the fetcher to use
    * @param fetchTheBody if true, the response body is fetched, else not.
+   * @param theRequestHeaders request headers to add
+   * @param followRedirectsToNewDomain if true, follow redirects that lead to a different domain.
    */
   public HTMLPageResponseCallable(CrawlerURL theUrl, HTMLPageResponseFetcher theFetcher,
       boolean fetchTheBody, Map<String, String> theRequestHeaders, boolean followRedirectsToNewDomain) {

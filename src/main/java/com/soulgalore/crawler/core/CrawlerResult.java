@@ -41,6 +41,7 @@ public class CrawlerResult {
    * 
    * @param theStartPoint where the crawl was started
    * @param theUrls the urls that was fetched
+   * @param theVerifiedResponses the verified responses
    * @param theNonWorkingResponses the non working urls
    */
   public CrawlerResult(String theStartPoint, Set<CrawlerURL> theUrls,

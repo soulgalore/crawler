@@ -51,6 +51,7 @@ public class HTMLPageResponse {
    * @param theBody the body
    * @param theEncoding the encoding
    * @param theSize the size
+   * @param theResponseType the response mime type
    * @param theFetchTime the time it took to fetch the response
    */
   public HTMLPageResponse(CrawlerURL pageUrl, int theResponseCode, Map<String, String> theHeaders,
